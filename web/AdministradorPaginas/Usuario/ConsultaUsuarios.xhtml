@@ -1,0 +1,200 @@
+<ui:composition template="/Templates/AdminTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+
+
+    <ui:define name="content" rendered="true">
+
+        <h:form id="fo">
+            <p:growl id="growl" autoUpdate="true" showDetail="true" />
+            <!--Tabela Principal-->
+            <p:dataTable id="tabela"  
+                         value="#{beanUsuario.listaUsuarios()}" 
+                         var="us" 
+                         rendered="true" 
+                         style="margin-bottom:20px; font-size: 15px;">
+
+                <f:facet name="header"  rendered="true">
+                    Usuários Cadastrados
+                </f:facet>
+
+                <p:column headerText="Nome" filterBy="#{us.nome}"  >
+                    <h:outputText value="#{us.nome}" />
+                </p:column>
+
+                <p:column headerText="Matrícula">
+                    <center>
+                        <h:outputText value="#{us.matricula}" />
+                    </center>
+                </p:column>
+
+                <p:column headerText="Usuário" filterBy="#{us.tipoUsuario}">
+                    <center>
+                        <h:outputText value="#{us.tipoUsuario}" />
+                    </center>
+                </p:column>
+
+                <p:column headerText="Colegiado" filterBy="#{us.colegiado}" >
+                    <h:outputText value="#{us.colegiado}" />
+                </p:column>
+
+
+                <p:column headerText="Telefone 1:"  >
+                    <h:outputText value="#{us.telefoneResidencial}" />
+                </p:column>
+
+
+                <!--Botão de Exibir o dialog que exibe o PROJETO do usuário está cadastrado-->
+
+                <p:column headerText="Projeto Participante" style="text-align: center" >
+                    <p:commandButton  icon="ui-icon-search" 
+                                      title="Visualizar Projetos Participantes"
+                                      update=":fo:projetoDetail" 
+                                      oncomplete="PF('dialogExibirProjetos').show()"
+                                      action="#{beanUsuario_Projeto.setProjeto(projeto)}"
+                                      />
+                </p:column>
+
+
+                <!--Botões de ação da tabela EXCLUIR E ALTERAR  -->
+                <p:column headerText="Ação">
+                    <center>
+                        <p:commandButton  update=":fo:usuarioDetail" oncomplete="PF('usuarioDialog').show()" 
+                                          icon="ui-icon-pencil" title="Visualizar/Editar"
+                                          action="#{beanUsuario.setUser(us)}">
+                                          
+
+                        </p:commandButton>
+
+                        <p:commandButton icon="ui-icon-trash" title="Excluir" 
+                                         update=":fo:usuarioDialogExcluir"
+
+                                         oncomplete="PF('usuarioDialogExcluir').show()" >
+
+                            <f:setPropertyActionListener value="#{us}" target="#{beanUsuario.user}" /> 
+
+                        </p:commandButton>
+
+
+                    </center>
+                </p:column>
+
+            </p:dataTable>
+
+            <!--///Dialog para Exclusão-->
+            <p:dialog id="dialog2" header="Excluir Usuário?" widgetVar="usuarioDialogExcluir" resizable="true" rendered="true" > 
+                <p:panel>
+                    <h:outputLabel id="usuarioDialogExcluir" style="text-align:center;" rendered="true" value="Tem certeza que deseja Excluir o Usuário?">
+                    </h:outputLabel>
+
+                    <p:commandButton value="Não" 
+                                     icon="ui-icon-check"
+                                     oncomplete="PF('usuarioDialogExcluir').hide()"
+                                     style="position: relative;top:36px;left: 10%"></p:commandButton>
+
+                    <p:commandButton value="Sim" 
+                                     oncomplete="PF('usuarioDialogExcluir').hide()"
+                                     update="growl,tabela"
+                                     icon="ui-icon-notice"
+                                     actionListener="#{beanUsuario.excluirUsuario(beanUsuario.user.matricula)}"
+                                     style="position: relative;top:0px"
+
+
+                                     ></p:commandButton>
+
+                </p:panel>
+
+            </p:dialog>
+
+
+            <!--Dialog para alteração-->
+            <p:dialog id="dialog" header="Editar Usuários:" widgetVar="usuarioDialog"   > 
+                <p:outputPanel id="usuarioDetail" style="text-align:center;" rendered="true">
+                    <p:panelGrid  columns="4"  >
+
+                        <h:outputText value="Nome:" />
+                        <p:inputText value="#{beanUsuario.user.nome}" />
+
+                        <h:outputText  value="Endereço:" />
+                        <p:inputText id="idEnd" value="#{beanUsuario.user.endereco}" />
+
+                        <h:outputText value="Tipo de Usuário:" />
+                        <p:inputText value="#{beanUsuario.user.tipoUsuario}" />
+
+                        <h:outputText value="Colegiado" />
+                        <p:inputText value="#{beanUsuario.user.colegiado}" />
+
+                        <h:outputLabel for="date" value="Data Nascimento:" />
+                        <p:inputMask  id="date" value="#{beanUsuario.user.dataNasc}"  mask="99/99/9999"/>
+
+                        <h:outputText value="Matricula" />
+                        <p:inputText value="#{beanUsuario.user.matricula}" disabled="true"/>
+
+                        <h:outputText value="Login:" />
+                        <p:inputText value="#{beanUsuario.user.login}" />
+
+                        <h:outputText value="Telefone Residencial." />
+                        <p:inputText value="#{beanUsuario.user.telefoneResidencial}" />
+
+                        <h:outputText value="Telefone Comercial" />
+                        <p:inputText value="#{beanUsuario.user.telefoneComercial}" />
+
+                        <h:outputText value="Telefone Celular" />
+                        <p:inputText value="#{beanUsuario.user.telefoneCelular}" />
+
+                        <h:outputText value="Senha:" />
+                        <p:commandLink value="Reiniciar" />
+                    </p:panelGrid>
+
+
+                    <!--Botões para salvar alterações-->
+
+                    <p:commandButton value="Salvar" 
+                                     style="right: 20%;top:8px"
+                                     actionListener="#{beanUsuario.editarUsuario(submit)}" 
+                                     update="growl,tabela"
+                                     oncomplete="PF('usuarioDialog').hide()"
+                                     icon="ui-icon-circle-check"
+                                     ></p:commandButton>
+
+                    <p:commandButton value="Cancelar" oncomplete="PF('usuarioDialog').hide()"  
+                                     style="left: 30%;top:8px"
+                                     icon="ui-icon-cancel"
+                                     ></p:commandButton>
+
+
+                </p:outputPanel>
+
+            </p:dialog>
+
+            <!--Dialog para mostrar os Projetos que determinado usuário está cadastrado-->
+            <p:dialog id="dialog3" 
+                      header="Projetos Cadastrados" 
+                      widgetVar="dialogExibirProjetos"
+                      width="70%" 
+                      height="100%">
+                
+                <p:outputPanel id="projetoDetail" rendered="true">
+                    <p:dataTable value="Projetos Cadastrados"  >
+                        <p:column headerText="Nome">
+                            <h:outputText />
+                        </p:column >
+                        <p:column headerText="Situação">
+                            <h:outputText value="#{beanUsuario_Projeto.getListProjetos(us)}"/>
+                        </p:column>
+                    </p:dataTable>
+                    <p:commandButton style="top:5px"
+                                     title="Fechar" value="Fechar" 
+                                     oncomplete="PF('dialogExibirProjetos').hide()"
+                                     >
+                    </p:commandButton>
+                </p:outputPanel>
+            </p:dialog>
+
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,180 @@
+.fDefaultHeader{
+    height: 100%;
+    width: 100%;
+    background:  #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
+        rgba(255, 255, 255, 0)) repeat scroll 0 0;
+    font-weight: bold;
+    color: #333;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+
+}
+
+.ui-layout-unit .ui-layout-unit-content
+{
+    padding: 0 !important;
+}
+
+.ui-layout-north{
+    background: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
+        rgba(255, 255, 255, 0)) repeat scroll 0 0;
+}
+
+.ui-panelgrid{
+    width: 100%;
+}
+
+#center{
+    background: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
+        rgba(255, 255, 255, 0)) repeat scroll 0 0; 
+
+}
+
+#divLogoUnifil{
+    top:50%;
+}
+
+#doCadastroPnl{
+    border-bottom: 0.5px solid lightslategrey;
+    border-right: 0.5px solid lightslategrey;
+    border-top: 0.5px solid lightslategrey;
+    border-left:  0.5px solid lightslategrey;
+}
+
+#formCadastro:doCadastroPnl{
+    width: 80%;   
+}
+
+
+.txtField_sessionComponent{
+    width: 500px;
+}
+
+
+.sessionTite{
+    width: 30%;    
+}
+
+
+.txtTel{
+    min-width: 25%;
+    max-width: 25%;
+}
+
+.tctDataNasc{
+    min-width: 18%;
+    max-width: 18%;
+}
+
+.ui-panelgrid{
+    border: none;
+    border-collapse: separate;
+}
+
+#formAcesso{
+    position: absolute;
+    background:  #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
+        rgba(255, 255, 255, 0)) repeat scroll 0 0;
+    top:10%;
+    padding: 2%;
+    width: 70%;
+    left: 8%;
+    height: 45%;
+    border-bottom: 0.5px solid lightslategrey;
+    border-right: 0.5px solid lightslategrey;
+    border-top: 0.5px solid lightslategrey;
+    border-left:  0.5px solid lightslategrey;
+    border-radius: 10px;
+}
+
+.btnIniciarSessao{
+    position: relative;
+    top:5px;
+    left:5%;
+
+}
+.btnEncerrar{
+    position: relative;
+    top:5px;
+    left:60%;
+
+}
+
+
+#panelAcesso{
+    position: relative;
+
+    background: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
+        rgba(255, 255, 255, 0)) repeat scroll 0 0;
+}
+
+.txtHorario{
+    width: 70%;
+    font-size: 10px;
+}
+
+#divCentral{
+    position: relative;
+    margin-top: 2%;
+    width: 100%;
+    height: 100%;
+    padding: 0%;
+}
+
+#panelCentralLogin{
+    background: #c4c4c4 -moz-linear-gradient(left , rgba(255, 255, 255, 0.8),
+        rgba(255, 255, 255, 0)) repeat scroll 0 0;
+    width: 100%;
+    height: 200px;
+    position: relative;
+    margin-top: 10%;
+    margin-bottom: 10%;
+    font-size: 14px;
+}
+
+#labelLogin{
+    position: relative;
+    width: 5%;
+    height: 10%;
+    left: 30%;
+    /*top:127px;*/
+
+}
+
+#divLogoUnifilLogin{
+    top:50%;
+}
+
+#SenhaLogin{
+    top:20%;
+    left: 30%;
+    position: relative;
+    /*margin-top:15px;*/
+    margin-bottom: 15px;
+    /*margin-left: 30%;*/
+    width: 20%;
+    height: 40%;
+}
+
+.ui-priority-primary{
+    width:  20%;
+    background: yellow;
+    left:80%;
+    top:20px ;
+    font-size: 15px
+}
+
+#divCentralCadastroProjeto{
+    position: relative;
+    height: 60%;
+    border-bottom: 0.5px solid lightslategrey;
+    border-right: 0.5px solid lightslategrey;
+    border-top: 0.5px solid lightslategrey;
+    border-left:  0.5px solid lightslategrey;
+
+}
+
+.txtInputCadastroProjeto{
+    width: 160%;
+}
+
+

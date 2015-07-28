@@ -1,0 +1,62 @@
+<ui:composition template="/Templates/AdminTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+
+    <ui:define name="left-menu">
+        <div id="divLogoUnifilLogin">
+            <h:graphicImage id="logo-inicial"  url="/resources/img/logo_unifil.png" 
+                            width="196" height="70" style="position: relative;top: 190px;margin-left: 10px;" />
+        </div>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form>
+            
+            <div id="panelCentralLogin">
+                <!--<div id="labelLogin">Login</div>-->
+                <div id="SenhaLogin">
+                    <form >
+                        <h:panelGrid columns="1" style="position: relative;left: 20%" >
+                            <h:outputLabel value="Usuário"></h:outputLabel>
+                                <h:inputText id="idLogin" style="left: 10%"> </h:inputText>
+                            
+                            <h:outputLabel value="Senha"></h:outputLabel>
+                            <h:inputText id="idSenha" ></h:inputText>
+                            
+                        </h:panelGrid>
+                    </form>
+                </div>
+                <p:button value="Acessar" id="btnAcessar" outcome="/AdministradorPaginas/Ponto/AcessarPonto.xhtml"
+                          style="font-size: 11px;
+                          top:25%;
+                          left:34.3%;">
+
+                </p:button>
+                <h:commandLink id="txtCadastrar" value="Cadastrar"  
+                               style="
+                               position: relative;
+                               top:27%;
+                               left:37%">
+
+                </h:commandLink>
+
+
+
+            </div>
+        </h:form>
+
+
+    </ui:define>
+
+
+
+
+
+
+
+
+</ui:composition>

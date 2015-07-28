@@ -1,0 +1,87 @@
+<ui:composition template="AppLayout.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="style-sheets">
+        <h:outputStylesheet library="css" name="/AdminPages/estilo.css" />
+    </ui:define>
+
+    <ui:define name="header">
+        <h:form id="fHL" >
+            <span style="float: left;">
+                <ui:insert name="header-left"></ui:insert>                    
+            </span>
+                           
+        </h:form>
+    </ui:define>
+
+    <ui:define name="left-menu" rendered="true">
+        <h:form id="fSideMenu">
+            <p:slideMenu style="width: 94%; margin: 0.5%;" backLabel="Voltar" >
+                <p:menuitem value="Inicio" outcome="/AdministradorPaginas/Ponto/AcessarPonto.xhtml"></p:menuitem>
+                <p:separator />
+                <p:submenu label="Ponto" >
+                    <p:menuitem value="Justificar"  ></p:menuitem>
+                    <p:separator />
+                    <p:submenu label="Consultar">
+                        <p:menuitem value="Aluno" > </p:menuitem>
+                         <p:separator />
+                         <p:menuitem value="Projeto" rendered="false"> </p:menuitem>
+                         <p:separator />
+                    </p:submenu>
+                    <p:separator />
+                </p:submenu>
+
+                <p:separator />
+
+                <p:submenu label="Projeto" >
+                    <p:menuitem value="Cadastrar" outcome="/AdministradorPaginas/Projetos/CadastroProjeto.xhtml">
+                        
+                    </p:menuitem>
+                    <p:separator />
+                    <p:menuitem value="Consultar" outcome="/AdministradorPaginas/Projetos/ConsultaProjetos.xhtml">
+                        
+                    </p:menuitem>
+                    <p:separator />
+                    <p:menuitem value="Associar Aluno"></p:menuitem>
+                    <p:separator />
+                    <p:menuitem value="Associar Professor" outcome="/AdministradorPaginas/Projetos/VincularProfessor.xhtml">
+                        
+                    </p:menuitem>
+                    <p:separator />
+                </p:submenu>
+
+                <p:separator />
+
+                <p:submenu label="Usuario" >
+                    <p:menuitem value="Cadastrar"  outcome="/AdministradorPaginas/Usuario/CadastroUsuario.xhtml" ajax="false" ></p:menuitem>
+                    <p:separator/>
+                    <p:menuitem value="Consultar" outcome="/AdministradorPaginas/Usuario/ConsultaUsuarios.xhtml" ajax="false" ></p:menuitem>
+                    <p:separator />
+                </p:submenu>
+
+                <p:separator />
+
+                <p:submenu label="Relatório" >
+                    <p:menuitem value="Cadastrar"  ajax="false" />
+                    <p:separator/>
+                    <p:menuitem value="Consultar"  ajax="false" />
+                    <p:separator />
+                </p:submenu>
+                <p:separator/>
+                <p:menuitem value="Sair" outcome="/index.xhtml"/>
+            </p:slideMenu>
+
+        </h:form>
+        <div id="divLogoUnifil">
+             <h:graphicImage id="logo"  url="/resources/img/logo_unifil.png" 
+                             width="196" height="70" style="position: relative;top: 50px;margin-left: 10px;" />
+        </div>
+    </ui:define>
+</ui:composition>
+
+
+

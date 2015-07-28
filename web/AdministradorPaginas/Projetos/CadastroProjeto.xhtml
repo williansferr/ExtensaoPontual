@@ -1,0 +1,76 @@
+<ui:composition template="/Templates/AdminTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="content" rendered="true">
+
+        <h:form rendered="true" id="formCadastro" >
+            <p:panel style="width: 100%; 
+                             background: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
+                             rgba(255, 255, 255, 0)) repeat scroll 0 0">
+
+                <p:growl id="growl" autoUpdate="true" showDetail="true" />
+
+                <h:panelGrid id="doCadastroPnl" columns="2"  cellpadding="10" width="70%" >
+
+                    <f:facet name="header">
+                        <h:outputText value="Cadastrar Projeto"  class="sessionTitle" />
+                    </f:facet>
+
+
+                    <p:outputLabel class="outLabel" value="Nome: " id="labe" ></p:outputLabel>
+                    <p:inputText  class="txtInputCadastroProjeto" value="#{beanProjeto.nome}" 
+                                  required="true" 
+                                  label="Nome"
+                                  style="font-variant: small-caps"
+                                  requiredMessage="Favor entrar com um nome para o Usuário."
+                                  title="Nome do Usuário" ></p:inputText >
+
+
+
+                    <p:outputLabel for="txtEstado" value="Situação:"
+                                   title="Será utilizado p/ realizar Estado."
+                                   class="outLabel" />
+
+                    <p:selectOneMenu id="txtEstado" 
+                                     class="radiosContainer sessionComponent" 
+                                     value="#{beanProjeto.estado}">
+                        <p:ajax event="click" 
+                                update="@(#cbFuncao)"/>
+                        <f:selectItem  itemLabel="Em Execução" itemValue="Em Execução"></f:selectItem>
+                        <f:selectItem itemLabel="Aprovado" itemValue="Inativo"></f:selectItem>
+                        <f:selectItem itemLabel="Em Análise" itemValue="Inativo"></f:selectItem>
+                        <f:selectItem itemLabel="Pendência" itemValue="Inativo"></f:selectItem>
+                        <f:selectItem itemLabel="Reprovado" itemValue="Inativo"></f:selectItem>
+                        <f:selectItem itemLabel="Concluído" itemValue="Inativo"></f:selectItem>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel for="txtColegiado" value="Colegiado:"
+                                   class="outLabel" />
+                    <p:inputText id="txtColegiado" class="txtInputCadastroProjeto"
+                                 title="Colegiado" value="#{beanProjeto.colegiado}">
+                    </p:inputText>
+
+
+                </h:panelGrid>
+
+
+                <p:commandButton id="btnLimpar" update="doCadastroPnl"  process="@this"
+                                 value="Limpar" style="position: relative;left:10%;
+                                 font-size: 15px" 
+                                 icon="ui-icon-trash"
+                                 />
+
+                <p:commandButton id="btnCadastrar" 
+                                 value="Cadastrar" style="position: relative;left:60%;
+                                 font-size: 15px"
+                                 icon="ui-icon-check"
+                                 action="#{beanProjeto.novoUsuario(submit)}"/>
+
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>
