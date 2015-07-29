@@ -10,7 +10,14 @@
     <ui:define name="content">
         <h:form id="formAcesso">
             <div id="divCentral">
-                <p:dataTable style="font-size: 15px">  
+                <p:commandButton class="btnIniciarSessao"  
+                                 value="Iniciar" disabled="false" 
+                                 rendered="true" style="font-size: 13px;left: 10%;top:-5%" />
+                <p:commandButton class="btnEncerrar"  
+                                 value="Encerrar" disabled="false" rendererType="true" 
+                                 rendered="true" style="font-size: 13px;left: 60%;top:-5% "/>
+
+                <p:dataTable style="font-size: 15px">
 
                     <f:facet name="header">Acesso Diário de Frequência </f:facet>
                     <p:column headerText="Data">
@@ -32,12 +39,6 @@
 
                 </p:dataTable>
 
-                <p:commandButton class="btnIniciarSessao"  
-                                 value="Iniciar" disabled="false" 
-                                 rendered="true" style="font-size: 13px;left: 10%;top:15%"></p:commandButton>
-                <p:commandButton class="btnEncerrar"  
-                                 value="Encerrar" disabled="false" rendererType="true" 
-                                 rendered="true" style="font-size: 13px;left: 60%;top:15% "></p:commandButton>
             </div>
 
 

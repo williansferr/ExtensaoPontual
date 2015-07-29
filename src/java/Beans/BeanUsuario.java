@@ -18,7 +18,7 @@ import models.Usuario;
  */
 @ManagedBean
 @ViewScoped
-public class BeanUsuario{
+public class BeanUsuario {
 
     private String nome;
     private String login;
@@ -27,7 +27,6 @@ public class BeanUsuario{
     private String tel1;
     private String tel2;
 
-
     private String tel3;
     private String endereco;
     private String colegiado;
@@ -35,9 +34,7 @@ public class BeanUsuario{
     private String tipoUsuario;
     private Usuario user = new Usuario();
     List<Usuario> lista = new ArrayList();
-    
 
-     
     UsuarioJpaController jpa = new UsuarioJpaController();
 
     public String novoUsuario(Action submit) {
@@ -51,19 +48,16 @@ public class BeanUsuario{
         getUser().setTelefoneComercial(getTel3());
         getUser().setEndereco(getEndereço());
         getUser().setColegiado(getColegiado());
-        
-        
-        try{
+
+        try {
             jpa.create(getUser());
-             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                     FacesMessage.SEVERITY_INFO, "Novo usuario cadastrado", ""));
-            
-            
-        
-        }catch(Exception e){
+            setUser(new Usuario());
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_INFO, "Novo usuario cadastrado", ""));
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        
 
         return null;
     }
@@ -71,94 +65,91 @@ public class BeanUsuario{
     public void insert() {
         if (validaUsuario(user)) {
             jpa.create(this.user);
-            
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                FacesMessage.SEVERITY_INFO,"Cadastro realizado com sucesso!","" ));
+            setUser(new Usuario());
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_INFO, "Cadastro realizado com sucesso!", ""));
         } else {
-           FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                FacesMessage.SEVERITY_WARN,"Não foi possível realizar cadastro!","" ));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_WARN, "Não foi possível realizar cadastro!", ""));
         }
 
     }
-    
+
     public void insert(Usuario us) {
         if (validaUsuario(us)) {
             jpa.create(us);
-            
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                FacesMessage.SEVERITY_INFO,"Cadastro realizado com sucesso!","" ));
+
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_INFO, "Cadastro realizado com sucesso!", ""));
         } else {
-           FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                FacesMessage.SEVERITY_WARN,"Não foi possível realizar cadastro!","" ));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_WARN, "Não foi possível realizar cadastro!", ""));
         }
 
     }
-    
+
     public boolean validaUsuario(Usuario usuario) {
-        if(usuario.getTipoUsuario().equals("") && usuario.getNome().equals("")) {
+        if (usuario.getTipoUsuario().equals("") && usuario.getNome().equals("")) {
             return false;
         }
-            return true;
-        
+        return true;
+
     }
-    
-   public void excluirUsuario(int id){
-        try{
-        jpa.destroy(id);
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                FacesMessage.SEVERITY_INFO,"Deletado com sucesso!","" ));
-        }catch(Exception e){
-           FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                FacesMessage.SEVERITY_WARN,"Não foi possível deletar o Usuário!","" ));
-            
+
+    public void excluirUsuario(int id) {
+        try {
+            jpa.destroy(id);
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_INFO, "Deletado com sucesso!", ""));
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_WARN, "Não foi possível deletar o Usuário!", ""));
+
         }
     }
 
     public String editarUsuario(Action submit) {
-        
+
         try {
             jpa.edit(getUser());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                FacesMessage.SEVERITY_INFO,"Alteração realizada!","" ));
+                    FacesMessage.SEVERITY_INFO, "Alteração realizada!", ""));
         } catch (Exception e) {
-             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                FacesMessage.SEVERITY_WARN,"Não foi possível realizar alteração!","" ));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_WARN, "Não foi possível realizar alteração!", ""));
         }
-        
 
         return null;
     }
-    
-    public List<Usuario> selecionarAll(){
+
+    public List<Usuario> selecionarAll() {
         List lista;
-        try{
+        try {
             lista = jpa.findUsuarioEntities();
             return lista;
-            
-        }catch(Exception e){
+
+        } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                FacesMessage.SEVERITY_WARN,"Não foi possível buscar Usuarios!","" ));
+                    FacesMessage.SEVERITY_WARN, "Não foi possível buscar Usuarios!", ""));
         }
         return null;
     }
-    
 
     public List<Usuario> listaUsuarios() {
-       lista= jpa.selectAll();
+        lista = jpa.selectAll();
         return lista;
     }
-    
-    public List<Usuario> getUsuariosProfessores(){
+
+    public List<Usuario> getUsuariosProfessores() {
         List list;
         list = jpa.getUsuarioProfessor();
         return list;
     }
 
-    public void incluirUsuarioProjeto(Usuario usuario){
-        
-        
+    public void incluirUsuarioProjeto(Usuario usuario) {
+
     }
-    
+
     public String getNome() {
         return nome;
     }
@@ -182,6 +173,7 @@ public class BeanUsuario{
     public void setSenha(String senha) {
         this.senha = senha;
     }
+
     public void setTipoUsuario(String tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
     }
@@ -199,7 +191,7 @@ public class BeanUsuario{
     }
 
     public void setUser(Usuario user) {
-        System.out.println("Classe Usuario: "+user);
+        System.out.println("Classe Usuario: " + user);
         this.user = user;
     }
 
@@ -272,10 +264,11 @@ public class BeanUsuario{
     public void setColegiado(String colegiado) {
         this.colegiado = colegiado;
     }
-    
+
     public String getTipoUsuario() {
         return tipoUsuario;
     }
+
     public String getEndereco() {
         return endereco;
     }
@@ -291,9 +284,6 @@ public class BeanUsuario{
     public void setDataNasc(Date dataNasc) {
         this.dataNasc = dataNasc;
     }
-
-   
-    
 
 //    public String getNomeTipoUsuario(Usuario us) {
 //        String nomeTipo = "";

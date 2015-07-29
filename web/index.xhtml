@@ -15,37 +15,29 @@
 
     <ui:define name="content">
         <h:form>
-            
             <div id="panelCentralLogin">
                 <!--<div id="labelLogin">Login</div>-->
                 <div id="SenhaLogin">
-                    <form >
+                    <form>
                         <h:panelGrid columns="1" style="position: relative;left: 20%" >
                             <h:outputLabel value="Usuário"></h:outputLabel>
-                                <h:inputText id="idLogin" style="left: 10%"> </h:inputText>
-                            
+                            <h:inputText id="idLogin" style="left: 10%" value="#{beanLogar.usuario}"> </h:inputText>
+
                             <h:outputLabel value="Senha"></h:outputLabel>
-                            <h:inputText id="idSenha" ></h:inputText>
-                            
+                            <h:inputText id="idSenha" value="#{beanLogar.senha}" ></h:inputText>
+
                         </h:panelGrid>
                     </form>
                 </div>
-                <p:button value="Acessar" id="btnAcessar" outcome="/AdministradorPaginas/Ponto/AcessarPonto.xhtml"
-                          style="font-size: 11px;
-                          top:25%;
-                          left:34.3%;">
-
-                </p:button>
+                <p:commandButton value="Acessar" id="btnAcessar" 
+                                 style="font-size: 11px;
+                                 top:25%;
+                                 left:34.3%;" action="#{beanLogar.verificar}"/>
                 <h:commandLink id="txtCadastrar" value="Cadastrar"  
                                style="
                                position: relative;
                                top:27%;
-                               left:37%">
-
-                </h:commandLink>
-
-
-
+                               left:37%"/>
             </div>
         </h:form>
 
