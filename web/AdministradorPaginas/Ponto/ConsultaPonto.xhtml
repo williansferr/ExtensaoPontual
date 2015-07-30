@@ -8,56 +8,69 @@
 
 
     <ui:define name="content" rendered="true">
-
         <h:form id="fo">
-           <p:growl id="growl" autoUpdate="true" showDetail="true" />
+            <p:growl id="growl" autoUpdate="true" showDetail="true" />
+
             <!--Tabela Principal-->
-            <p:dataTable id="tabela"  value="#{beanProjeto.allProject}" var="p" resizableColumns="false"
+
+            <p:dataTable id="tabela"  value="#{beanPonto.allPontos}" var="p" resizableColumns="false"
                          rendered="true" style="margin-bottom:20px; font-size: 15px">
 
                 <f:facet name="header"  rendered="true">
-                    Projetos Cadastrados
+                    PONTOS CADASTRADOS
                 </f:facet>
 
-                <p:column headerText="Nome" filterBy="#{p.nome}"  >
-                    <h:outputText value="#{p.nome}" />
+                <p:column headerText="Descrição da atividade" filterBy="#{p.descricaoAtividade}">
+                    <h:outputText value="#{p.descricaoAtividade}" />
                 </p:column>
 
-                <p:column headerText="Colegiado" filterBy="#{p.colegiado}">
-                    <h:outputText value="#{p.colegiado}" />
-                </p:column>
-
-                <p:column headerText="Estado" filterBy="#{p.estado}">
+                <p:column headerText="Data" filterBy="#{p.data}">
                     <center>
-                        <h:outputText value="#{p.estado}" />
+                        <h:outputText value="#{p.data}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
                     </center>
                 </p:column>
 
-                <p:column headerText="Data" filterBy="#{p.dataInicio}">
+                <p:column headerText="Horário Entrada" filterBy="#{p.horaEntrada}">
                     <center>
-                        <h:outputText value="#{p.dataInicio}" />
+                        <h:outputText value="#{p.horaEntrada}" >
+                            <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Montevideo" />
+                        </h:outputText>
                     </center>
                 </p:column>
 
-                <p:column headerText="Colegiado" filterBy="#{p.colegiado}" style="font-variant: small-caps">
-                    <h:outputText value="#{p.colegiado}" />
+                <p:column headerText="Horário Saída" filterBy="#{p.horaSaida}">
+                    <center>
+                        <h:outputText value="#{p.horaSaida}" >
+                            <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Montevideo" />
+                        </h:outputText>
+                    </center>
                 </p:column>
+
+
+                <p:column headerText="Usuário logado" filterBy="#{beanPonto.buscaNomeUsuario(p.matricula)}">
+                    <h:outputText value="#{beanPonto.buscaNomeUsuario(p.matricula)}" />
+                </p:column>
+
+
+                <!--Botões de ação da tabela-->
 
                 <p:column headerText="Ação">
                     <center>
-                        <p:commandButton  update=":fo:projetoDetail" oncomplete="PF('ProjetoDialog').show()" 
+                        <p:commandButton  update=":fo:pontoDetail" oncomplete="PF('pontoDialog').show()" 
                                           icon="ui-icon-pencil" title="Visualizar/Editar"
-                                          action="#{beanProjeto.setProjeto(p)}"
+                                          action="#{beanPonto.setPontoAtual(p)}"
                                           >
 
                         </p:commandButton>
 
                         <p:commandButton icon="ui-icon-trash" title="Excluir" 
-                                         update=":fo:projetoDialogExcluir"
-                                        
-                                         oncomplete="PF('projetoDialogExcluir').show()" >
+                                         update=":fo:pontoDialogExcluir"
 
-                            <f:setPropertyActionListener value="#{p}" target="#{beanProjeto.projeto}" /> 
+                                         oncomplete="PF('pontoDialogExcluir').show()" >
+
+                            <f:setPropertyActionListener value="#{p}" target="#{beanPonto.pontoAtual}" /> 
 
                         </p:commandButton>
 
@@ -70,67 +83,68 @@
 
 
             <!--///Dialog para Exclusão-->
-            <p:dialog id="dialog2" header="Excluir Projeto?" widgetVar="projetoDialogExcluir" resizable="true" rendered="true" > 
+            <p:dialog id="dialog2" header="Excluir Ponto?" widgetVar="pontoDialogExcluir" resizable="true" rendered="true" > 
                 <p:panel>
-                    <h:outputLabel id="projetoDialogExcluir" style="text-align:center;" rendered="true" value="Tem certeza que deseja Excluir o Usuário?">
+                    <h:outputLabel id="pontoDialogExcluir" style="text-align:center;" rendered="true" value="Tem certeza que deseja Excluir o Ponto?">
                     </h:outputLabel>
-                    
-                     <p:commandButton value="Não" 
+
+                    <p:commandButton value="Não" 
                                      icon="ui-icon-check"
-                                     oncomplete="PF('projetoDialogExcluir').hide()"
+                                     oncomplete="PF('pontoDialogExcluir').hide()"
                                      style="position: relative;top:36px;left: 10%"></p:commandButton>
-                    
+
                     <p:commandButton value="Sim" 
-                                     oncomplete="PF('projetoDialogExcluir').hide()"
+                                     oncomplete="PF('pontoDialogExcluir').hide()"
                                      update="growl,tabela"
                                      icon="ui-icon-notice"
-                                     actionListener="#{beanProjeto.excluirProjeto(beanProjeto.projeto.idProjeto)}"
                                      style="position: relative;top:0px"
-                                     
-                                     
+                                     actionListener="#{beanPonto.excluirPonto(beanPonto.pontoAtual.idPonto)}"
                                      ></p:commandButton>
-
-                   
                 </p:panel>
             </p:dialog>
 
 
             <!--Dialog para alteração-->
-            <p:dialog id="dialog" header="Editar Projeto" widgetVar="ProjetoDialog"   > 
-                <p:outputPanel id="projetoDetail" style="text-align:center;" rendered="true">
-                    <p:panelGrid  columns="4"  >
+            <p:dialog id="dialog" header="Editar Ponto" widgetVar="pontoDialog"   > 
+                <p:outputPanel id="pontoDetail" style="text-align:center;" rendered="true">
+                    <p:panelGrid  columns="1">
+                        <p:panelGrid  columns="2">
 
+                            <h:outputText value="Data" />
+                            <p:inputMask value="#{beanPonto.pontoAtual.data}" mask="99/99/9999">
+                                <f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+                            </p:inputMask>   
 
-                        <h:outputText value="Nome:" />
-                        <p:inputText value="#{p.nome}" />
+                            <h:outputText  value="Descrição da atividade" />
+                            <p:inputText id="idEnd" value="#{beanPonto.pontoAtual.descricaoAtividade}" />
 
-                        <h:outputText  value="Colegiado" />
-                        <p:inputText id="idEnd" value="#{p.colegiado}" />
+                            <h:outputText value="Horário Entrada" />
+                            <p:inputMask value="#{beanPonto.pontoAtual.horaEntrada}" mask="99:99:99" >
+                                <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Montevideo"></f:convertDateTime>
+                            </p:inputMask>  
 
+                            <h:outputText value="Horário Saída" />
+                            <p:inputMask value="#{beanPonto.pontoAtual.horaSaida}" mask="99:99:99">
+                                <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Montevideo"></f:convertDateTime>
+                            </p:inputMask>
 
-                        <h:outputText value="Data" />
-                        <p:inputMask value="#{p.dataInicio}" mask="99/99/9999" >
-                            <f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
-                        </p:inputMask>                     
-
-                        <h:outputText value="Estado" />
-                        <p:inputText value="#{p.estado}" />
+                        </p:panelGrid>
+                        <p:inputTextarea value="#{beanPonto.pontoAtual.descricaoAtividade}" rows="10" cols="50" autoResize="false"/>
 
                     </p:panelGrid>
 
-
                     <!--Botões para salvar alterações-->
-                    <p:commandButton value="Cancelar" oncomplete="PF('ProjetoDialog').hide()"  
+                    <p:commandButton value="Cancelar" oncomplete="PF('pontoDialog').hide()"  
                                      style="right:  20%;top:8px"
                                      icon="ui-icon-cancel"
                                      ></p:commandButton>
 
                     <p:commandButton value="Salvar" 
                                      style="left: 20%;top:8px"
-                                     actionListener="#{beanProjeto.editarProjeto(submit)}" 
                                      update="growl,tabela"
+                                     actionListener="#{beanPonto.editarPonto(submit)}" 
+                                     oncomplete="PF('pontoDialog').hide()"
                                      icon="ui-icon-circle-check"
-                                     oncomplete="PF('ProjetoDialog').hide()"
                                      ></p:commandButton>
                 </p:outputPanel>
             </p:dialog>

@@ -50,7 +50,7 @@
                 <p:column headerText="Horário Saída" filterBy="#{ps.horaSaida}">
                     <center>
                         <h:outputText value="#{ps.horaSaida}" >
-                            <f:convertDateTime pattern="HH:mm:ss" />
+                            <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Montevideo"/>
                         </h:outputText>
                     </center>
                 </p:column>

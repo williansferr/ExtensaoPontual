@@ -189,4 +189,17 @@ public class PontoJpaController implements Serializable {
         return null;
     }
 
+    public List<Ponto> findByMatricula(Integer matricula) {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createNamedQuery("Ponto.findByMatricula");
+            query.setParameter("matricula", matricula);
+            List<Ponto> lista = query.getResultList();
+            return lista;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

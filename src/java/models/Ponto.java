@@ -58,7 +58,7 @@ public class Ponto implements Serializable {
     private String descricaoAtividade;
     @Column(name = "totalHoras")
     private Integer totalHoras;
-
+    
     public Ponto() {
     }
 

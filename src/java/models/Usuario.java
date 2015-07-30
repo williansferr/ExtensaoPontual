@@ -26,8 +26,10 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "usuario")
 @NamedQueries({
-    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u")})
+    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
+    @NamedQuery(name = "Usuario.findByMatricula", query = "SELECT u FROM Usuario u where u.matricula = :matricula")})
 public class Usuario implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "nome")
@@ -193,5 +195,5 @@ public class Usuario implements Serializable {
     public String toString() {
         return "models.Usuario[ matricula=" + matricula + " ]";
     }
-    
+
 }

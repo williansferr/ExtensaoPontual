@@ -14,7 +14,7 @@
             <span style="float: left;">
                 <ui:insert name="header-left"></ui:insert>                    
             </span>
-                           
+
         </h:form>
     </ui:define>
 
@@ -27,10 +27,10 @@
                     <p:menuitem value="Justificar"  ></p:menuitem>
                     <p:separator />
                     <p:submenu label="Consultar">
-                        <p:menuitem value="Aluno" > </p:menuitem>
-                         <p:separator />
-                         <p:menuitem value="Projeto" rendered="false"> </p:menuitem>
-                         <p:separator />
+                        <p:menuitem value="Aluno" outcome="/AdministradorPaginas/Ponto/ConsultaPonto.xhtml"> </p:menuitem>
+                        <p:separator />
+                        <p:menuitem value="Projeto" rendered="false"> </p:menuitem>
+                        <p:separator />
                     </p:submenu>
                     <p:separator />
                 </p:submenu>
@@ -39,17 +39,17 @@
 
                 <p:submenu label="Projeto" >
                     <p:menuitem value="Cadastrar" outcome="/AdministradorPaginas/Projetos/CadastroProjeto.xhtml">
-                        
+
                     </p:menuitem>
                     <p:separator />
                     <p:menuitem value="Consultar" outcome="/AdministradorPaginas/Projetos/ConsultaProjetos.xhtml">
-                        
+
                     </p:menuitem>
                     <p:separator />
                     <p:menuitem value="Associar Aluno"></p:menuitem>
                     <p:separator />
                     <p:menuitem value="Associar Professor" outcome="/AdministradorPaginas/Projetos/VincularProfessor.xhtml">
-                        
+
                     </p:menuitem>
                     <p:separator />
                 </p:submenu>
@@ -77,8 +77,8 @@
 
         </h:form>
         <div id="divLogoUnifil">
-             <h:graphicImage id="logo"  url="/resources/img/logo_unifil.png" 
-                             width="196" height="70" style="position: relative;top: 50px;margin-left: 10px;" />
+            <h:graphicImage id="logo"  url="/resources/img/logo_unifil.png" 
+                            width="196" height="70" style="position: relative;top: 50px;margin-left: 10px;" />
         </div>
     </ui:define>
 </ui:composition>

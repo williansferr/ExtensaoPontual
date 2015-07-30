@@ -15,6 +15,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import models.Ponto;
 import models.Usuario;
 
 /**
@@ -31,8 +32,6 @@ public class UsuarioJpaController implements Serializable {
     public UsuarioJpaController() {
     }
 
-    
-    
     public EntityManager getEntityManager() {
         try {
             if (emf == null) {
@@ -149,8 +148,8 @@ public class UsuarioJpaController implements Serializable {
             em.close();
         }
     }
-    
-     public List<Usuario> getUsuarioProfessor(){
+
+    public List<Usuario> getUsuarioProfessor() {
         EntityManager em = getEntityManager();
 
         Query query = em.createQuery("SELECT u FROM Usuario u WHERE u.tipoUsuario = 'Professor'");
@@ -158,9 +157,9 @@ public class UsuarioJpaController implements Serializable {
 
         return qlista;
     }
-    
+
     public List<Usuario> selectAll() {
-       
+
         EntityManager em = getEntityManager();
 
         Query query = em.createQuery("SELECT u FROM Usuario u");
@@ -168,5 +167,18 @@ public class UsuarioJpaController implements Serializable {
 
         return qlista;
     }
-    
+
+    public List<Usuario> findByMatricula(Integer matricula) {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createNamedQuery("Usuario.findByMatricula");
+            query.setParameter("matricula", matricula);
+            List<Usuario> lista = query.getResultList();
+            return lista;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
