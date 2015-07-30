@@ -7,6 +7,7 @@ package Controllers;
 
 import Controllers.exceptions.NonexistentEntityException;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -147,5 +148,45 @@ public class PontoJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public List<Ponto> findAll() {
+
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createNamedQuery("Ponto.findAll");
+            List<Ponto> lista = query.getResultList();
+            return lista;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Ponto> findByData(Date data) {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createNamedQuery("Ponto.findByData");
+            query.setParameter("data", data);
+            List<Ponto> lista = query.getResultList();
+            return lista;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Ponto> findByUsuarioAndData(Integer matricula, Date data) {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createNamedQuery("Ponto.findByUsuarioAndData");
+            query.setParameter("matricula", matricula);
+            query.setParameter("data", data);
+            List<Ponto> lista = query.getResultList();
+            return lista;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

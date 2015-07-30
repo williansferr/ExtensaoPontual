@@ -1,6 +1,7 @@
 package Beans;
 
 import Controllers.UsuarioJpaController;
+import java.io.Serializable;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -15,7 +16,7 @@ import models.Usuario;
  */
 @ManagedBean
 @SessionScoped
-public class BeanLogar {
+public class BeanLogar implements Serializable{
 
     private Usuario usuarioLogado;
 

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package models;
 
 import java.io.Serializable;
@@ -13,29 +8,43 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Willians
+ * @author danielmorita
  */
 @Entity
 @Table(name = "ponto")
+@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Ponto.findAll", query = "SELECT p FROM Ponto p")})
+    @NamedQuery(name = "Ponto.findAll", query = "SELECT p FROM Ponto p"),
+    @NamedQuery(name = "Ponto.findByIdPonto", query = "SELECT p FROM Ponto p WHERE p.idPonto = :idPonto"),
+    @NamedQuery(name = "Ponto.findByMatricula", query = "SELECT p FROM Ponto p WHERE p.matricula = :matricula"),
+    @NamedQuery(name = "Ponto.findByHoraEntrada", query = "SELECT p FROM Ponto p WHERE p.horaEntrada = :horaEntrada"),
+    @NamedQuery(name = "Ponto.findByHoraSaida", query = "SELECT p FROM Ponto p WHERE p.horaSaida = :horaSaida"),
+    @NamedQuery(name = "Ponto.findByData", query = "SELECT p FROM Ponto p WHERE p.data = :data"),
+    @NamedQuery(name = "Ponto.findByDescricaoAtividade", query = "SELECT p FROM Ponto p WHERE p.descricaoAtividade = :descricaoAtividade"),
+    @NamedQuery(name = "Ponto.findByTotalHoras", query = "SELECT p FROM Ponto p WHERE p.totalHoras = :totalHoras"),
+    @NamedQuery(name = "Ponto.findByUsuarioAndData", query = "SELECT p FROM Ponto p "
+            + "where p.matricula = :matricula and p.data = :data")
+})
 public class Ponto implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "idPonto")
     private Integer idPonto;
+    @Basic(optional = false)
+    @Column(name = "matricula")
+    private int matricula;
     @Column(name = "horaEntrada")
     @Temporal(TemporalType.TIME)
     private Date horaEntrada;
@@ -47,9 +56,8 @@ public class Ponto implements Serializable {
     private Date data;
     @Column(name = "descricaoAtividade")
     private String descricaoAtividade;
-    @JoinColumn(name = "matricula", referencedColumnName = "matricula")
-    @ManyToOne(optional = false)
-    private Usuario usuario;
+    @Column(name = "totalHoras")
+    private Integer totalHoras;
 
     public Ponto() {
     }
@@ -58,12 +66,25 @@ public class Ponto implements Serializable {
         this.idPonto = idPonto;
     }
 
+    public Ponto(Integer idPonto, int matricula) {
+        this.idPonto = idPonto;
+        this.matricula = matricula;
+    }
+
     public Integer getIdPonto() {
         return idPonto;
     }
 
     public void setIdPonto(Integer idPonto) {
         this.idPonto = idPonto;
+    }
+
+    public int getMatricula() {
+        return matricula;
+    }
+
+    public void setMatricula(int matricula) {
+        this.matricula = matricula;
     }
 
     public Date getHoraEntrada() {
@@ -98,12 +119,12 @@ public class Ponto implements Serializable {
         this.descricaoAtividade = descricaoAtividade;
     }
 
-    public Usuario getUsuario() {
-        return usuario;
+    public Integer getTotalHoras() {
+        return totalHoras;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setTotalHoras(Integer totalHoras) {
+        this.totalHoras = totalHoras;
     }
 
     @Override
@@ -130,5 +151,5 @@ public class Ponto implements Serializable {
     public String toString() {
         return "models.Ponto[ idPonto=" + idPonto + " ]";
     }
-    
+
 }
