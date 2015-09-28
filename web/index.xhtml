@@ -14,41 +14,43 @@
     </ui:define>
 
     <ui:define name="content">
-        <h:form>
+        <h:form id="formLoginSenha">
+            <p:growl id="growl" sticky="true" showDetail="true"/>
             <div id="panelCentralLogin">
                 <!--<div id="labelLogin">Login</div>-->
                 <div id="SenhaLogin">
-                    <form>
-                        <h:panelGrid columns="1" style="position: relative;left: 20%" >
-                            <h:outputLabel value="Usuário"></h:outputLabel>
-                            <h:inputText id="idLogin" style="left: 10%" value="#{beanLogar.usuario}"> </h:inputText>
+                    <div id="panelCentralLogin2">
+                        <h:panelGrid columns="1" style="position: relative;left: 43%" >
+                            <p:inputText id="idLogin" 
+                                         style="left: 10%" 
+                                         value="#{beanLogar.login}"
+                                         placeholder="Login ou E-mail"> 
+                            </p:inputText>
 
-                            <h:outputLabel value="Senha"></h:outputLabel>
-                            <h:inputText id="idSenha" value="#{beanLogar.senha}" ></h:inputText>
+                            <p:password id="idSenha"  value="#{beanLogar.senha}"
+                                        placeholder="Senha"></p:password>
 
                         </h:panelGrid>
-                    </form>
+                    </div>
                 </div>
                 <p:commandButton value="Acessar" id="btnAcessar" 
-                                 style="font-size: 11px;
-                                 top:25%;
-                                 left:34.3%;" action="#{beanLogar.verificar}"/>
-                <h:commandLink id="txtCadastrar" value="Cadastrar"  
-                               style="
-                               position: relative;
-                               top:27%;
-                               left:37%"/>
+                                 style="font-size: 12px;
+                                 top:15%;
+                                 left:39%;" action="#{beanLogar.verificar()}" 
+                                 update="formLoginSenha"/>
+                
+                <p:commandLink value="Esqueceu à Senha" 
+                               action="/RecuperarSenha.xhtml"
+                                style="position: relative;font-size: 12px;
+                                 top:17%;
+                                 left:42%;
+                                 outline-offset: inherit"/>
+
             </div>
+
         </h:form>
 
 
     </ui:define>
-
-
-
-
-
-
-
 
 </ui:composition>

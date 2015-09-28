@@ -1,0 +1,136 @@
+<ui:composition template="/Templates/AdminTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+
+
+    <ui:define name="content" rendered="true">
+        <script src = "jquery.js"  type = "text/javascript" ></script> 
+        <script src = "jquery.maskedinput.js"  type = "text/javascript" ></script>
+        <h:form id="fo">
+            <p:growl id="growl" autoUpdate="true" showDetail="true" />
+
+            <!--Tabela Principal-->
+
+            <p:dataTable id="tabela"  value="#{beanPonto.buscaPontoMensal(beanLogar.usuarioLogado)}" var="p" resizableColumns="false"
+                         rendered="true" style="margin-bottom:20px; font-size: 15px">
+
+                <f:facet name="header"  rendered="true">
+                    CONSULTA DE PONTO
+                </f:facet>
+
+                <p:column headerText="Projeto" filterBy="#{p.idUsuarioProjeto.idProjeto.nome}"
+                          style="text-transform: capitalize">
+                    <h:outputText value="#{p.idUsuarioProjeto.idProjeto.nome}" />
+                </p:column>
+
+                <p:column headerText="Data" >
+                    <center>
+                        <h:outputText value="#{p.data}" >
+                            <f:convertDateTime pattern="dd/MM/yyyy"  />
+                        </h:outputText>
+                    </center>
+                </p:column>
+
+                <p:column headerText="Horário Entrada" >
+                    <center>
+                        <h:outputText value="#{p.horaEntrada}" >
+                            <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Montevideo" />
+                        </h:outputText>
+                    </center>
+                </p:column>
+
+                <p:column headerText="Horário Saída" >
+                    <center>
+                        <h:outputText value="#{p.horaSaida}" >
+                            <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Montevideo" />
+                        </h:outputText>
+                    </center>
+                </p:column>
+                <!--Botões de ação da tabela-->
+
+                <p:column headerText="Ação" rendered="#{beanLogar.loggedUserType('Professor','Coordenador')}">
+                    <center>
+                        <p:commandButton  update=":fo:pontoDetail" oncomplete="PF('pontoDialog').show()" 
+                                          icon="ui-icon-pencil" title="Visualizar/Editar"
+                                          action="#{beanPonto.setPontoAtual(p)}"
+                                          >
+
+                        </p:commandButton>
+
+
+
+
+                    </center>
+                </p:column>
+
+            </p:dataTable>
+
+
+
+            <!--///Dialog para Exclusão-->
+            <p:dialog id="dialog2" header="Excluir Ponto?" widgetVar="pontoDialogExcluir" resizable="true" rendered="true" > 
+                <p:panel>
+                    <h:outputLabel id="pontoDialogExcluir" style="text-align:center;" rendered="true" value="Tem certeza que deseja Excluir o Ponto?">
+                    </h:outputLabel>
+
+                    <p:commandButton value="Não" 
+                                     icon="ui-icon-check"
+                                     oncomplete="PF('pontoDialogExcluir').hide()"
+                                     style="position: relative;top:36px;left: 10%"></p:commandButton>
+
+                   
+                </p:panel>
+            </p:dialog>
+
+
+            <!--Dialog para alteração-->
+            <p:dialog id="dialog" header="Editar Ponto" widgetVar="pontoDialog"  > 
+                <p:outputPanel id="pontoDetail" style="text-align:center;" rendered="true">
+                    <p:panelGrid  columns="1">
+                        <p:panelGrid  columns="2">
+
+                            <h:outputText value="Data" />
+                            <p:inputMask value="#{beanPonto.pontoAtual.data}" mask="99/99/9999" disabled="true">
+                                <f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+                            </p:inputMask>   
+
+                            <h:outputText  value="Descrição da atividade" />
+                            <p:inputText id="idEnd" value="#{beanPonto.pontoAtual.descricaoAtividade}" />
+
+                            <h:outputText value="Horário Entrada" />
+                            <p:inputMask value="#{beanPonto.pontoAtual.horaEntrada}" mask="99:99:99" disabled="true">
+                                <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Montevideo"></f:convertDateTime>
+                            </p:inputMask>  
+
+                            <h:outputText value="Horário Saída" />
+                            <p:inputMask value="#{beanPonto.pontoAtual.horaSaida}" mask="99:99:99" disabled="true">
+                                <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Montevideo"></f:convertDateTime>
+                            </p:inputMask>
+
+                        </p:panelGrid>
+                        <p:inputTextarea value="#{beanPonto.pontoAtual.descricaoAtividade}" rows="10" cols="50" autoResize="false"/>
+
+                    </p:panelGrid>
+
+                    <!--Botões para salvar alterações-->
+                    <p:commandButton value="Cancelar" oncomplete="PF('pontoDialog').hide()"  
+                                     style="right:  20%;top:8px"
+                                     icon="ui-icon-cancel"
+                                     ></p:commandButton>
+
+                    <p:commandButton value="Salvar" 
+                                     style="left: 20%;top:8px"
+                                     update="growl,tabela"
+                                     actionListener="#{beanPonto.editarPonto(submit)}" 
+                                     oncomplete="PF('pontoDialog').hide()"
+                                     icon="ui-icon-circle-check"
+                                     ></p:commandButton>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

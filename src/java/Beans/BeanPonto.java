@@ -4,6 +4,7 @@ import Controllers.PontoJpaController;
 import Controllers.UsuarioJpaController;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.faces.application.FacesMessage;
@@ -13,6 +14,9 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.swing.Action;
 import models.Ponto;
+import models.Projeto;
+import models.Usuario;
+import models.UsuarioProjeto;
 
 /**
  *
@@ -22,15 +26,20 @@ import models.Ponto;
 @SessionScoped
 public class BeanPonto implements Serializable {
 
-    private PontoJpaController pontoControle;
+    private PontoJpaController pontoControle = new PontoJpaController();
     private List<Ponto> lista = new ArrayList<Ponto>();
     private List<Ponto> allPontos = new ArrayList<Ponto>();
     @ManagedProperty(value = "#{beanLogar}")
     private BeanLogar beanLogar;
+    BeanUsuario_Projeto beanUsuarioProjeto = new BeanUsuario_Projeto();
     private Integer idUsuario = 0;
     private String txtDescricao;
-    private Util util = new Util();
     private Ponto pontoAtual = new Ponto();
+    Ponto ponto;
+    String mes;
+
+    UsuarioProjeto up;
+    BeanConverterProjeto beanConverteProjeto = new BeanConverterProjeto();
 
     public BeanPonto() {
     }
@@ -39,79 +48,72 @@ public class BeanPonto implements Serializable {
         if (pontoControle == null) {
             pontoControle = new PontoJpaController();
         }
-        return new UsuarioJpaController().findByMatricula(matricula).get(0).getNome();
+        String nome = new UsuarioJpaController().findByMatricula(matricula).getNome();
+        return nome;
     }
 
-    public String iniciarPonto() {
+    public void iniciarPonto(Projeto p) {
+        Calendar dataAtual = Calendar.getInstance();
+        boolean aux = false;
+        System.out.println("Projeto Selecionado: "+p.getNome());
+        getListaPonto();
+        up = beanUsuarioProjeto.getCadastroUsuarioProjeto(p, beanLogar.getUsuarioLogado());
         if (pontoControle == null) {
             pontoControle = new PontoJpaController();
         }
-        if (lista.size() > 0) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Ponto ja foi iniciado", ""));
-        } else {
+
+        if (!validarInicialidacao()) {
             try {
-                pontoAtual = new Ponto();
-                Date dataAtual = new Date();
-                pontoAtual.setData(dataAtual);
+                pontoAtual.setData(dataAtual.getTime());
                 pontoAtual.setDescricaoAtividade(txtDescricao);
-                pontoAtual.setHoraEntrada(dataAtual);
-                pontoAtual.setMatricula(getBeanLogar().getUsuarioLogado().getMatricula());
+                pontoAtual.setHoraEntrada(dataAtual.getTime());
+                pontoAtual.setIdUsuarioProjeto(up);
                 if (txtDescricao == null || txtDescricao.equals("")) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro: favor informar a atividade", ""));
                 } else {
-                    getLista();
+
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Ponto Efetuado com sucesso", ""));
                     txtDescricao = "";
                     pontoControle.create(pontoAtual);
-                    return "PF('pontoDialog').hide()";
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return null;
     }
 
-    public void encerrarPonto() {
+    public void encerrarPonto(Ponto pont) {
         if (pontoControle == null) {
             pontoControle = new PontoJpaController();
         }
-        getLista();
-        if (lista.get(lista.size() - 1).getHoraSaida() == null) {
-            if (lista.size() == 0) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Ponto ainda nao foi iniciado para ser encerrado", ""));
+
+        if (pont == null) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Selecione o Ponto a ser Encerrado", ""));
+        } else if (existePontoLista(pont)) {
+            if (pont.getHoraSaida() != null) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ponto já consta encerrado!", ""));
             } else {
                 try {
-                    Date dataAtual = new Date();
-                    pontoAtual = lista.get(lista.size() - 1);
-                    pontoAtual.setHoraSaida(dataAtual);
-                    pontoAtual.setIdPonto(lista.get(lista.size() - 1).getIdPonto());
-                    pontoControle.edit(pontoAtual);
-                    getLista();
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Ponto encerrado com sucesso", ""));
+                    Calendar dataFinal = Calendar.getInstance();
+                    pont.setHoraSaida(dataFinal.getTime());
+                    pontoControle.edit(pont);
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Ponto finalizado com sucesso!", ""));
                 } catch (Exception e) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro: ", ""));
                     e.printStackTrace();
                 }
             }
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Ponto ja foi encerrado", ""));
         }
     }
 
-    public void excluirPonto(int id) {
-        if (pontoControle == null) {
-            pontoControle = new PontoJpaController();
+    public boolean existePontoLista(Ponto p) {
+        for (int i = 0; i < getAllPontos().size(); i++) {
+            if (p.getIdPonto().equals(getAllPontos().get(i).getIdPonto())) {
+                return true;
+            }
         }
-        try {
-            pontoControle.destroy(id);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_INFO, "Deletado com sucesso!", ""));
-        } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_WARN, "Não foi possível deletar o Ponto!", ""));
-
-        }
+        return false;
     }
 
     public String editarPonto(Action submit) {
@@ -130,33 +132,70 @@ public class BeanPonto implements Serializable {
         return null;
     }
 
-    public String disableIniciar() {
-        System.out.println("lista.size() " + getLista());
-        if (lista.size() > 0) {
-            return "true";
-        }
-        return "false";
-    }
-
-    public String disableEncerrar() {
-        getLista();
-        if (lista.size() > 0) {
-            if (lista.get(lista.size() - 1).getHoraSaida() == null) {
-                return "false";
-            }
-        }
-        return "true";
-    }
-
-    public List<Ponto> getLista() {
+    public List<Ponto> getListaPonto() {
         if (pontoControle == null) {
             pontoControle = new PontoJpaController();
         }
         if (getBeanLogar().getUsuarioLogado() != null) {
             idUsuario = getBeanLogar().getUsuarioLogado().getMatricula();
         }
-        lista = pontoControle.findByUsuarioAndData(idUsuario, new Date());
-        return lista;
+        setLista(pontoControle.findByUsuarioAndData(idUsuario, new Date()));
+        return getLista();
+    }
+
+    //BUSCA PONTO DO USUARIO LOGADO
+    public List<Ponto> getPontoUsuarioLogado(Usuario us) {
+        List<Ponto> list = pontoControle.findByMatricula(us.getMatricula());
+        return list;
+    }
+
+    public boolean validarInicialidacao() {
+        boolean aux = false;
+        for (int i = 0; i < getLista().size(); i++) {
+            if (getLista().get(i).getIdUsuarioProjeto().getId().equals(up.getId())) {
+                FacesContext.getCurrentInstance().addMessage(
+                        null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Esse Projeto já consta iniciado Hoje!", ""));
+                aux = true;
+            }
+        }
+        return aux;
+    }
+
+    //BUSCA TODOS OS PONTO DO DIA CORRENTE DO USUARIO LOGADO
+    public List<Ponto> buscaPontoDiarioDoUsuario() {
+        Calendar data = Calendar.getInstance();
+        
+        setAllPontos(pontoControle.findByUsuarioAndData(beanLogar.getUsuarioLogado().getMatricula(), data.getTime()));
+        return getAllPontos();
+    }
+
+    //BUSCA TODOS OS PONTOS DO MES CORRENTE DE DETERMINADO USUARIO (USUARIO)
+    public List<Ponto> buscaPontoMensal(Usuario us) {
+        Calendar m = Calendar.getInstance();
+        int mes = (m.getTime().getMonth()+1);
+        try {
+            List<Ponto> listPonto = new ArrayList();
+            listPonto = pontoControle.findByMonth(mes, us);
+            return listPonto;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    //BUSCA TODOS OS PONTOS DO MES CORRENTE DE DETERMINADO USUARIO (Usuário, Mes)
+
+    public List<Ponto> buscarPontoDeData(Calendar dataInicial, Calendar dataFinal, Usuario us, Projeto p) {
+        CalendarView calendarView = new CalendarView();
+        try {
+            List<Ponto> listPonto = new ArrayList();
+            listPonto = pontoControle.findByData(dataInicial, dataFinal, 
+                    us.getMatricula(), p.getIdProjeto());
+            return listPonto;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void setLista(List<Ponto> lista) {
@@ -180,10 +219,6 @@ public class BeanPonto implements Serializable {
     }
 
     public List<Ponto> getAllPontos() {
-        if (pontoControle == null) {
-            pontoControle = new PontoJpaController();
-        }
-        allPontos = pontoControle.findAll();
         return allPontos;
     }
 
@@ -193,12 +228,31 @@ public class BeanPonto implements Serializable {
 
     public Ponto getPontoAtual() {
 
-        System.out.println("Ponto Atual " + pontoAtual);
         return pontoAtual;
     }
 
     public void setPontoAtual(Ponto pontoAtual) {
         this.pontoAtual = pontoAtual;
+    }
+
+    public Ponto getPonto() {
+        return ponto;
+    }
+
+    public void setPonto(Ponto ponto) {
+        this.ponto = ponto;
+    }
+
+    public List<Ponto> getLista() {
+        return lista;
+    }
+
+    public String getMes() {
+        return mes;
+    }
+
+    public void setMes(String mes) {
+        this.mes = mes;
     }
 
 }

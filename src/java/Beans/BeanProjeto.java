@@ -3,17 +3,18 @@ package Beans;
 import Controllers.ProjetoJpaController;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.swing.Action;
 import models.Projeto;
 import models.Usuario;
+import org.primefaces.event.DragDropEvent;
+import org.primefaces.event.FlowEvent;
 
 /**
  *
@@ -21,36 +22,33 @@ import models.Usuario;
  */
 @ManagedBean
 @ViewScoped
-public class BeanProjeto{
+public class BeanProjeto implements Serializable {
 
     private int idProjeto, matricula;
     private Date data;
+
     private String nome, estado, colegiado;
-    private Projeto projeto  = new Projeto();
+    private Projeto projeto = new Projeto();
     List<Projeto> listaProjeto;
-    ProjetoJpaController jpa = new ProjetoJpaController();
-
-    public String novoUsuario(Action submit) {
-        getProjeto().setNome(getNome());
-        getProjeto().setDataInicio(getData());
-        getProjeto().setColegiado(getColegiado());
-        getProjeto().setEstado(getEstado());
-
-        try {
-            jpa.create(getProjeto());
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Novo projeto cadastrado", ""));
-
-        } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Cadastro não foi realizado!", ""));
-        }
-
-        return null;
-    }
+    List<Projeto> listaProjetoAux;
+    ProjetoJpaController jpa;
+    static List<Usuario> dropLista = new ArrayList();
+    List<Usuario> lista = new ArrayList();
+    Date dataAtual = new Date();
 
     public void insert() {
+        Calendar dataAtual = Calendar.getInstance();
+        getProjeto().setNome(getNome());
+        getProjeto().setDataInicio(getDataAtual());
+        getProjeto().setColegiado(getColegiado());
+        getProjeto().setEstado(getEstado());
+        getProjeto().setDataInicio(dataAtual.getTime());
+         if (jpa == null) {
+            jpa = new ProjetoJpaController();
+        }
         if (validaProjeto(projeto)) {
             jpa.create(this.projeto);
-
+            setProjeto(new Projeto());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
                     FacesMessage.SEVERITY_INFO, "Cadastro realizado com sucesso!", ""));
         } else {
@@ -69,6 +67,9 @@ public class BeanProjeto{
     }
 
     public void excluirProjeto(int id) {
+         if (jpa == null) {
+            jpa = new ProjetoJpaController();
+        }
         try {
             jpa.destroy(id);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
@@ -80,7 +81,37 @@ public class BeanProjeto{
         }
     }
 
-    
+    public String onFlowProcess(FlowEvent event) {
+
+        String current = event.getOldStep();
+        String next = event.getNewStep();
+        boolean proceed = true;
+
+        if (current.equals("projeto") && next.equals("alunos") && (getProjeto() == null)) {
+
+            proceed = false;
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_INFO, "", "Necessário Escolher Projeto!"));
+        }
+        if (proceed) {
+            BeanUsuario.init();
+            return next;
+        } else {
+            BeanUsuario.init();
+
+            return current;
+        }
+    }
+
+//    public List<Projeto> getTodosProjetos() {
+//        return jpa.selectAll();
+//    }
+    //EVENTO DA DRAGDROP DE ARRASTAR E SOLTAR
+    public void onUsuarioDrop(DragDropEvent ddEvent) {
+        Usuario us = ((Usuario) ddEvent.getData());
+        dropLista.add(us);
+        lista.remove(us);
+    }
 
     public int getIdProjeto() {
         return idProjeto;
@@ -130,8 +161,6 @@ public class BeanProjeto{
         this.colegiado = colegiado;
     }
 
-
-
     public Projeto getProjeto() {
         return projeto;
     }
@@ -139,9 +168,11 @@ public class BeanProjeto{
     public void setProjeto(Projeto projeto) {
         this.projeto = projeto;
     }
-    
 
     public String editarProjeto(Action submit) {
+        if (jpa == null) {
+            jpa = new ProjetoJpaController();
+        }
 
         try {
             jpa.edit(getProjeto());
@@ -154,11 +185,39 @@ public class BeanProjeto{
 
         return null;
     }
-    
-    public List<Projeto> allProject(){
+
+    //Busca Todos os Projetos Cadastrados
+    public List<Projeto> todosProjetos() {
+         if (jpa == null) {
+            jpa = new ProjetoJpaController();
+        }
         List<Projeto> list = new ArrayList();
         list = jpa.selectAll();
         return list;
+    }
+
+    public void removerAlunoDaLista(Usuario us) {
+        dropLista.remove(us);
+    }
+
+    public void limparDropLista() {
+        this.dropLista = new ArrayList<>();
+    }
+
+    public List<Usuario> getDropLista() {
+        return dropLista;
+    }
+
+    public void setDropLista(List<Usuario> dropLista) {
+        this.dropLista = dropLista;
+    }
+
+    public Date getDataAtual() {
+        return dataAtual;
+    }
+
+    public void setDataAtual(Date dataAtual) {
+        this.dataAtual = dataAtual;
     }
 
 }

@@ -1,0 +1,126 @@
+<ui:composition template="/Templates/AdminTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+
+
+    <ui:define name="content" rendered="true">
+
+       
+        <h:form id="usForm"  rendered="#{beanLogar.loggedUserType('Aluno','Voluntário')}">
+            <center>
+                <div id="divSelectProject">
+
+                    <p:outputLabel for="labelProjeto" value="Projetos: " />
+                    <p:selectOneMenu id="labelProjeto" value="#{beanProjeto.projeto}" converter="projetoConverter">
+                        <f:selectItems value="#{beanConverterProjeto.getProjetosUsuarioLogado(beanLogar.usuarioLogado)}" 
+                                       var="p" itemLabel="#{p.nome}" itemValue="#{p}"/>
+                    </p:selectOneMenu>
+                </div>
+            </center>
+
+            <h:form id="formAcesso" >
+
+                <div id="divGlobal">
+
+                    <p:growl id="growl" autoUpdate="true" showDetail="true" />
+                    <p:commandButton class="btnIniciarSessao"  
+                                     value="Iniciar" 
+                                     title="Iniciar Registro do Ponto"
+                                     style="font-size: 15px;left: 10%;top:-5%" 
+                                     oncomplete="PF('pontoDialog').show()"
+                                     />
+                    <p:commandButton class="btnEncerrar"  
+                                     value="Encerrar" 
+                                     title="Encerrar Registro do Ponto"
+                                     style="font-size: 15px;left: 60%;top:-5% "
+                                     action="#{beanPonto.encerrarPonto(beanPonto.ponto)}"
+                                     update="usForm,tabelaPonto"
+                                     />
+
+                    <p:dataTable style="font-size: 15px"
+                                 value="#{beanPonto.buscaPontoDiarioDoUsuario()}"
+                                 var="ps"
+                                 rendered="true"
+                                 id="tabelaPonto"
+                                 selection="#{beanPonto.ponto}"
+                                 rowKey="#{ps.idPonto}"
+                                 emptyMessage="Nenhum Ponto iniciado hoje!">
+
+                        <f:facet name="header" rendered="true">Acesso Diário de Frequência </f:facet>
+
+                        <p:column selectionMode="single" style="width:16px;text-align:center" />
+                        <p:column headerText="Projeto" >
+                            <center>
+                                <h:outputText value="#{ps.idUsuarioProjeto.idProjeto.nome}">
+                                </h:outputText>
+                            </center>
+                        </p:column>
+
+                        <p:column headerText="Data" >
+                            <center>
+                                <h:outputText value="#{ps.data}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+                            </center>
+                        </p:column>
+
+                        <p:column headerText="Horário Entrada" >
+                            <center>
+                                <h:outputText value="#{ps.horaEntrada}" >
+                                    <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Montevideo" />
+                                </h:outputText>
+                            </center>
+                        </p:column>
+
+                        <p:column headerText="Horário Saída" >
+                            <center>
+                                <h:outputText value="#{ps.horaSaida}" >
+                                    <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Montevideo"/>
+                                </h:outputText>
+                            </center>
+                        </p:column>
+
+                        <p:column headerText="Descrição" >
+                            <center>
+                                <h:outputText value="#{ps.descricaoAtividade}"/>
+                            </center>
+                        </p:column>
+
+                    </p:dataTable>
+
+                    <p:dialog id="dialog" header="Descreva a atividade a ser realizada" widgetVar="pontoDialog"   > 
+                        <p:outputPanel  id="panelDialog" style="text-align:center;" rendered="true">
+                            <p:panelGrid  id="gridId" columns="4"  >
+                                <p:inputTextarea value="#{beanPonto.txtDescricao}" rows="10" cols="50" autoResize="false"/>
+                            </p:panelGrid>
+
+                            <!--Botões para salvar alterações-->
+
+                            <p:commandButton value="Continuar" 
+                                             action="#{beanPonto.iniciarPonto(beanProjeto.projeto)}"
+                                             icon="ui-icon-circle-check"
+                                             update="usForm,tabelaPonto"
+                                             oncomplete="PF('pontoDialog').hide()"/>
+                        </p:outputPanel>
+                    </p:dialog>
+
+                </div>
+            </h:form>
+
+        </h:form>
+
+        <h:form id="formLogoUnifil" rendered="#{beanLogar.loggedUserType('Coordenador','Professor')}">
+            <div>
+                <center>
+                    <h:graphicImage id="imgNpi"  url="/resources/img/icone.png" 
+                                    width="200" height="200" 
+                                    style="position: absolute;top: 30%;left: 35%;right: 50%" />
+                </center>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

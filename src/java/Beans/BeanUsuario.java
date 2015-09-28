@@ -1,16 +1,20 @@
 package Beans;
 
 import Controllers.UsuarioJpaController;
+import hash.GenerateSenha;
+import hash.Sha;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.swing.Action;
 import models.Usuario;
+import org.primefaces.event.DragDropEvent;
 
 /**
  *
@@ -18,7 +22,7 @@ import models.Usuario;
  */
 @ManagedBean
 @ViewScoped
-public class BeanUsuario {
+public class BeanUsuario implements Serializable {
 
     private String nome;
     private String login;
@@ -26,7 +30,6 @@ public class BeanUsuario {
     private String email;
     private String tel1;
     private String tel2;
-
     private String tel3;
     private String endereco;
     private String colegiado;
@@ -34,8 +37,21 @@ public class BeanUsuario {
     private String tipoUsuario;
     private Usuario user = new Usuario();
     List<Usuario> lista = new ArrayList();
+    static List<Usuario> listaUsuarios;
+    static List<Usuario> dropList;
+    private String senhaConfirm;
+    private String senhaAntiga;
+    private String renhaReset;
 
-    UsuarioJpaController jpa = new UsuarioJpaController();
+    BeanUsuario_Projeto beanUsuarioProjeto = new BeanUsuario_Projeto();
+    static UsuarioJpaController usuarioControlerJpa = new UsuarioJpaController();
+    BeanUsuario_Projeto usuarioProjeto = new BeanUsuario_Projeto();
+
+    @PostConstruct
+    static public void init() {
+        listaUsuarios = usuarioControlerJpa.getAllUserStudentsAndVolunteers();
+        dropList = new ArrayList<Usuario>();
+    }
 
     public String novoUsuario(Action submit) {
         getUser().setEmail(getEmail());
@@ -50,7 +66,7 @@ public class BeanUsuario {
         getUser().setColegiado(getColegiado());
 
         try {
-            jpa.create(getUser());
+            usuarioControlerJpa.create(getUser());
             setUser(new Usuario());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
                     FacesMessage.SEVERITY_INFO, "Novo usuario cadastrado", ""));
@@ -62,48 +78,159 @@ public class BeanUsuario {
         return null;
     }
 
+    //metodo deve ser testado!
     public void insert() {
+
         if (validaUsuario(user)) {
-            jpa.create(this.user);
+            if (!user.getSenha().equals("")) {
+                try {
+                    String aux = user.getSenha();
+                    String senhaHash = Sha.generateHash(aux);
+                    user.setSenha(senhaHash);
+//                    System.out.println("Senha Hash: "+user.getSenha());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            usuarioControlerJpa.create(this.user);
             setUser(new Usuario());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
                     FacesMessage.SEVERITY_INFO, "Cadastro realizado com sucesso!", ""));
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_WARN, "Não foi possível realizar cadastro!", ""));
         }
-
     }
 
-    public void insert(Usuario us) {
-        if (validaUsuario(us)) {
-            jpa.create(us);
-
+    public void esqueceuSenha(String senha, String senhaConfirm, String email) {
+        Usuario us = new Usuario();
+        if (senha.equals("") || senhaConfirm.equals("") || email.equals("")) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_INFO, "Cadastro realizado com sucesso!", ""));
+                    FacesMessage.SEVERITY_ERROR, "Existem campos vazios!", ""));
+        } else if (!senha.equals(senhaConfirm)) {
+        } else {
+            us = usuarioControlerJpa.getFindEmail(email.trim());
+            if (us != null) {
+                us.setSenha(senha);
+                try {
+                    usuarioControlerJpa.edit(us);
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                            FacesMessage.SEVERITY_INFO, "Senha Alterada com sucesso!", ""));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                        FacesMessage.SEVERITY_ERROR, "Email não Localizado!", ""));
+            }
+        }
+    }
+
+    public void alterarSenha(String senhaAntiga, String senhaNova, String senhaConfirm, Usuario usuarioLogado) {
+        if (!senhaAntiga.equals("") || !senhaNova.equals("") || !senhaConfirm.equals("")) {
+            String senhaAntigaHash = getSenhaHash(senhaAntiga);
+            String senhaNovaHash = getSenhaHash(senhaNova);
+            String senhaConfirmHash = getSenhaHash(senhaConfirm);
+            Usuario us = usuarioControlerJpa.findUsuario(usuarioLogado.getMatricula());
+            if (!us.getSenha().equals("")) {
+                if (!us.getSenha().equals(senhaAntigaHash)) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                            FacesMessage.SEVERITY_ERROR, "Senha Atual Incorreta!", ""));
+                } else if (!senhaNovaHash.equals(senhaConfirmHash)) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                            FacesMessage.SEVERITY_ERROR, "Confirmação de Senha inválido!", ""));
+                } else {
+                    try {
+                        us.setSenha(senhaNovaHash);
+                        usuarioControlerJpa.edit(us);
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                                FacesMessage.SEVERITY_INFO, "Alteração Realizada!", ""));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                if (!senhaNovaHash.equals(senhaConfirmHash)) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                            FacesMessage.SEVERITY_ERROR, "Confirmação de Senha inválido!", ""));
+                } else {
+                    try {
+                        us.setSenha(senhaNovaHash);
+                        usuarioControlerJpa.edit(us);
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                                FacesMessage.SEVERITY_INFO, "Alteração Realizada!", ""));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_WARN, "Não foi possível realizar cadastro!", ""));
-        }
+                    FacesMessage.SEVERITY_ERROR, "Todos os campos devem ser preenchidos!", ""));
 
+        }
+    }
+
+    // PROFESSOR OU COORDENADOR REALIZA RESET DA SENHA PARA DATA DE ANIVERSARIO
+    public void resetSenha(Usuario us) {
+        final String senhaProvisoria = "123";
+        Usuario usuario = usuarioControlerJpa.findUsuario(us.getMatricula());
+        if (usuario != null) {
+            String senha = getSenhaHash(senhaProvisoria);
+            usuario.setSenha(senha);
+            try {
+                usuarioControlerJpa.edit(usuario);
+                setRenhaReset(usuario.getSenha());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public String getSenhaHash(String senha) {
+        try {
+            return Sha.generateHash(senha);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public boolean validaUsuario(Usuario usuario) {
-        if (usuario.getTipoUsuario().equals("") && usuario.getNome().equals("")) {
+        List<Usuario> listaUser = listaUsuarios();
+        if (!listaUser.isEmpty()) {
+            for (int i = 0; i < listaUser.size(); i++) {
+                if (usuario.getEmail().equals(listaUser.get(i).getEmail())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                            FacesMessage.SEVERITY_ERROR, "Email já Cadastrado!", ""));
+
+                    return false;
+
+                } else if (usuario.getEmail().equals("")) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                            FacesMessage.SEVERITY_ERROR, "Incluir o Nome", ""));
+                    return false;
+                }
+            }
+        }
+        try {
+            if (usuario.getTipoUsuario().equals("")
+                    || usuario.getNome().equals("")) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                        FacesMessage.SEVERITY_INFO, "Necessário incluir o nome!", ""));
+                return false;
+            }
+        } catch (Exception e) {
             return false;
         }
         return true;
-
     }
 
-    public void excluirUsuario(int id) {
+    public void excluirUsuario(Usuario us) {
+        beanUsuarioProjeto.removeRegistroCadastro(us);
         try {
-            jpa.destroy(id);
+            usuarioControlerJpa.destroy(us.getMatricula());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_INFO, "Deletado com sucesso!", ""));
+                    FacesMessage.SEVERITY_INFO, "Usuário Deletado!", ""));
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_WARN, "Não foi possível deletar o Usuário!", ""));
+                    FacesMessage.SEVERITY_WARN, "Não foi possível deletar o Usuário" + "\n" + "Contate o Administrador!", ""));
 
         }
     }
@@ -111,7 +238,7 @@ public class BeanUsuario {
     public String editarUsuario(Action submit) {
 
         try {
-            jpa.edit(getUser());
+            usuarioControlerJpa.edit(getUser());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
                     FacesMessage.SEVERITY_INFO, "Alteração realizada!", ""));
         } catch (Exception e) {
@@ -122,32 +249,48 @@ public class BeanUsuario {
         return null;
     }
 
-    public List<Usuario> selecionarAll() {
-        List lista;
-        try {
-            lista = jpa.findUsuarioEntities();
-            return lista;
+//BUSCAR TODOS OS USUARIOS CADASTRADOS SEM EXCEÇÃO
+    public List<Usuario> listaUsuarios() {
+        lista = usuarioControlerJpa.selectAll();
+        return lista;
+    }
+//BUSCAR TODOS OS PROFESSORES CADASTRADOS DA TABELA USUARIO
 
-        } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_WARN, "Não foi possível buscar Usuarios!", ""));
+    public List<Usuario> usuariosProfessores() {
+        List list = new ArrayList();
+        list = usuarioControlerJpa.getUserProfessor();
+        if(list ==  null){
+        return null;
+        }else{
+            return list; 
+        }
+    }
+//BUSCAR TODOS OS ALUNOS E VOLUNTÁRIOS CADASTRADOS NA TABELA USUARIO
+
+    public List<Usuario> getBuscarAlunosEVoluntarios() {
+        return listaUsuarios;
+    }
+
+    //BUSCAR USUÁRIOS CADASTRADOS CONFORME O PERFIL LOGADO (USUARIO_LOGADO)
+    public List<Usuario> getUsuarioCadastrados(Usuario us) {
+        if (us.getTipoUsuario().equals("Coordenador")) {
+            return usuarioControlerJpa.selectAll();
+        } else if (us.getTipoUsuario().equals("Professor")) {
+            return usuarioControlerJpa.getAllUserStudentsAndVolunteers();
         }
         return null;
     }
 
-    public List<Usuario> listaUsuarios() {
-        lista = jpa.selectAll();
-        return lista;
+    //EVENTO DA DRAGDROP DE ARRASTAR E SOLTAR
+    public void onUsuarioDrop(DragDropEvent ddEvent) {
+        Usuario us = ((Usuario) ddEvent.getData());
+        System.out.println("us: " + us);
+        dropList.add(us);
+        listaUsuarios.remove(us);
     }
 
-    public List<Usuario> getUsuariosProfessores() {
-        List list;
-        list = jpa.getUsuarioProfessor();
-        return list;
-    }
-
-    public void incluirUsuarioProjeto(Usuario usuario) {
-
+    public void removerAlunoDaLista(Usuario us) {
+        dropList.remove(us);
     }
 
     public String getNome() {
@@ -191,7 +334,6 @@ public class BeanUsuario {
     }
 
     public void setUser(Usuario user) {
-        System.out.println("Classe Usuario: " + user);
         this.user = user;
     }
 
@@ -285,31 +427,52 @@ public class BeanUsuario {
         this.dataNasc = dataNasc;
     }
 
-//    public String getNomeTipoUsuario(Usuario us) {
-//        String nomeTipo = "";
-//        
-//        try{
-//        if (us.getTipoUsuario().equals("1") || us.getTipoUsuario().equals("2") || us.getTipoUsuario().equals("3") || us.getTipoUsuario().equals("4")) {
-//            switch (us.getTipoUsuario()) {
-//                case "1":
-//                    nomeTipo = "Coordenador";
-//                    break;
-//                case "2":
-//                    nomeTipo = "Professor";
-//                    break;
-//                case "3":
-//                    nomeTipo = "Aluno";
-//                    break;
-//                case "4":
-//                    nomeTipo = "Voluntário";
-//                    break;
-//            }
-//            return nomeTipo;
-//        }
-//        } catch(Exception e) {
-//            FacesContext.getCurrentInstance().addMessage(null, 
-//                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Usuário Inválido", ""));
-//        }
-//        return nomeTipo;
-//    }
+    public List<Usuario> getLista() {
+        return lista;
+    }
+
+    public void setLista(List<Usuario> lista) {
+        this.lista = lista;
+    }
+
+    public List<Usuario> getListaUsuarios() {
+        return listaUsuarios;
+    }
+
+    public void setListaUsuarios(List<Usuario> listaUsuarios) {
+        this.listaUsuarios = listaUsuarios;
+    }
+
+    public List<Usuario> getDropList() {
+        return dropList;
+    }
+
+    public void setDropList(List<Usuario> dropList) {
+        this.dropList = dropList;
+    }
+
+    public String getSenhaConfirm() {
+        return senhaConfirm;
+    }
+
+    public void setSenhaConfirm(String senhaConfirm) {
+        this.senhaConfirm = senhaConfirm;
+    }
+
+    public String getSenhaAntiga() {
+        return senhaAntiga;
+    }
+
+    public void setSenhaAntiga(String senhaAntiga) {
+        this.senhaAntiga = senhaAntiga;
+    }
+
+    public String getRenhaReset() {
+        return renhaReset;
+    }
+
+    public void setRenhaReset(String renhaReset) {
+        this.renhaReset = renhaReset;
+    }
+
 }

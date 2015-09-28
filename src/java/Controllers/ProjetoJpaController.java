@@ -19,7 +19,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import models.Projeto;
-import models.Usuario;
 
 /**
  *
@@ -27,15 +26,17 @@ import models.Usuario;
  */
 public class ProjetoJpaController implements Serializable {
 
+    public ProjetoJpaController() {
+    }
+
+    
     public ProjetoJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
-
-    public ProjetoJpaController() {
-    }
-    
     private EntityManagerFactory emf = null;
 
+    
+    
     public EntityManager getEntityManager() {
         try {
             if (emf == null) {
@@ -65,12 +66,12 @@ public class ProjetoJpaController implements Serializable {
             projeto.setUsuarioProjetoList(attachedUsuarioProjetoList);
             em.persist(projeto);
             for (UsuarioProjeto usuarioProjetoListUsuarioProjeto : projeto.getUsuarioProjetoList()) {
-                Projeto oldProjetoOfUsuarioProjetoListUsuarioProjeto = usuarioProjetoListUsuarioProjeto.getProjeto();
-                usuarioProjetoListUsuarioProjeto.setProjeto(projeto);
+                Projeto oldIdProjetoOfUsuarioProjetoListUsuarioProjeto = usuarioProjetoListUsuarioProjeto.getIdProjeto();
+                usuarioProjetoListUsuarioProjeto.setIdProjeto(projeto);
                 usuarioProjetoListUsuarioProjeto = em.merge(usuarioProjetoListUsuarioProjeto);
-                if (oldProjetoOfUsuarioProjetoListUsuarioProjeto != null) {
-                    oldProjetoOfUsuarioProjetoListUsuarioProjeto.getUsuarioProjetoList().remove(usuarioProjetoListUsuarioProjeto);
-                    oldProjetoOfUsuarioProjetoListUsuarioProjeto = em.merge(oldProjetoOfUsuarioProjetoListUsuarioProjeto);
+                if (oldIdProjetoOfUsuarioProjetoListUsuarioProjeto != null) {
+                    oldIdProjetoOfUsuarioProjetoListUsuarioProjeto.getUsuarioProjetoList().remove(usuarioProjetoListUsuarioProjeto);
+                    oldIdProjetoOfUsuarioProjetoListUsuarioProjeto = em.merge(oldIdProjetoOfUsuarioProjetoListUsuarioProjeto);
                 }
             }
             em.getTransaction().commit();
@@ -95,7 +96,7 @@ public class ProjetoJpaController implements Serializable {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain UsuarioProjeto " + usuarioProjetoListOldUsuarioProjeto + " since its projeto field is not nullable.");
+                    illegalOrphanMessages.add("You must retain UsuarioProjeto " + usuarioProjetoListOldUsuarioProjeto + " since its idProjeto field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -111,12 +112,12 @@ public class ProjetoJpaController implements Serializable {
             projeto = em.merge(projeto);
             for (UsuarioProjeto usuarioProjetoListNewUsuarioProjeto : usuarioProjetoListNew) {
                 if (!usuarioProjetoListOld.contains(usuarioProjetoListNewUsuarioProjeto)) {
-                    Projeto oldProjetoOfUsuarioProjetoListNewUsuarioProjeto = usuarioProjetoListNewUsuarioProjeto.getProjeto();
-                    usuarioProjetoListNewUsuarioProjeto.setProjeto(projeto);
+                    Projeto oldIdProjetoOfUsuarioProjetoListNewUsuarioProjeto = usuarioProjetoListNewUsuarioProjeto.getIdProjeto();
+                    usuarioProjetoListNewUsuarioProjeto.setIdProjeto(projeto);
                     usuarioProjetoListNewUsuarioProjeto = em.merge(usuarioProjetoListNewUsuarioProjeto);
-                    if (oldProjetoOfUsuarioProjetoListNewUsuarioProjeto != null && !oldProjetoOfUsuarioProjetoListNewUsuarioProjeto.equals(projeto)) {
-                        oldProjetoOfUsuarioProjetoListNewUsuarioProjeto.getUsuarioProjetoList().remove(usuarioProjetoListNewUsuarioProjeto);
-                        oldProjetoOfUsuarioProjetoListNewUsuarioProjeto = em.merge(oldProjetoOfUsuarioProjetoListNewUsuarioProjeto);
+                    if (oldIdProjetoOfUsuarioProjetoListNewUsuarioProjeto != null && !oldIdProjetoOfUsuarioProjetoListNewUsuarioProjeto.equals(projeto)) {
+                        oldIdProjetoOfUsuarioProjetoListNewUsuarioProjeto.getUsuarioProjetoList().remove(usuarioProjetoListNewUsuarioProjeto);
+                        oldIdProjetoOfUsuarioProjetoListNewUsuarioProjeto = em.merge(oldIdProjetoOfUsuarioProjetoListNewUsuarioProjeto);
                     }
                 }
             }
@@ -155,7 +156,7 @@ public class ProjetoJpaController implements Serializable {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Projeto (" + projeto + ") cannot be destroyed since the UsuarioProjeto " + usuarioProjetoListOrphanCheckUsuarioProjeto + " in its usuarioProjetoList field has a non-nullable projeto field.");
+                illegalOrphanMessages.add("This Projeto (" + projeto + ") cannot be destroyed since the UsuarioProjeto " + usuarioProjetoListOrphanCheckUsuarioProjeto + " in its usuarioProjetoList field has a non-nullable idProjeto field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
@@ -216,13 +217,20 @@ public class ProjetoJpaController implements Serializable {
     }
     
     public List<Projeto> selectAll() {
-       
         EntityManager em = getEntityManager();
-
-        Query query = em.createQuery("SELECT p FROM Projeto p");
+        try{
+        Query query = em.createQuery("SELECT p FROM Projeto p ORDER BY p.nome");
         List<Projeto> qlista = query.getResultList();
-
         return qlista;
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }finally {
+            if (em != null) {
+                em.close();
+            }
+        }
     }
+    
     
 }

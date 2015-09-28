@@ -7,6 +7,7 @@ package Controllers;
 
 import Controllers.exceptions.NonexistentEntityException;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -17,6 +18,9 @@ import javax.persistence.Persistence;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import models.Ponto;
+import models.Projeto;
+import models.Usuario;
+import models.UsuarioProjeto;
 
 /**
  *
@@ -46,11 +50,21 @@ public class PontoJpaController implements Serializable {
     }
 
     public void create(Ponto ponto) {
+        System.out.println("ponto: " + ponto);
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            UsuarioProjeto idUsuarioProjeto = ponto.getIdUsuarioProjeto();
+            if (idUsuarioProjeto != null) {
+                idUsuarioProjeto = em.getReference(idUsuarioProjeto.getClass(), idUsuarioProjeto.getId());
+                ponto.setIdUsuarioProjeto(idUsuarioProjeto);
+            }
             em.persist(ponto);
+            if (idUsuarioProjeto != null) {
+                idUsuarioProjeto.getPontoList().add(ponto);
+                idUsuarioProjeto = em.merge(idUsuarioProjeto);
+            }
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -64,7 +78,22 @@ public class PontoJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Ponto persistentPonto = em.find(Ponto.class, ponto.getIdPonto());
+            UsuarioProjeto idUsuarioProjetoOld = persistentPonto.getIdUsuarioProjeto();
+            UsuarioProjeto idUsuarioProjetoNew = ponto.getIdUsuarioProjeto();
+            if (idUsuarioProjetoNew != null) {
+                idUsuarioProjetoNew = em.getReference(idUsuarioProjetoNew.getClass(), idUsuarioProjetoNew.getId());
+                ponto.setIdUsuarioProjeto(idUsuarioProjetoNew);
+            }
             ponto = em.merge(ponto);
+            if (idUsuarioProjetoOld != null && !idUsuarioProjetoOld.equals(idUsuarioProjetoNew)) {
+                idUsuarioProjetoOld.getPontoList().remove(ponto);
+                idUsuarioProjetoOld = em.merge(idUsuarioProjetoOld);
+            }
+            if (idUsuarioProjetoNew != null && !idUsuarioProjetoNew.equals(idUsuarioProjetoOld)) {
+                idUsuarioProjetoNew.getPontoList().add(ponto);
+                idUsuarioProjetoNew = em.merge(idUsuarioProjetoNew);
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -93,6 +122,11 @@ public class PontoJpaController implements Serializable {
                 ponto.getIdPonto();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The ponto with id " + id + " no longer exists.", enfe);
+            }
+            UsuarioProjeto idUsuarioProjeto = ponto.getIdUsuarioProjeto();
+            if (idUsuarioProjeto != null) {
+                idUsuarioProjeto.getPontoList().remove(ponto);
+                idUsuarioProjeto = em.merge(idUsuarioProjeto);
             }
             em.remove(ponto);
             em.getTransaction().commit();
@@ -149,6 +183,8 @@ public class PontoJpaController implements Serializable {
         }
     }
 
+    //BUSCA TODOS PONTOS SEM RESTRIÇÕES
+
     public List<Ponto> findAll() {
 
         EntityManager em = getEntityManager();
@@ -158,22 +194,81 @@ public class PontoJpaController implements Serializable {
             return lista;
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
         }
         return null;
     }
+//BUSCA PONTOS DO MES CORRENTE PASSADOS COMO PARAMETRO (MES/USUARIO)
 
-    public List<Ponto> findByData(Date data) {
+    public List<Ponto> findByMonth(Integer mes, Usuario us) {
         EntityManager em = getEntityManager();
         try {
-            Query query = em.createNamedQuery("Ponto.findByData");
-            query.setParameter("data", data);
+            Query query = em.createNamedQuery("Ponto.findByMonth");
+            query.setParameter("mes", mes);
+            query.setParameter("matricula", us.getMatricula());
             List<Ponto> lista = query.getResultList();
             return lista;
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
         }
         return null;
     }
+
+    //BUSCA PONTOS DO MES E ANO COM HORA_ENTRADA OU HORA_SAIDA NULL, PASSADOS COMO PARAMETRO 
+    //(DIA_INICIAL, DIA_FINAL, USUARIO, PROJETO)
+
+    public List<Ponto> findByDataHourNull(Calendar dataInicial, Calendar dataFinal, Integer us, Integer p) {
+        Date ini = dataInicial.getTime();
+        Date fim = dataFinal.getTime();
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createNamedQuery("Ponto.findByDateByUserAndProject");
+            query.setParameter("dataInicial", ini);
+            query.setParameter("dataFinal", fim);
+            query.setParameter("matricula", us);
+            query.setParameter("idProjeto", p);
+            List<Ponto> lista = query.getResultList();
+            return lista;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return null;
+    }
+    //BUSCA PONTOS DO MES E ANO USUARIO E PROJETO (DATA_INICIAL, DATA_FINAL, MATRICULA, ID_PROJETO)
+    public List<Ponto> findByData(Calendar dataInicial, Calendar dataFinal, Integer us, Integer p) {
+        Date ini = dataInicial.getTime();
+        Date fim = dataFinal.getTime();
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createNamedQuery("Ponto.findByDateByUserAndProject");
+            query.setParameter("dataInicial", ini);
+            query.setParameter("dataFinal", fim);
+            query.setParameter("matricula", us);
+            query.setParameter("idProjeto", p);
+            List<Ponto> lista = query.getResultList();
+            return lista;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return null;
+    }
+    
+//BUSCA A LISTA DE PONTOS SOBRE DETERMINADA DATA E USUÁRIO (DATA, USUARIO)
 
     public List<Ponto> findByUsuarioAndData(Integer matricula, Date data) {
         EntityManager em = getEntityManager();
@@ -185,9 +280,14 @@ public class PontoJpaController implements Serializable {
             return lista;
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
         }
         return null;
     }
+//BUSCA USUÁRIO CONFORME A MATRICULA (MATRICULA)
 
     public List<Ponto> findByMatricula(Integer matricula) {
         EntityManager em = getEntityManager();
@@ -198,6 +298,10 @@ public class PontoJpaController implements Serializable {
             return lista;
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
         }
         return null;
     }

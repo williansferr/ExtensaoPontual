@@ -1,0 +1,81 @@
+<ui:composition template="/Templates/AdminTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+
+    <ui:define name="left-menu">
+        <div id="divLogoUnifilLogin">
+            <h:graphicImage id="logo-inicial"  url="/resources/img/logo_unifil.png" 
+                            width="196" height="70" style="position: relative;top: 190px;margin-left: 10px;" />
+        </div>
+    </ui:define>
+    <ui:define name="content" rendered="true">
+        <p:messages autoUpdate="true" />
+
+        <h:form rendered="true" id="formGerenciarSenha" 
+                style="position: absolute;width: 50%; left: 20%;top:10%" >
+
+            <p:growl id="growl" autoUpdate="true" showDetail="true" />
+
+            <h:panelGrid id="doCadastroPnl" columns="2" rendered="true" cellspacing="15" 
+                         style="width: 100%; background: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
+                         rgba(255, 255, 255, 0)) repeat scroll 0 0">
+
+                <f:facet name="header">
+                    <h:outputText value="RECUPERAR SENHA" 
+                                  style="position: relative; right: 3%;margin-bottom: 40%;font-size: 15px"  />
+                </f:facet>
+                
+                 <h:outputLabel  for="txtSenhaAtual"  value="Senha Atual"  style="font-size: 17px" />
+                <p:password id="txtSenhaAtual"  value="#{beanUsuario.senhaAntiga}" 
+                             requiredMessage="Favor entrar com um a senha atual."
+                             title="Senha atual" 
+                             >
+                </p:password>
+
+                <p:outputLabel for="txtEmail" value="E-mail: "
+                               title="Será utilizado p/ realizar login."
+                               style="font-size: 17px"/>
+                <p:inputText id="txtEmail" 
+                             title="Endereço eletrônico do Usuário" 
+                             value="#{beanUsuario.user.email}"
+                             class="txtEmailSenha"
+                             requiredMessage="Favor entrar com Email para o Usuário"
+                             >
+                </p:inputText>
+
+
+                <h:outputLabel  for="txtLogin"  value="Senha"  style="font-size: 17px" />
+                <p:password id="txtLogin"  value="#{beanUsuario.senha}" 
+                             requiredMessage="Favor entrar com um login para o Usuário."
+                             title="Login do Usuário" 
+                             >
+                </p:password>
+
+                <h:outputLabel  for="txtSenhaLogin"  value="Confirmar Senha "  style="font-size: 17px" />
+                <p:password id="txtSenhaLogin"  value="#{beanUsuario.senhaConfirm}" 
+                            label="Confirmar Senha"
+                            requiredMessage="Favor entrar com uma senha para o Usuário."
+                            title="Senha do Usuário" 
+                            >
+                </p:password>
+
+                <p:commandButton id="btnCancelar" 
+                                 value="Cancelar"
+                                 action="/index.xhtml"
+                                 icon="ui-icon-arrow-1-w"
+                                 style="position: relative ;left: 15%;font-size: 15px"/>
+
+                <p:commandButton value="Salvar" 
+                                 action="#{beanUsuario.alterarSenha(beanUsuario.senhaAntiga,beanUsuario.senha, beanUsuario.senhaConfirm, beanUsuario.user.email)}"
+                                 icon="ui-icon-circle-check"
+                                 update="formGerenciarSenha"
+                                 style="position: relative;left: 70%;font-size: 15px"/>
+            </h:panelGrid>
+        </h:form>
+
+    </ui:define>
+</ui:composition>

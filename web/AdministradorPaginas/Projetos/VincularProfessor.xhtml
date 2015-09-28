@@ -10,105 +10,112 @@
     <ui:define name="content" rendered="true">
 
         <h:form id="fo" >
-                <p:growl id="growl_1" autoUpdate="true" showDetail="true" />
+            <p:growl id="growl_1" autoUpdate="true" showDetail="true" />
 
-                <!--Tabela Principal-->
-                <p:dataTable id="singleDT"
-                             value="#{beanUsuario.usuariosProfessores}" 
-                             var="us"  rowKey="#{us.matricula}" 
-                             style="font-size: 15px;margin-bottom:20px;">
+            <!--Tabela Principal-->
+            <p:dataTable id="singleDT"
+                         value="#{beanProjeto.todosProjetos()}" 
+                         var="p"  rowKey="#{p.idProjeto}" 
+                         style="font-size: 15px;margin-bottom:20px;"
+                         emptyMessage="Nenhum Projeto Cadastrado!">
 
-                    <f:facet name="header"  rendered="true">
-                        Relacionar Professor ao Projeto
-                    </f:facet>
+                <f:facet name="header"  rendered="true">
+                    ADICIONAR PROFESSOR
+                </f:facet>
 
-                    <p:column headerText="Nome" filterBy="#{us.nome}"  >
-                        <h:outputText value="#{us.nome}" />
-                    </p:column>
+                <p:column headerText="Nome" filterBy="#{p.nome}" style="text-transform: capitalize"  >
+                    <h:outputText value="#{p.nome}" />
+                </p:column>
 
-                    <p:column headerText="Matrícula" filterBy="#{us.matricula}">
-                        <center>
-                            <h:outputText value="#{us.matricula}" />
-                        </center>
-                    </p:column>
+                <p:column headerText="Colegiado" filterBy="#{p.colegiado}" style="text-transform: capitalize" >
+                    <center>
+                        <h:outputText value="#{p.colegiado}" style="text-transform: capitalize" />
+                    </center>
+                </p:column>
 
-                    <p:column headerText="Usuário" >
-                        <center>
-                            <h:outputText value="#{us.tipoUsuario}" />
-                        </center>
-                    </p:column>
-
-                    <p:column headerText="Projeto Extensão">
-                        <center>
-                            <p:outputLabel value="#{beanUsuario_Projeto.projeto.nome}"></p:outputLabel>
-                        </center>
-                    </p:column>
-
-                    <p:column headerText="Alterar">
-                        <center>
-                            <p:commandButton  update=":fo:dialogEscolherProjeto"
-                                              oncomplete="PF('dialogEscolherProjeto').show()" 
-                                              icon="ui-icon-search" 
-                                              title="Definir Projeto" 
-                                              style="font-size: 13px"
-                                              action="#{beanProjeto.setProjeto(p)}">
-
-                            </p:commandButton>
-                        </center>
-                    </p:column>
-
-                </p:dataTable>
-
-                <!--Dialog para Escolha do Projeto-->
-                <p:growl id="growl" autoUpdate="true" showDetail="true" />
-                <p:dialog id="dialogEscolherProjeto" header="Escolher Projeto" widgetVar="dialogEscolherProjeto">
+                <p:column headerText="Situação" style="text-transform: capitalize" >
+                    <center>
+                        <h:outputText value="#{p.estado}" />
+                    </center>
+                </p:column>
 
 
-                    <p:dataTable id="tabela" value="#{beanProjeto.allProject()}" 
-                                 var="p" 
+
+
+                <p:column headerText="Incluir Professor">
+                    <center>
+                        <p:commandButton  update=":fo:dialogEscolherProfessor"
+                                          oncomplete="PF('dialogEscolherProfessor').show()" 
+                                          icon="ui-icon-person" 
+                                          title="Incluir Professor" 
+                                          style="font-size: 13px"
+                                          action="#{beanProjeto.setProjeto(p)}"
+                                          >
+                        </p:commandButton>
+                    </center>
+                </p:column>
+
+            </p:dataTable>
+
+            <!--Dialog para Escolha do Projeto-->
+            <p:growl id="growl" autoUpdate="true" showDetail="true" />
+            <p:dialog id="dialogEscolherProfessor" 
+                      header="Selecionar Professor" 
+                      showHeader="true"
+                      widgetVar="dialogEscolherProfessor"
+                      height="380"
+                      width="900">
+
+
+                    <p:dataTable id="tabela" value="#{beanUsuario.usuariosProfessores()}" 
+                                 var="u" 
                                  style="margin-bottom:20px; font-size: 15px"
-                                 selection="#{beanProjeto.projeto}"
-                                 rowKey="#{p.idProjeto}">
+                                 selection="#{beanUsuario.user}"
+                                 rowKey="#{u.matricula}"
+                                 emptyMessage="Nenhum Professor Cadastrado!">
 
 
                         <p:column selectionMode="single" style="width:16px;text-align:center"/>
 
-                        <p:column headerText="Nome" filterBy="#{p.nome}"  >
-                            <h:outputText value="#{p.nome}" />
+                        <p:column headerText="Nome" filterBy="#{u.nome}" style="text-transform: capitalize" >
+                            <h:outputText value="#{u.nome}" />
                         </p:column>
 
-                        <p:column headerText="Colegiado" filterBy="#{p.colegiado}">
-                            <h:outputText value="#{p.colegiado}" />
+                        <p:column headerText="Matrícula" filterBy="#{usuario.matricula}"  style="text-transform: capitalize" >
+                            <h:outputText value="#{u.matricula}" />
+                        </p:column>
+
+                        <p:column headerText="Colegiado" filterBy="#{usuario.colegiado}">
+                            <h:outputText value="#{u.colegiado}" />
                         </p:column>
 
 
-                        <p:column headerText="Situação" >
-                            <h:outputText value="#{p.estado}" />
+                        <p:column headerText="Email" >
+                            <h:outputText value="#{u.email}" />
                         </p:column>
 
-                        <p:column headerText="Professor Responsavel" filterBy="#{p.colegiado}" >
-                            <h:outputText  />
-                        </p:column>
+
+
+
 
                     </p:dataTable>
-                    <!--comandos do Associar Projeto ao Professor, fica fora da tabela-->
+                    <!--comandos do Associar Projeto ao Professor, fora da tabela-->
 
                     <p:commandButton value="Cancelar"
-                                     style="left: 10%;font-size: 13px"
+                                     style="left: 10%;font-size: 13px;padding: 0.5%"
                                      icon="ui-icon-close"
-                                     oncomplete="PF('dialogEscolherProjeto').hide()">
+                                     oncomplete="PF('dialogEscolherProfessor').hide()">
                     </p:commandButton>
 
-                    <p:commandButton value="Escolher Projeto" 
-                                     process="tabela"
-                                     action="#{beanUsuario_Projeto.jpa.findAll()}"
-                                     style="left:65%;font-size: 13px"
+                    <p:commandButton value="Adicionar Professor" 
+                                     action="#{beanUsuario_Projeto.insert(beanUsuario.user,beanProjeto.projeto)}"
+                                     style="left:55%;font-size: 13px;padding: 0.5%"
                                      icon="ui-icon-check"
-                                     update="growl_1,tabela"
-                                     oncomplete="PF('dialogEscolherProjeto').hide()">
+                                     update="growl_1,singleDT"
+                                     oncomplete="PF('dialogEscolherProfessor').hide()"
+                                     >
                     </p:commandButton>
-                    <!--</p:outputLabel>-->
-                </p:dialog>
+            </p:dialog>
         </h:form>
     </ui:define>
 </ui:composition>

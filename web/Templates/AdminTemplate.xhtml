@@ -20,59 +20,49 @@
 
     <ui:define name="left-menu" rendered="true">
         <h:form id="fSideMenu">
-            <p:slideMenu style="width: 94%; margin: 0.5%;" backLabel="Voltar" >
-                <p:menuitem value="Inicio" outcome="/AdministradorPaginas/Ponto/AcessarPonto.xhtml"></p:menuitem>
-                <p:separator />
-                <p:submenu label="Ponto" >
-                    <p:menuitem value="Justificar"  ></p:menuitem>
-                    <p:separator />
-                    <p:submenu label="Consultar">
-                        <p:menuitem value="Aluno" outcome="/AdministradorPaginas/Ponto/ConsultaPonto.xhtml"> </p:menuitem>
-                        <p:separator />
-                        <p:menuitem value="Projeto" rendered="false"> </p:menuitem>
-                        <p:separator />
-                    </p:submenu>
-                    <p:separator />
+            <p:slideMenu style="width: 94%; margin: 0.4%; font-size: 20px" backLabel="Voltar" >
+                <p:menuitem icon="ui-icon-home" value="Inicio" outcome="/AdministradorPaginas/Ponto/EscolherProjetoAcessarPonto.xhtml"></p:menuitem>
+                <p:menuitem icon="ui-icon-flag" value="Ponto Mensal" rendered="#{beanLogar.loggedUserType('Aluno','Voluntário')}" outcome="/AdministradorPaginas/Ponto/ConsultaPontoUserLogado.xhtml">
+                </p:menuitem>
+                <p:submenu icon="ui-icon-flag" label="Ponto"  rendered="#{beanLogar.loggedUserType('Professor','Coordenador')}" >
+
+                    
+                    <p:menuitem value="Justificar" outcome="/AdministradorPaginas/Ponto/ConsultaJustificarPonto.xhtml" rendered="#{beanLogar.loggedUserType('Professor','Coordenador')}" ></p:menuitem>
+
                 </p:submenu>
 
-                <p:separator />
 
-                <p:submenu label="Projeto" >
-                    <p:menuitem value="Cadastrar" outcome="/AdministradorPaginas/Projetos/CadastroProjeto.xhtml">
+                <p:submenu icon="ui-icon-wrench" label="Projeto" rendered="#{beanLogar.loggedUserType('Coordenador','Professor')}">
+                    <p:menuitem value="Cadastrar" rendered="#{beanLogar.loggedUserType('Coordenador')}" 
+                                outcome="/AdministradorPaginas/Projetos/CadastroProjeto.xhtml">
 
                     </p:menuitem>
-                    <p:separator />
-                    <p:menuitem value="Consultar" outcome="/AdministradorPaginas/Projetos/ConsultaProjetos.xhtml">
+                    <p:menuitem value="Consultar" rendered="#{beanLogar.loggedUserType('Coordenador','Professor')}" 
+                                outcome="/AdministradorPaginas/Projetos/ConsultaProjetos.xhtml"/>
 
-                    </p:menuitem>
-                    <p:separator />
-                    <p:menuitem value="Associar Aluno"></p:menuitem>
-                    <p:separator />
-                    <p:menuitem value="Associar Professor" outcome="/AdministradorPaginas/Projetos/VincularProfessor.xhtml">
+                    <p:menuitem value="Incluir Aluno" rendered="#{beanLogar.loggedUserType('Coordenador','Professor')}" 
+                                outcome="/AdministradorPaginas/Projetos/VincularAlunos.xhtml"/>
 
-                    </p:menuitem>
-                    <p:separator />
+                    <p:menuitem value="Incluir Professor" rendered="#{beanLogar.loggedUserType('Coordenador')}" 
+                                outcome="/AdministradorPaginas/Projetos/VincularProfessor.xhtml"/>
                 </p:submenu>
 
-                <p:separator />
 
-                <p:submenu label="Usuario" >
-                    <p:menuitem value="Cadastrar"  outcome="/AdministradorPaginas/Usuario/CadastroUsuario.xhtml" ajax="false" ></p:menuitem>
-                    <p:separator/>
-                    <p:menuitem value="Consultar" outcome="/AdministradorPaginas/Usuario/ConsultaUsuarios.xhtml" ajax="false" ></p:menuitem>
-                    <p:separator />
+                <p:submenu icon="ui-icon-person" label="Usuario" rendered="#{beanLogar.loggedUserType('Coordenador','Professor')}">
+                    <p:menuitem value="Cadastrar" rendered="#{beanLogar.loggedUserType('Coordenador','Professor')}"
+                                outcome="/AdministradorPaginas/Usuario/CadastroUsuario.xhtml" ajax="false" ></p:menuitem>
+
+                    <p:menuitem value="Consultar" rendered="#{beanLogar.loggedUserType('Coordenador','Professor')}"
+                                outcome="/AdministradorPaginas/Usuario/ConsultaUsuarios.xhtml" ajax="false" ></p:menuitem>
                 </p:submenu>
 
-                <p:separator />
 
-                <p:submenu label="Relatório" >
-                    <p:menuitem value="Cadastrar"  ajax="false" />
-                    <p:separator/>
-                    <p:menuitem value="Consultar"  ajax="false" />
-                    <p:separator />
-                </p:submenu>
-                <p:separator/>
-                <p:menuitem value="Sair" outcome="/index.xhtml"/>
+                <p:menuitem icon="ui-icon-document" value="Relatório" rendered="#{beanLogar.loggedUserType('Coordenador')}"
+                            outcome="/AdministradorPaginas/Relatorio/ConsultaRelatorioPontoAluno.xhtml"></p:menuitem>
+
+                <p:menuitem icon="ui-icon-locked" value="Senha" outcome="/AdministradorPaginas/LoginSenha/GerenciarSenha.xhtml"></p:menuitem>
+                <p:menuitem icon="ui-icon-arrow-1-w" value="Sair" outcome="/index.xhtml"/>
+
             </p:slideMenu>
 
         </h:form>
@@ -80,6 +70,12 @@
             <h:graphicImage id="logo"  url="/resources/img/logo_unifil.png" 
                             width="196" height="70" style="position: relative;top: 50px;margin-left: 10px;" />
         </div>
+        <div>
+            <h:graphicImage id="imgNpi"  url="/resources/img/logoNPI.png" 
+                            width="196" height="70" style="position: relative;top: 80px;margin-left: 10px;" />
+
+        </div>
+
     </ui:define>
 </ui:composition>
 

@@ -1,0 +1,149 @@
+<ui:composition template="/Templates/AdminTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+
+
+    <ui:define name="content" rendered="true">
+
+        <script type="text/javascript">
+            function handleDrop(event, ui) {
+                var dropLista = ui.dropLista,
+                        helper = ui.helper,
+                        position = ui.position,
+                        offset = ui.offset;
+            }
+        </script> 
+
+
+        <h:form id="usForm"  >
+
+            <p:growl id="growl" sticky="true" showDetail="true"/>
+            <p:wizard flowListener="#{beanProjeto.onFlowProcess}"  
+                      nextLabel="Continuar" backLabel="Voltar"
+                      >
+
+                <p:tab id="projeto" title="1 - Selecionar Projeto" transient="true">
+
+                    <p:message for="projeto"/>
+                    <p:dataTable id="tabEscolhaProjetos" 
+                                 value="#{beanUsuario_Projeto.getProjetosUsuarioLogado(beanLogar.usuarioLogado)}"
+                                 var="p" 
+                                 selection="#{beanProjeto.projeto}" 
+                                 rowKey="#{p.idProjeto}" 
+                                 emptyMessage="É necessário que você seja cadastrado em algum projeto!">
+
+
+
+                        <p:column selectionMode="single" style="width:16px;text-align:center" />
+                        <p:column headerText="Nome" colspan="3"  filterBy="#{p.nome}" style="text-transform: capitalize">
+                            <h:outputText value="#{p.nome}" ></h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Colegiado"  style="text-transform: capitalize">
+                            <h:outputText value="#{p.colegiado}"></h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Situação"  style="text-transform: capitalize">
+                            <h:outputText value="#{p.estado}"></h:outputText>
+                        </p:column>
+
+                    </p:dataTable>
+                </p:tab>
+
+                <p:tab id="alunos" title="2 - Adicionar Alunos" >
+                    <p:dataTable id="availableStudents" var="us" 
+                                 value="#{beanUsuario.buscarAlunosEVoluntarios}"
+                                 >
+
+                        <p:column style="width:20px" >
+                            <h:outputText id="ui-icon-arrow-4" styleClass="ui-icon ui-icon-arrow-4"
+                                          title="Pressione e Arraste" />
+
+                            <p:draggable for="ui-icon-arrow-4" revert="true" helper="clone" />
+                        </p:column>
+
+                        <p:column headerText="Nome" filterBy="#{us.nome}" colspan="3" style="text-transform: capitalize">
+                            <h:outputText value="#{us.nome}" />
+                        </p:column>
+
+                        <p:column headerText="Matrícula" filterBy="#{us.matricula}" colspan="2"
+                                  style="text-align: center;text-transform: capitalize">
+                            <h:outputText value="#{us.matricula}" />
+                        </p:column>
+
+                        <p:column headerText="Usuário" filterBy="#{us.tipoUsuario}" colspan="2" 
+                                  style="text-align: center;text-transform: capitalize">
+                            <h:outputText value="#{us.tipoUsuario}" />
+                        </p:column>
+
+                    </p:dataTable>
+               
+                
+                <p:fieldset id="selectedUsers" 
+
+
+
+                            legend="Projeto - #{beanProjeto.projeto.nome}"
+                            style="width: 95%;text-transform: capitalize"
+                            >
+                    <p:outputPanel id="dropArea">
+                        <h:outputText value="Arraste aqui os alunos que deseja cadastrar!" 
+                                      rendered="#{empty beanUsuario.dropList}" 
+                                      style="font-size:15px;text-transform: uppercase" />
+
+                        <p:dataTable id="selectedUsersTable" var="listDrop" style="text-transform: capitalize"
+                                     value="#{beanUsuario.dropList}" 
+                                     rendered="#{not empty beanUsuario.dropList}"
+                                     >
+
+
+                            <p:column headerText="Nome">
+                                <h:outputText value="#{listDrop.nome}" />
+                            </p:column>
+
+                            <p:column headerText="Matrícula">
+                                <h:outputText value="#{listDrop.matricula}" />
+                            </p:column>
+
+                            <p:column headerText="Usuário">
+                                <h:outputText value="#{listDrop.tipoUsuario}" />
+                            </p:column>
+
+
+                            <p:column headerText="Remover" style="text-align: center">
+                                <p:commandButton style="width: 30%; "
+                                                 actionListener="#{beanUsuario.removerAlunoDaLista(listDrop)}"
+                                                 update=":usForm:dropArea"
+                                                 icon="ui-icon-trash" 
+                                                 title="Remover Usuário">
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                    </p:outputPanel>
+                </p:fieldset>
+
+                <!--Falta apenas incluir o Projeto Escolhido-->
+                <p:commandButton value="Adicionar" 
+                                 actionListener="#{beanUsuario_Projeto.incluirAlunosNoProjeto(beanUsuario.dropList, 
+                                                   beanProjeto.projeto )}"
+                                 style="left: 87%;top: 40px;position: relative" 
+                                 update="@all"
+                                 icon="ui-icon-circle-check">
+                </p:commandButton>
+
+                <p:droppable for="selectedUsers" tolerance="touch" activeStyleClass="ui-state-highlight" 
+                             datasource="availableStudents" onDrop="handleDrop">
+                    <p:ajax listener="#{beanUsuario.onUsuarioDrop}" update="dropArea availableStudents" />
+                </p:droppable>
+
+             </p:tab>
+
+
+            </p:wizard>
+        </h:form>
+    </ui:define>
+</ui:composition>

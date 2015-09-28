@@ -7,7 +7,9 @@ package models;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,21 +17,43 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Willians
  */
 @Entity
-@Table(name = "usuario")
+@Table(name = "usuario", catalog = "sipow", schema = "")
+@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
-    @NamedQuery(name = "Usuario.findByMatricula", query = "SELECT u FROM Usuario u where u.matricula = :matricula")})
-public class Usuario implements Serializable {
+    @NamedQuery(name = "Usuario.findAll",
+            query = "SELECT u FROM Usuario u ORDER BY u.nome"),
 
+    @NamedQuery(name = "Usuario.findByMatricula",
+            query = "SELECT u FROM Usuario u where u.matricula = :matricula ORDER BY u.nome"),
+
+    @NamedQuery(name = "Usuario.findUsersProfessor",
+            query = "SELECT u FROM Usuario u where u.tipoUsuario = 'Professor' ORDER BY u.nome"),
+
+    @NamedQuery(name = "Usuario.findAllUserStudentsAndVolunteers",
+            query = "SELECT u FROM Usuario u where u.tipoUsuario = 'Aluno' or u.tipoUsuario = 'Voluntario' ORDER BY u.nome"),
+
+    @NamedQuery(name = "Usuario.findAllEmails",
+            query = "SELECT u.email FROM Usuario u"),
+
+    @NamedQuery(name = "Usuario.findEmail",
+            query = "SELECT u FROM Usuario u "
+                    + "where u.email = :email")
+})
+
+
+public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
     @Basic(optional = false)
     @Column(name = "nome")
@@ -53,6 +77,7 @@ public class Usuario implements Serializable {
     private String senha;
     @Column(name = "login")
     private String login;
+    @Basic(optional = false)
     @Column(name = "email")
     private String email;
     @Column(name = "telefoneResidencial")
@@ -61,6 +86,8 @@ public class Usuario implements Serializable {
     private String telefoneComercial;
     @Column(name = "telefoneCelular")
     private String telefoneCelular;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "matricula")
+    private List<UsuarioProjeto> usuarioProjetoList;
 
     public Usuario() {
     }
@@ -69,10 +96,11 @@ public class Usuario implements Serializable {
         this.matricula = matricula;
     }
 
-    public Usuario(Integer matricula, String nome, String tipoUsuario) {
+    public Usuario(Integer matricula, String nome, String tipoUsuario, String email) {
         this.matricula = matricula;
         this.nome = nome;
         this.tipoUsuario = tipoUsuario;
+        this.email = email;
     }
 
     public String getNome() {
@@ -171,6 +199,25 @@ public class Usuario implements Serializable {
         this.telefoneCelular = telefoneCelular;
     }
 
+    @XmlTransient
+    public List<UsuarioProjeto> getUsuarioProjetoList() {
+        return usuarioProjetoList;
+    }
+
+    public void setUsuarioProjetoList(List<UsuarioProjeto> usuarioProjetoList) {
+        this.usuarioProjetoList = usuarioProjetoList;
+    }
+//
+//    @XmlTransient
+//    public List<Ponto> getPontoList() {
+//        return pontoList;
+//    }
+//
+//    public void setPontoList(List<Ponto> pontoList) {
+//        this.pontoList = pontoList;
+//    }
+    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -195,5 +242,5 @@ public class Usuario implements Serializable {
     public String toString() {
         return "models.Usuario[ matricula=" + matricula + " ]";
     }
-
+    
 }

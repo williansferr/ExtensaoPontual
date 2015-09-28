@@ -10,22 +10,31 @@
     <ui:define name="content" rendered="true">
 
         <h:form id="fo">
-           <p:growl id="growl" autoUpdate="true" showDetail="true" />
-           
-           <!--Tabela Principal-->
-           
-           <p:dataTable id="tabela"  value="#{beanProjeto.allProject()}" var="p" resizableColumns="false"
-                         rendered="true" style="margin-bottom:20px; font-size: 15px">
+            <p:growl id="growl" autoUpdate="true" showDetail="true" />
+
+            <!--Tabela Principal-->
+
+            <p:dataTable id="tabela"  value="#{beanUsuario_Projeto.getProjetosUsuarioLogado(beanLogar.usuarioLogado)}" var="p" resizableColumns="false"
+                         rendered="true" style="margin-bottom:20px; font-size: 15px"
+                         emptyMessage="Não há projetos em seu cadastro">
 
                 <f:facet name="header"  rendered="true">
-                    PROJETOS CADASTRADOS
+                    CONSULTA DE PROJETOS
                 </f:facet>
 
-                <p:column headerText="Nome" filterBy="#{p.nome}"  >
+                <p:column headerText="Nome" filterBy="#{p.nome}" style="text-transform: capitalize" >
                     <h:outputText value="#{p.nome}" />
                 </p:column>
 
-                <p:column headerText="Colegiado" filterBy="#{p.colegiado}">
+                <p:column headerText="Data Inicio"  style="text-transform: capitalize"  >
+                    <center>
+                        <h:outputText value="#{p.dataInicio}" >
+                            <f:convertDateTime pattern="dd/MM/yyyy"  />
+                        </h:outputText>
+                    </center>
+                </p:column>
+
+                <p:column headerText="Colegiado" filterBy="#{p.colegiado}" style="text-transform: capitalize" >
                     <h:outputText value="#{p.colegiado}" />
                 </p:column>
 
@@ -36,14 +45,9 @@
                 </p:column>
 
 
-               <p:column headerText="Professor Coordenador" >
-                   <h:outputText value="#{beanUsuario_Projeto.getNomeProjetoOuUsuario(p)}" />
-                </p:column>
-                
-
                 <!--Botões de ação da tabela-->
-                
-                <p:column headerText="Ação">
+
+                <p:column headerText="Ações">
                     <center>
                         <p:commandButton  update=":fo:projetoDetail" oncomplete="PF('ProjetoDialog').show()" 
                                           icon="ui-icon-pencil" title="Visualizar/Editar"
@@ -54,8 +58,8 @@
 
                         <p:commandButton icon="ui-icon-trash" title="Excluir" 
                                          update=":fo:projetoDialogExcluir"
-                                        
-                                         oncomplete="PF('projetoDialogExcluir').show()" >
+                                         oncomplete="PF('projetoDialogExcluir').show()" 
+                                         rendered="#{beanLogar.loggedUserType('Coordenador')}">
 
                             <f:setPropertyActionListener value="#{p}" target="#{beanProjeto.projeto}" /> 
 
@@ -74,50 +78,79 @@
                 <p:panel>
                     <h:outputLabel id="projetoDialogExcluir" style="text-align:center;" rendered="true" value="Tem certeza que deseja Excluir o Usuário?">
                     </h:outputLabel>
-                    
-                     <p:commandButton value="Não" 
+
+                    <p:commandButton value="Não" 
                                      icon="ui-icon-check"
                                      oncomplete="PF('projetoDialogExcluir').hide()"
                                      style="position: relative;top:36px;left: 10%"></p:commandButton>
-                    
+
                     <p:commandButton value="Sim" 
                                      oncomplete="PF('projetoDialogExcluir').hide()"
                                      update="growl,tabela"
                                      icon="ui-icon-notice"
                                      actionListener="#{beanProjeto.excluirProjeto(beanProjeto.projeto.idProjeto)}"
                                      style="position: relative;top:0px"
-                                     
+
                                      ></p:commandButton>
                 </p:panel>
             </p:dialog>
 
 
-            <!--Dialog para alteração-->
-            <p:dialog id="dialog" header="Editar Projeto" widgetVar="ProjetoDialog"   > 
+            <!--Dialog para alteração do projeto escolhido-->
+
+            <p:dialog id="dialog" header="Editar Projeto" widgetVar="ProjetoDialog" width="70%"  > 
                 <p:outputPanel id="projetoDetail" style="text-align:center;" rendered="true">
-                    <p:panelGrid  columns="2"  >
+                    <p:panelGrid  id="PanelGridAlterar" columns="2"   >
 
 
                         <h:outputText value="Nome:" />
-                        <p:inputText value="#{beanProjeto.projeto.nome}" />
+                        <p:inputText value="#{beanProjeto.projeto.nome}" disabled="#{beanLogar.loggedUserType('Professor')}"
+                                     style="width: 100%;text-transform: capitalize" />
 
                         <h:outputText  value="Colegiado" />
-                        <p:inputText id="idEnd" value="#{beanProjeto.projeto.colegiado}" />
+                        <p:inputText id="idEnd" value="#{beanProjeto.projeto.colegiado}" 
+                                     disabled="#{beanLogar.loggedUserType('Professor')}" 
+                                     style="width: 100%;text-transform: capitalize" />
 
 
-                        <h:outputText value="Data" />
-                        <p:inputMask value="#{beanProjeto.projeto.dataInicio}" mask="99/99/9999" >
-                            <f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
-                        </p:inputMask>                     
+
 
                         <h:outputText value="Estado" />
-                        <p:inputText value="#{beanProjeto.projeto.estado}" />
+                        <p:selectOneMenu id="txtEstado" 
+                                         class="radiosContainer sessionComponent" 
+                                         value="#{beanProjeto.projeto.estado}"
+                                         disabled="#{beanLogar.loggedUserType('Professor')}">
+                            <p:ajax event="click" 
+                                    update="@(#cbFuncao),fo,growl"/>
+                            <f:selectItem  itemLabel="Em Execução" itemValue="Em Execução"></f:selectItem>
+                            <f:selectItem itemLabel="Aprovado" itemValue="Aprovado"></f:selectItem>
+                            <f:selectItem itemLabel="Em Análise" itemValue="Em Análise"></f:selectItem>
+                            <f:selectItem itemLabel="Pendente" itemValue="Pendente"></f:selectItem>
+                            <f:selectItem itemLabel="Reprovado" itemValue="Reprovado"></f:selectItem>
+                            <f:selectItem itemLabel="Concluído" itemValue="Concluído"></f:selectItem>
+                        </p:selectOneMenu>
 
-                        <h:outputText value="Professor Coordenador" />
-                        <p:inputText label="Professor" disabled="true" value="#{beanProjeto.projeto.estado}" >
-                            <p:commandButton value="Buscar" style="font-size: 13px"></p:commandButton>
-                        </p:inputText>
-                        
+                        <h:outputText value="Professor" title="Visualizar Professor Coordenador"  />
+                        <p:commandButton update="fo:dialogVisualizarProfessor"
+                                         value="Buscar"
+                                         icon="ui-icon-search"
+                                         oncomplete="PF('ProjetoDialogVisualizarProfessor').show()"
+                                         title="Visualizar Professor do Projeto"
+                                         action="#{beanUsuario_Projeto.setListaProfessores(
+                                                   beanUsuario_Projeto.getListaRegistroProfessor(beanProjeto.projeto))}">
+                        </p:commandButton>
+
+                        <h:outputText value="Alunos" />
+                        <p:commandButton update="fo:dialogVisualizarAlunos"
+                                         oncomplete="PF('ProjetoDialogVisualizarAlunos').show()"
+                                         value="Buscar"
+                                         icon="ui-icon-search" 
+                                         title="Visualizar Alunos do Projeto"
+                                         action="#{beanUsuario_Projeto.setListaAlunosPorProjeto(
+                                                   beanUsuario_Projeto.getAlunosDoProjeto(beanProjeto.projeto))}"
+                                         >
+                        </p:commandButton>
+
                     </p:panelGrid>
 
 
@@ -127,15 +160,160 @@
                                      icon="ui-icon-cancel"
                                      ></p:commandButton>
 
+
+
                     <p:commandButton value="Salvar" 
                                      style="left: 20%;top:8px"
                                      actionListener="#{beanProjeto.editarProjeto(submit)}" 
-                                     update="growl,tabela"
+                                     update="fo,dialog"
                                      oncomplete="PF('ProjetoDialog').hide()"
                                      icon="ui-icon-circle-check"
                                      ></p:commandButton>
                 </p:outputPanel>
             </p:dialog>
+
+
+            <!--DIALOG PARA ALTERAR O PROFESSOR-->
+            <p:dialog id="dialogAlterarProfessor"
+                      header="Alterar Professor" 
+                      widgetVar="escolherProfessorDialog"
+                      height="380"
+                      width="900">
+                <p:panel id="panelAlterarProfessor">
+                    <p:dataTable id="tabelaAlterarProfessor" value="#{beanUsuario.usuariosProfessores()}" 
+                                 var="u" 
+                                 style="margin-bottom:20px; font-size: 15px"
+                                 selection="#{beanUsuario.user}"
+                                 rowKey="#{u.matricula}">
+
+
+                        <p:column selectionMode="single" style="width:16px;text-align:center"/>
+
+                        <p:column headerText="Nome" filterBy="#{u.nome}" style="text-transform: capitalize" >
+                            <h:outputText value="#{u.nome}" />
+                        </p:column>
+
+                        <p:column headerText="Matrícula" filterBy="#{usuario.matricula}"  style="text-transform: capitalize" >
+                            <h:outputText value="#{u.matricula}" />
+                        </p:column>
+
+                        <p:column headerText="Colegiado" filterBy="#{usuario.colegiado}">
+                            <h:outputText value="#{u.colegiado}" />
+                        </p:column>
+
+
+                        <p:column headerText="Email" >
+                            <h:outputText value="#{u.email}" />
+                        </p:column>
+                    </p:dataTable>
+                    <!--BOTOES PARA ALTERAR O PROFESSOR (outro dialog)-->
+
+                </p:panel>
+
+
+            </p:dialog>
+
+            <!--DIALOG PARA VISUALIZAR ALUNOS DO PROJETO-->
+            <p:dialog id="dialogVisualizarAlunos"
+                      header="Alunos ou Voluntários desse Projeto" 
+                      widgetVar="ProjetoDialogVisualizarAlunos"
+                      width="800"
+                      height="300px">
+                <p:outputPanel id='panelAlunosDoProjeto' >
+
+                    <p:dataTable id="tabelaAlunosDoProjeto" 
+                                 value="#{beanUsuario_Projeto.listaAlunosPorProjeto}" 
+                                 var="aluno"
+                                 emptyMessage="Nenhum Aluno Cadastrado">
+
+                        <p:column headerText="Nome" style="text-transform: capitalize">
+                            <h:outputText value="#{aluno.nome}" />
+                        </p:column>
+                        
+                        
+
+                        <p:column headerText="Colegiado" style="text-transform: capitalize">
+                            <h:outputText value="#{aluno.colegiado}" />
+                        </p:column>
+
+                        <p:column headerText="Matricula">
+                            <h:outputText value="#{aluno.matricula}" />
+                        </p:column>
+
+                        <p:column headerText="Ação" style="text-align: center;text-transform: capitalize">
+                            <p:commandButton 
+                                title="Remover Aluno desse Projeto"
+                                actionListener="#{beanUsuario_Projeto.excluirCadastro(
+                                                  aluno, beanProjeto.projeto)}"
+                                update=":fo:panelAlunosDoProjeto"
+                                icon="ui-icon-trash"
+                                oncomplete="PF('ProjetoDialogVisualizarAlunos').hide()"
+                                >
+
+                            </p:commandButton>
+                        </p:column>
+
+                    </p:dataTable>
+
+
+                </p:outputPanel>
+                <p:commandButton value="Fechar" style="top:10px;position: relative;left: 10%"
+                                 oncomplete="PF('ProjetoDialogVisualizarAlunos').hide()">
+
+                </p:commandButton>
+            </p:dialog>
+
+
+            <!--DIALOG PARA VISUALIZAR PROFESSOR DO PROJETO-->
+            <p:dialog id="dialogVisualizarProfessor"
+                      header="Professor Coordenador do Projeto" 
+                      widgetVar="ProjetoDialogVisualizarProfessor"
+                      width="70%">
+                <p:panel id='panelProfessorDoProjeto' rendered="true">
+
+                    <p:dataTable id="tabelaProfessorDoProjeto" 
+                                 value="#{beanUsuario_Projeto.listaProfessores}" 
+                                 var="professor"
+                                 emptyMessage="Nenhum Professor Cadastrado">
+
+                        <p:column headerText="Nome" style="text-transform: capitalize">
+                            <h:outputText value="#{professor.nome}" />
+                        </p:column>
+
+                        
+                        <p:column headerText="Colegiado" style="text-transform: capitalize">
+                            <h:outputText value="#{professor.colegiado}" />
+                        </p:column>
+
+                        <p:column headerText="Matricula">
+                            <h:outputText value="#{professor.matricula}" />
+                        </p:column>
+
+                        <p:column headerText="Ação" style="text-align: center;text-transform: capitalize">
+
+                            <p:commandButton 
+                                title="Remover Professor do Projeto"
+                                actionListener="#{beanUsuario_Projeto.excluirCadastro(
+                                                  professor, beanProjeto.projeto)}"
+                                update=":fo:panelAlunosDoProjeto"
+                                icon="ui-icon-trash"
+                                oncomplete="PF('ProjetoDialogVisualizarProfessor').hide()"
+                                disabled="#{beanLogar.loggedUserType('Professor')}">
+
+                            </p:commandButton>
+                        </p:column>
+
+                    </p:dataTable>
+
+                    <p:commandButton value="Fechar"
+                                     oncomplete="PF('ProjetoDialogVisualizarProfessor').hide()">
+
+                    </p:commandButton>
+                </p:panel>
+
+            </p:dialog>
+
+
         </h:form>
     </ui:define>
 </ui:composition>

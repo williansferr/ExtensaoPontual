@@ -7,70 +7,74 @@
 
     <ui:define name="content" rendered="true">
 
-        <h:form rendered="true" id="formCadastro" >
-            <p:panel style="width: 100%; 
-                             background: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
-                             rgba(255, 255, 255, 0)) repeat scroll 0 0">
+        <h:form rendered="#{beanLogar.loggedUserType('Coordenador')}" id="formCadastro" >
 
-                <p:growl id="growl" autoUpdate="true" showDetail="true" />
+            <p:growl id="growl" autoUpdate="true" showDetail="true" />
 
-                <h:panelGrid id="doCadastroPnl" columns="2"  cellpadding="10" width="70%" >
+            <h:panelGrid id="doCadastroPnl" columns="2" rendered="true" cellspacing="10" 
+                         style="width: 100%; height: 50%; 
+                         background: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
+                         rgba(255, 255, 255, 0)) repeat scroll 0 0">
 
-                    <f:facet name="header">
-                        <h:outputText value="Cadastrar Projeto"  class="sessionTitle" />
-                    </f:facet>
-
-
-                    <p:outputLabel class="outLabel" value="Nome: " id="labe" ></p:outputLabel>
-                    <p:inputText  class="txtInputCadastroProjeto" value="#{beanProjeto.nome}" 
-                                  required="true" 
-                                  label="Nome"
-                                  style="font-variant: small-caps"
-                                  requiredMessage="Favor entrar com um nome para o Usuário."
-                                  title="Nome do Usuário" ></p:inputText >
+                <f:facet name="header">
+                    <h:outputText value="CADASTRAR PROJETO" 
+                                  style="position: relative; right: 3.5%;margin-bottom: 40%;font-size: 15px" />
+                </f:facet>
 
 
-
-                    <p:outputLabel for="txtEstado" value="Situação:"
-                                   title="Será utilizado p/ realizar Estado."
-                                   class="outLabel" />
-
-                    <p:selectOneMenu id="txtEstado" 
-                                     class="radiosContainer sessionComponent" 
-                                     value="#{beanProjeto.estado}">
-                        <p:ajax event="click" 
-                                update="@(#cbFuncao)"/>
-                        <f:selectItem  itemLabel="Em Execução" itemValue="Em Execução"></f:selectItem>
-                        <f:selectItem itemLabel="Aprovado" itemValue="Inativo"></f:selectItem>
-                        <f:selectItem itemLabel="Em Análise" itemValue="Inativo"></f:selectItem>
-                        <f:selectItem itemLabel="Pendência" itemValue="Inativo"></f:selectItem>
-                        <f:selectItem itemLabel="Reprovado" itemValue="Inativo"></f:selectItem>
-                        <f:selectItem itemLabel="Concluído" itemValue="Inativo"></f:selectItem>
-                    </p:selectOneMenu>
-
-                    <p:outputLabel for="txtColegiado" value="Colegiado:"
-                                   class="outLabel" />
-                    <p:inputText id="txtColegiado" class="txtInputCadastroProjeto"
-                                 title="Colegiado" value="#{beanProjeto.colegiado}">
-                    </p:inputText>
+                <p:outputLabel class="outLabel" value="Nome: "  ></p:outputLabel>
+                <p:inputText  class="txtField_sessionComponent" value="#{beanProjeto.nome}" 
+                              required="true" 
+                              label="Nome"
+                              style="text-transform: capitalize"
+                              requiredMessage="Favor entrar com um nome para o Usuário."
+                              title="Nome do Usuário" ></p:inputText >
 
 
-                </h:panelGrid>
+                <p:outputLabel for="txtColegiado" value="Colegiado:"
+                               class="outLabel" />
+                <p:inputText id="txtColegiado" 
+                             class="txtField_sessionComponent2"
+                             title="Colegiado" 
+                             required="true"
+                             requiredMessage="Digite o Colegiado"
+                             value="#{beanProjeto.colegiado}"
+                             style="text-transform: capitalize">
+                </p:inputText>
+
+                <p:outputLabel for="txtEstado" value="Situação:"
+                               title="Será utilizado p/ realizar Estado."
+                               class="outLabel" />
+
+                <p:selectOneMenu id="txtEstado" 
+                                 class="radiosContainer sessionComponent" 
+                                 value="#{beanProjeto.estado}">
+                    <p:ajax event="click" 
+                            update="@(#cbFuncao)"/>
+                    <f:selectItem  itemLabel="Em Execução" itemValue="Em Execução"></f:selectItem>
+                    <f:selectItem itemLabel="Aprovado" itemValue="Aprovado"></f:selectItem>
+                    <f:selectItem itemLabel="Em Análise" itemValue="Em Análise"></f:selectItem>
+                    <f:selectItem itemLabel="Pendente" itemValue="Pendente"></f:selectItem>
+                    <f:selectItem itemLabel="Reprovado" itemValue="Reprovado"></f:selectItem>
+                    <f:selectItem itemLabel="Concluído" itemValue="Concluído"></f:selectItem>
+                </p:selectOneMenu>
 
 
-                <p:commandButton id="btnLimpar" update="doCadastroPnl"  process="@this"
-                                 value="Limpar" style="position: relative;left:10%;
-                                 font-size: 15px" 
-                                 icon="ui-icon-trash"
-                                 />
+            </h:panelGrid>
 
-                <p:commandButton id="btnCadastrar" 
-                                 value="Cadastrar" style="position: relative;left:60%;
-                                 font-size: 15px"
-                                 icon="ui-icon-check"
-                                 action="#{beanProjeto.novoUsuario(submit)}"/>
+            <br/><br/>
+            <p:commandButton update="formCadastro"  process="@this"
+                             value="Limpar" 
+                             icon="ui-icon-trash"
+                             style="left: 10%;
+                             position: absolute"
+                             />
 
-            </p:panel>
+            <p:commandButton value="Cadastrar" style="position: absolute;left:80%"
+                             icon="ui-icon-check"
+                             action="#{beanProjeto.insert()}"
+                             update="formCadastro"/>
         </h:form>
+
     </ui:define>
 </ui:composition>

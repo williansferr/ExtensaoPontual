@@ -17,45 +17,54 @@
                          rgba(255, 255, 255, 0)) repeat scroll 0 0">
 
                 <f:facet name="header">
-                    <h:outputText value="Cadastrar Usuário"  class="sessionTitle" />
+                    <h:outputText value="CADASTRAR USUÁRIO" 
+                                  style="position: relative; right: 3%;margin-bottom: 40%;font-size: 15px"  />
                 </f:facet>
 
 
                 <h:outputLabel  for="txtNome1"  value="Nome: "   />
-                <p:inputText id="txtNome1" class="txtField_sessionComponent" value="#{beanUsuario.user.nome}" 
+                <p:inputText id="txtNome1" class="txtField_sessionComponent" 
+                             value="#{beanUsuario.user.nome}" 
                              label="Nome"
-                             style="font-variant: small-caps"
-                             requiredMessage="Favor entrar com um nome para o Usuário."
+                             style="text-transform: capitalize"
+                             requiredMessage="Favor entrar com um nome para o Usuário"
                              title="Nome do Usuário" 
                              required="true">
 
                 </p:inputText >
 
-                <h:outputLabel  for="txtLogin"  value="Login (Opcional): "   />
-                <p:inputText id="txtLogin" class="txtField_sessionComponent" value="#{beanUsuario.user.login}" 
-                             label="Login"
-                             requiredMessage="Favor entrar com um login para o Usuário."
-                             title="Login do Usuário" 
-                             required="false">
-                </p:inputText >
 
-                <h:outputLabel  for="txtSenha"  value="Senha: "   />
-                <p:inputText id="txtSenha" class="txtField_sessionComponent" value="#{beanUsuario.user.senha}" 
-                             label="Senha"
-                             requiredMessage="Favor entrar com uma senha para o Usuário."
-                             title="Senha do Usuário" 
-                             required="true">
-                </p:inputText >
 
                 <p:outputLabel for="txtEmail" value="Email:"
                                title="Será utilizado p/ realizar login."
                                class="outLabel" />
-
-
-
-                <p:inputText id="txtEmail" title="Endereço eletrônico do Usuário." value="#{beanUsuario.user.email}"
-                             class="txtField_sessionComponent">
+                <p:inputText id="txtEmail" 
+                             title="Endereço eletrônico do Usuário" 
+                             value="#{beanUsuario.user.email}"
+                             class="txtEmailColegiado"
+                             requiredMessage="Favor entrar com Email para o Usuário"
+                             required="true">
                 </p:inputText>
+
+                <p:outputLabel for="txtColegiado" value="Colegiado: " class="sessionComponent" />
+                <p:inputText id="txtColegiado" value="#{beanUsuario.user.colegiado}"
+                             class="txtEmailColegiado"
+                             style="text-transform: capitalize">
+                </p:inputText>
+
+                <h:outputLabel  for="txtLogin"  value="Login (opcional): "   />
+                <p:inputText id="txtLogin" class="txtLogin"  value="#{beanUsuario.user.login}" 
+                             label="Login"
+                             title="Login do Usuário" 
+                             >
+                </p:inputText >
+
+                <h:outputLabel  for="txtSenha"  value="Senha (opcional): "   />
+                <p:password id="txtSenha" class="txtSenhaLogin"  value="#{beanUsuario.user.senha}" 
+                             label="Senha"
+                             title="Senha do Usuário" 
+                             >
+                </p:password>
 
 
 
@@ -81,41 +90,47 @@
                              mask="(99) 9999-9999"
                              class="txtTel"/>
 
-                <p:outputLabel for="usrtypesRadios" value="Usuario: " class="sessionComponent"/>
-                <p:selectOneMenu id="usrtypesRadios" 
+                <p:outputLabel rendered="#{beanLogar.loggedUserType('Professor')}" for="usrtypesRadios1" value="Usuario: " class="sessionComponent"/>
+                <p:selectOneMenu id="usrtypesRadios1" 
                                  class="radiosContainer sessionComponent" 
                                  value="#{beanUsuario.user.tipoUsuario}"
-                                 required="true" >
+                                 rendered="#{beanLogar.loggedUserType('Professor')}">
 
                     <p:ajax event="click" 
                             update="@(#cbFuncao)"/>
-                    <f:selectItem itemLabel="Professor" itemValue="Professor"></f:selectItem>
                     <f:selectItem itemLabel="Aluno" itemValue="Aluno"></f:selectItem>                            
-                    <f:selectItem itemLabel="Voluntário" itemValue="Voluntario"></f:selectItem>                            
+                    <f:selectItem itemLabel="Voluntário" itemValue="Voluntário"></f:selectItem>
                 </p:selectOneMenu>
 
+                <p:outputLabel for="usrtypesRadios" value="Usuario: " rendered="#{beanLogar.loggedUserType('Coordenador')}"
+                               class="sessionComponent"/>
+                <p:selectOneMenu id="usrtypesRadios" 
+                                 class="radiosContainer sessionComponent" 
+                                 value="#{beanUsuario.user.tipoUsuario}"
+                                 rendered="#{beanLogar.loggedUserType('Coordenador')}">
 
-                <p:outputLabel for="txtColegiado" value="Colegiado: " class="sessionComponent" />
-                <p:inputText id="txtColegiado" value="#{beanUsuario.user.colegiado}"
-                             requiredMessage="Favor selecionar uma Função para o Usuário."
-                             class="txtField_sessionComponent">
-                </p:inputText>
-
+                    <p:ajax event="click" 
+                            update="@(#cbFuncao)"/>
+                    <f:selectItem itemLabel="Aluno" itemValue="Aluno"></f:selectItem>                            
+                    <f:selectItem itemLabel="Voluntário" itemValue="Voluntário"></f:selectItem>
+                    <f:selectItem itemLabel="Professor" itemValue="Professor" 
+                                  ></f:selectItem>
+                </p:selectOneMenu>
 
             </h:panelGrid>
+            <br/><br/>
+            <p:commandButton id="btnLimpar" update="formCadastro" process="@this"
+                             value="Limpar"
+                             icon="ui-icon-trash"
+                             style="position: absolute ;left: 15%"/>
 
-            <p:commandButton id="btnLimpar" update="doCadastroPnl" process="@this"
-                             value="Limpar" style="left:0%;top:20px ;
-                             font-size: 15px"
-                             icon="ui-icon-trash"/>
-
-            <p:commandButton value="Cadastrar" style="left:70%;top:20px ;
-                             font-size: 15px" 
+            <p:commandButton value="Cadastrar" 
                              action="#{beanUsuario.insert()}"
                              icon="ui-icon-circle-check"
-                             update="formCadastro"/>
-
+                             update="formCadastro"
+                             style="position: absolute ;left: 70%"/>
 
         </h:form>
+
     </ui:define>
 </ui:composition>

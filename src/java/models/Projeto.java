@@ -21,16 +21,23 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Willians
  */
 @Entity
-@Table(name = "projeto")
+@Table(name = "projeto", catalog = "sipow", schema = "")
+@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Projeto.findAll", query = "SELECT p FROM Projeto p")})
-public class Projeto implements Serializable {
+    @NamedQuery(name = "Projeto.findAll",
+            query = "SELECT p FROM Projeto p")})
+
+
+public class Projeto implements Serializable{
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,11 +54,13 @@ public class Projeto implements Serializable {
     @Column(name = "dataInicio")
     @Temporal(TemporalType.DATE)
     private Date dataInicio;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "projeto")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProjeto")
     private List<UsuarioProjeto> usuarioProjetoList;
 
     public Projeto() {
     }
+
+    
 
     public Projeto(Integer idProjeto) {
         this.idProjeto = idProjeto;
@@ -102,6 +111,7 @@ public class Projeto implements Serializable {
         this.dataInicio = dataInicio;
     }
 
+    @XmlTransient
     public List<UsuarioProjeto> getUsuarioProjetoList() {
         return usuarioProjetoList;
     }
@@ -109,8 +119,6 @@ public class Projeto implements Serializable {
     public void setUsuarioProjetoList(List<UsuarioProjeto> usuarioProjetoList) {
         this.usuarioProjetoList = usuarioProjetoList;
     }
-
-
 
     @Override
     public int hashCode() {
@@ -134,7 +142,7 @@ public class Projeto implements Serializable {
 
     @Override
     public String toString() {
-        return "models.Projeto[ idProjeto=" + idProjeto + " ]";
+        return getNome();
     }
-    
+
 }

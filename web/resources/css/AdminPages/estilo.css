@@ -7,6 +7,19 @@
     color: #333;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
 
+
+}
+#usForm:availableStudents{
+    background: white;
+}
+
+.ui-fieldset, .ui-fieldset .ui-fieldset-legend{
+    background-color: transparent;
+}
+
+//botão back do wizard
+ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-wizard-nav-back{
+    top:0%;
 }
 
 .ui-layout-unit .ui-layout-unit-content
@@ -26,6 +39,7 @@
 #center{
     background: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
         rgba(255, 255, 255, 0)) repeat scroll 0 0; 
+    text-align-last: justify;
 
 }
 
@@ -40,15 +54,51 @@
     border-left:  0.5px solid lightslategrey;
 }
 
-#formCadastro:doCadastroPnl{
-    width: 80%;   
+#formCadastro{
+    width: 99%;  
+    height: 100%;
 }
 
 
 .txtField_sessionComponent{
-    width: 500px;
+    width: 600px;
 }
 
+.txtField_sessionComponent2{
+
+    width: 500px;
+
+}
+
+#txtSenhaLogin{
+    width: 400px;
+}
+
+#txtLogin{
+    width: 400px;
+}
+
+
+#txtEmailColegiado{
+    width: 400px;
+}
+
+.txtEmailColegiado{
+    width: 400px;
+}
+#txtEmailSenha{
+    width: 400px;
+}
+
+#formBtn{
+    top:20px;
+    background: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
+        rgba(255, 255, 255, 0)) repeat scroll 0 0;
+    width: 99%;
+    margin-left: 0%;
+    height: 20%;
+
+}
 
 .sessionTite{
     width: 30%;    
@@ -69,13 +119,16 @@
     border: none;
     border-collapse: separate;
 }
+#formClock{
+    width: 20%;
+}
 
 #formAcesso{
     position: absolute;
-    background:  #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
-        rgba(255, 255, 255, 0)) repeat scroll 0 0;
+    /*    background:  #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
+            rgba(255, 255, 255, 0)) repeat scroll 0 0;*/
     top:10%;
-    padding: 2%;
+    padding: 5%;
     width: 70%;
     left: 8%;
     height: 45%;
@@ -85,6 +138,24 @@
     border-left:  0.5px solid lightslategrey;
     border-radius: 10px;
 }
+#divGlobal{
+    padding: 7%;
+    background: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
+        rgba(255, 255, 255, 0)) repeat scroll 0 0;
+    margin-left: 5%;
+    margin-right:5%; 
+    margin-top: 5%;
+    -webkit-background-origin: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
+        rgba(255, 255, 255, 0)) repeat scroll 0 0;
+}
+
+#divSelectProject{
+    position: relative;
+    top:40px;
+    right: 10%;
+
+}
+
 
 .btnIniciarSessao{
     position: relative;
@@ -174,7 +245,30 @@
 }
 
 .txtInputCadastroProjeto{
-    width: 160%;
+    width: 100%;
+    margin-left: 30%;
 }
 
+#divSelecionarData{
+    height: 100px;
+    padding: 5%;
+    background: lightgrey;
+    border-bottom: 0.5px solid lightslategrey;
+    border-right: 0.5px solid lightslategrey;
+    border-top: 0.5px solid lightslategrey;
+    border-left:  0.5px solid lightslategrey;;
+    background: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
+        rgba(255, 255, 255, 0)) repeat scroll 0 0;
+    }
+
+
+    #divDataInicial{
+    position: absolute;
+    top:25%;
+    }
+    #divDataFinal{
+    position: absolute;
+    left:40%;
+    top:25%;
+    }
 

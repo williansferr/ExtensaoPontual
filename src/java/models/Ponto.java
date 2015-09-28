@@ -1,6 +1,12 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package models;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -8,6 +14,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -17,23 +25,64 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author danielmorita
+ * @author Willians
  */
 @Entity
 @Table(name = "ponto")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Ponto.findAll", query = "SELECT p FROM Ponto p"),
-    @NamedQuery(name = "Ponto.findByIdPonto", query = "SELECT p FROM Ponto p WHERE p.idPonto = :idPonto"),
-    @NamedQuery(name = "Ponto.findByMatricula", query = "SELECT p FROM Ponto p WHERE p.matricula = :matricula"),
-    @NamedQuery(name = "Ponto.findByHoraEntrada", query = "SELECT p FROM Ponto p WHERE p.horaEntrada = :horaEntrada"),
-    @NamedQuery(name = "Ponto.findByHoraSaida", query = "SELECT p FROM Ponto p WHERE p.horaSaida = :horaSaida"),
-    @NamedQuery(name = "Ponto.findByData", query = "SELECT p FROM Ponto p WHERE p.data = :data"),
-    @NamedQuery(name = "Ponto.findByDescricaoAtividade", query = "SELECT p FROM Ponto p WHERE p.descricaoAtividade = :descricaoAtividade"),
-    @NamedQuery(name = "Ponto.findByTotalHoras", query = "SELECT p FROM Ponto p WHERE p.totalHoras = :totalHoras"),
-    @NamedQuery(name = "Ponto.findByUsuarioAndData", query = "SELECT p FROM Ponto p "
-            + "where p.matricula = :matricula and p.data = :data")
-})
+    @NamedQuery(name = "Ponto.findAll",
+            query = "SELECT p FROM Ponto p"),
+    @NamedQuery(name = "Ponto.findByIdPonto",
+            query = "SELECT p FROM Ponto p WHERE p.idPonto = :idPonto"),
+
+    @NamedQuery(name = "Ponto.findByMatricula",
+            query = "SELECT p FROM Ponto p WHERE p.idUsuarioProjeto = :matricula"),
+
+    @NamedQuery(name = "Ponto.findByHoraEntrada",
+            query = "SELECT p FROM Ponto p WHERE p.horaEntrada = :horaEntrada"),
+
+    @NamedQuery(name = "Ponto.findByHoraSaida",
+            query = "SELECT p FROM Ponto p WHERE p.horaSaida = :horaSaida"),
+
+    @NamedQuery(name = "Ponto.findByMonth",
+            query = "SELECT p FROM Ponto p "
+            + "INNER JOIN p.idUsuarioProjeto up "
+            + "INNER JOIN up.matricula us "
+            + "WHERE FUNC('MONTH', p.data) = :mes and us.matricula = :matricula ORDER BY p.data"),
+
+    @NamedQuery(name = "Ponto.findByDescricaoAtividade",
+            query = "SELECT p FROM Ponto p WHERE p.descricaoAtividade = :descricaoAtividade"),
+
+    @NamedQuery(name = "Ponto.findByTotalHoras",
+            query = "SELECT p FROM Ponto p WHERE p.totalHoras = :totalHoras"),
+
+    @NamedQuery(name = "Ponto.findByUsuarioAndData",
+            query = "SELECT p FROM Ponto p "
+            + "where p.idUsuarioProjeto.matricula.matricula= :matricula and p.data = :data"),
+
+    @NamedQuery(name = "Ponto.findByUsuarioWithEmptyExit",
+            query = "SELECT p FROM Ponto p "
+            + "where p.horaSaida IS null and p.idUsuarioProjeto.matricula = :matricula"),
+
+    @NamedQuery(name = "Ponto.findByDateByUserAndProject",
+            query = "SELECT p FROM Ponto p "
+            + "INNER JOIN p.idUsuarioProjeto up "
+            + "INNER JOIN up.matricula us "
+            + "WHERE p.data >= :dataInicial and p.data <= :dataFinal and "
+            + "p.idUsuarioProjeto.matricula.matricula = :matricula and "
+            + "up.idProjeto.idProjeto = :idProjeto "
+            + "ORDER BY p.data"),
+
+    @NamedQuery(name = "Ponto.findByDateByUserAndProject",
+            query = "SELECT p FROM Ponto p "
+            + "INNER JOIN p.idUsuarioProjeto up "
+            + "INNER JOIN up.matricula us "
+            + "WHERE p.data >= :dataInicial and p.data <= :dataFinal and "
+            + "p.idUsuarioProjeto.matricula.matricula = :matricula and "
+            + "up.idProjeto.idProjeto = :idProjeto "
+            + "ORDER BY p.data")})
+
 public class Ponto implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -42,9 +91,6 @@ public class Ponto implements Serializable {
     @Basic(optional = false)
     @Column(name = "idPonto")
     private Integer idPonto;
-    @Basic(optional = false)
-    @Column(name = "matricula")
-    private int matricula;
     @Column(name = "horaEntrada")
     @Temporal(TemporalType.TIME)
     private Date horaEntrada;
@@ -58,17 +104,17 @@ public class Ponto implements Serializable {
     private String descricaoAtividade;
     @Column(name = "totalHoras")
     private Integer totalHoras;
-    
+    @Column(name = "justificativa")
+    private String justificativa;
+    @JoinColumn(name = "idUsuarioProjeto", referencedColumnName = "id")
+    @ManyToOne(optional = false)
+    private UsuarioProjeto idUsuarioProjeto;
+
     public Ponto() {
     }
 
     public Ponto(Integer idPonto) {
         this.idPonto = idPonto;
-    }
-
-    public Ponto(Integer idPonto, int matricula) {
-        this.idPonto = idPonto;
-        this.matricula = matricula;
     }
 
     public Integer getIdPonto() {
@@ -77,14 +123,6 @@ public class Ponto implements Serializable {
 
     public void setIdPonto(Integer idPonto) {
         this.idPonto = idPonto;
-    }
-
-    public int getMatricula() {
-        return matricula;
-    }
-
-    public void setMatricula(int matricula) {
-        this.matricula = matricula;
     }
 
     public Date getHoraEntrada() {
@@ -125,6 +163,22 @@ public class Ponto implements Serializable {
 
     public void setTotalHoras(Integer totalHoras) {
         this.totalHoras = totalHoras;
+    }
+
+    public String getJustificativa() {
+        return justificativa;
+    }
+
+    public void setJustificativa(String justificativa) {
+        this.justificativa = justificativa;
+    }
+
+    public UsuarioProjeto getIdUsuarioProjeto() {
+        return idUsuarioProjeto;
+    }
+
+    public void setIdUsuarioProjeto(UsuarioProjeto idUsuarioProjeto) {
+        this.idUsuarioProjeto = idUsuarioProjeto;
     }
 
     @Override

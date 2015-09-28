@@ -5,17 +5,19 @@
  */
 package Controllers;
 
+import Controllers.exceptions.IllegalOrphanException;
 import Controllers.exceptions.NonexistentEntityException;
 import java.io.Serializable;
+import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import models.UsuarioProjeto;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.Persistence;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import models.Ponto;
 import models.Usuario;
 
 /**
@@ -46,12 +48,31 @@ public class UsuarioJpaController implements Serializable {
     }
 
     public void create(Usuario usuario) {
+        if (usuario.getUsuarioProjetoList() == null) {
+            usuario.setUsuarioProjetoList(new ArrayList<UsuarioProjeto>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            List<UsuarioProjeto> attachedUsuarioProjetoList = new ArrayList<UsuarioProjeto>();
+            for (UsuarioProjeto usuarioProjetoListUsuarioProjetoToAttach : usuario.getUsuarioProjetoList()) {
+                usuarioProjetoListUsuarioProjetoToAttach = em.getReference(usuarioProjetoListUsuarioProjetoToAttach.getClass(), usuarioProjetoListUsuarioProjetoToAttach.getId());
+                attachedUsuarioProjetoList.add(usuarioProjetoListUsuarioProjetoToAttach);
+            }
+            usuario.setUsuarioProjetoList(attachedUsuarioProjetoList);
             em.persist(usuario);
+            for (UsuarioProjeto usuarioProjetoListUsuarioProjeto : usuario.getUsuarioProjetoList()) {
+                Usuario oldMatriculaOfUsuarioProjetoListUsuarioProjeto = usuarioProjetoListUsuarioProjeto.getMatricula();
+                usuarioProjetoListUsuarioProjeto.setMatricula(usuario);
+                usuarioProjetoListUsuarioProjeto = em.merge(usuarioProjetoListUsuarioProjeto);
+                if (oldMatriculaOfUsuarioProjetoListUsuarioProjeto != null) {
+                    oldMatriculaOfUsuarioProjetoListUsuarioProjeto.getUsuarioProjetoList().remove(usuarioProjetoListUsuarioProjeto);
+                    oldMatriculaOfUsuarioProjetoListUsuarioProjeto = em.merge(oldMatriculaOfUsuarioProjetoListUsuarioProjeto);
+                }
+            }
             em.getTransaction().commit();
+            
         } finally {
             if (em != null) {
                 em.close();
@@ -59,12 +80,45 @@ public class UsuarioJpaController implements Serializable {
         }
     }
 
-    public void edit(Usuario usuario) throws NonexistentEntityException, Exception {
+    public void edit(Usuario usuario) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Usuario persistentUsuario = em.find(Usuario.class, usuario.getMatricula());
+            List<UsuarioProjeto> usuarioProjetoListOld = persistentUsuario.getUsuarioProjetoList();
+            List<UsuarioProjeto> usuarioProjetoListNew = usuario.getUsuarioProjetoList();
+            List<String> illegalOrphanMessages = null;
+            for (UsuarioProjeto usuarioProjetoListOldUsuarioProjeto : usuarioProjetoListOld) {
+                if (!usuarioProjetoListNew.contains(usuarioProjetoListOldUsuarioProjeto)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain UsuarioProjeto " + usuarioProjetoListOldUsuarioProjeto + " since its matricula field is not nullable.");
+                }
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
+            List<UsuarioProjeto> attachedUsuarioProjetoListNew = new ArrayList<UsuarioProjeto>();
+            for (UsuarioProjeto usuarioProjetoListNewUsuarioProjetoToAttach : usuarioProjetoListNew) {
+                usuarioProjetoListNewUsuarioProjetoToAttach = em.getReference(usuarioProjetoListNewUsuarioProjetoToAttach.getClass(), usuarioProjetoListNewUsuarioProjetoToAttach.getId());
+                attachedUsuarioProjetoListNew.add(usuarioProjetoListNewUsuarioProjetoToAttach);
+            }
+            usuarioProjetoListNew = attachedUsuarioProjetoListNew;
+            usuario.setUsuarioProjetoList(usuarioProjetoListNew);
             usuario = em.merge(usuario);
+            for (UsuarioProjeto usuarioProjetoListNewUsuarioProjeto : usuarioProjetoListNew) {
+                if (!usuarioProjetoListOld.contains(usuarioProjetoListNewUsuarioProjeto)) {
+                    Usuario oldMatriculaOfUsuarioProjetoListNewUsuarioProjeto = usuarioProjetoListNewUsuarioProjeto.getMatricula();
+                    usuarioProjetoListNewUsuarioProjeto.setMatricula(usuario);
+                    usuarioProjetoListNewUsuarioProjeto = em.merge(usuarioProjetoListNewUsuarioProjeto);
+                    if (oldMatriculaOfUsuarioProjetoListNewUsuarioProjeto != null && !oldMatriculaOfUsuarioProjetoListNewUsuarioProjeto.equals(usuario)) {
+                        oldMatriculaOfUsuarioProjetoListNewUsuarioProjeto.getUsuarioProjetoList().remove(usuarioProjetoListNewUsuarioProjeto);
+                        oldMatriculaOfUsuarioProjetoListNewUsuarioProjeto = em.merge(oldMatriculaOfUsuarioProjetoListNewUsuarioProjeto);
+                    }
+                }
+            }
             em.getTransaction().commit();
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
@@ -82,7 +136,7 @@ public class UsuarioJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -93,6 +147,17 @@ public class UsuarioJpaController implements Serializable {
                 usuario.getMatricula();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The usuario with id " + id + " no longer exists.", enfe);
+            }
+            List<String> illegalOrphanMessages = null;
+            List<UsuarioProjeto> usuarioProjetoListOrphanCheck = usuario.getUsuarioProjetoList();
+            for (UsuarioProjeto usuarioProjetoListOrphanCheckUsuarioProjeto : usuarioProjetoListOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Usuario (" + usuario + ") cannot be destroyed since the UsuarioProjeto " + usuarioProjetoListOrphanCheckUsuarioProjeto + " in its usuarioProjetoList field has a non-nullable matricula field.");
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
             }
             em.remove(usuario);
             em.getTransaction().commit();
@@ -149,36 +214,107 @@ public class UsuarioJpaController implements Serializable {
         }
     }
 
-    public List<Usuario> getUsuarioProfessor() {
+    public List<Usuario> getUsuarioAllProfessor() {
         EntityManager em = getEntityManager();
-
-        Query query = em.createQuery("SELECT u FROM Usuario u WHERE u.tipoUsuario = 'Professor'");
-        List<Usuario> qlista = query.getResultList();
-
-        return qlista;
+        try {
+            Query query = em.createNamedQuery("Usuario.findAllUserProfessor");
+            List<Usuario> qlista = query.getResultList();
+            return qlista;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
     }
 
     public List<Usuario> selectAll() {
-
-        EntityManager em = getEntityManager();
-
-        Query query = em.createQuery("SELECT u FROM Usuario u");
-        List<Usuario> qlista = query.getResultList();
-
-        return qlista;
-    }
-
-    public List<Usuario> findByMatricula(Integer matricula) {
         EntityManager em = getEntityManager();
         try {
-            Query query = em.createNamedQuery("Usuario.findByMatricula");
-            query.setParameter("matricula", matricula);
-            List<Usuario> lista = query.getResultList();
-            return lista;
+            Query query = em.createNamedQuery("Usuario.findAll");
+            List<Usuario> qlista = query.getResultList();
+
+            return qlista;
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
         }
-        return null;
     }
 
+    public Usuario findByMatricula(Integer matricula) {
+        EntityManager em = getEntityManager();
+        Usuario usuario = new Usuario();
+        try {
+            usuario = em.getReference(Usuario.class, matricula);
+            return usuario;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+//BUSCA TODOS OS PROFESSORES DA TABELA USUARIO, SEM EXCEÇÃO
+
+    public List<Usuario> getUserProfessor() {
+        EntityManager em = getEntityManager();
+        List<Usuario> qlista = new ArrayList<>();
+        try {
+            Query query = em.createNamedQuery("Usuario.findUsersProfessor");
+            qlista = query.getResultList();
+            return qlista;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+
+    }
+    
+    //BUSCA EMAIL ESPECIFICO
+    
+    public Usuario getFindEmail(String email){
+        EntityManager em = getEntityManager();
+        try{
+            Query query = em.createNamedQuery("Usuario.findEmail");
+            query.setParameter("email", email);
+            Usuario us = (Usuario)query.getSingleResult();
+            return us;
+       }catch(Exception e){
+            return null;
+        }finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
+//BUSCA TODOS ALUNOS E VOLUNTÁRIOS DA TABELA USUARIO SEM EXEÇÃO
+
+    public List<Usuario> getAllUserStudentsAndVolunteers() {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createNamedQuery("Usuario.findAllUserStudentsAndVolunteers");
+            List<Usuario> qlista = query.getResultList();
+            return qlista;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
 }

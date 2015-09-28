@@ -13,20 +13,20 @@
             <p:growl id="growl" autoUpdate="true" showDetail="true" />
             <!--Tabela Principal-->
             <p:dataTable id="tabela"  
-                         value="#{beanUsuario.listaUsuarios()}" 
+                         value="#{beanUsuario.getUsuarioCadastrados(beanLogar.usuarioLogado)}" 
                          var="us" 
                          rendered="true" 
                          style="margin-bottom:20px; font-size: 15px;">
 
                 <f:facet name="header"  rendered="true">
-                    Usuários Cadastrados
+                    CONSULTA DE USUÁRIOS
                 </f:facet>
 
-                <p:column headerText="Nome" filterBy="#{us.nome}"  >
+                <p:column headerText="Nome" filterBy="#{us.nome}" style="text-transform: capitalize"  >
                     <h:outputText value="#{us.nome}" />
                 </p:column>
 
-                <p:column headerText="Matrícula">
+                <p:column headerText="Matrícula" filterBy="#{us.matricula}"> 
                     <center>
                         <h:outputText value="#{us.matricula}" />
                     </center>
@@ -39,13 +39,10 @@
                 </p:column>
 
                 <p:column headerText="Colegiado" filterBy="#{us.colegiado}" >
-                    <h:outputText value="#{us.colegiado}" />
+                    <h:outputText value="#{us.colegiado}" style="text-transform: capitalize"/>
                 </p:column>
 
 
-                <p:column headerText="Telefone 1:"  >
-                    <h:outputText value="#{us.telefoneResidencial}" />
-                </p:column>
 
 
                 <!--Botão de Exibir o dialog que exibe o PROJETO do usuário está cadastrado-->
@@ -55,8 +52,8 @@
                                       title="Visualizar Projetos Participantes"
                                       update=":fo:projetoDetail" 
                                       oncomplete="PF('dialogExibirProjetos').show()"
-                                      action="#{beanUsuario_Projeto.setProjeto(projeto)}"
-                                      />
+                                      action="#{beanUsuario_Projeto.setListaProjetos(
+                                                beanUsuario_Projeto.getListaProjetosPorUsuario(us))}"/>
                 </p:column>
 
 
@@ -66,13 +63,13 @@
                         <p:commandButton  update=":fo:usuarioDetail" oncomplete="PF('usuarioDialog').show()" 
                                           icon="ui-icon-pencil" title="Visualizar/Editar"
                                           action="#{beanUsuario.setUser(us)}">
-                                          
+
 
                         </p:commandButton>
 
                         <p:commandButton icon="ui-icon-trash" title="Excluir" 
                                          update=":fo:usuarioDialogExcluir"
-
+                                         rendered="#{beanLogar.loggedUserType('Coordenador')}"
                                          oncomplete="PF('usuarioDialogExcluir').show()" >
 
                             <f:setPropertyActionListener value="#{us}" target="#{beanUsuario.user}" /> 
@@ -100,7 +97,7 @@
                                      oncomplete="PF('usuarioDialogExcluir').hide()"
                                      update="growl,tabela"
                                      icon="ui-icon-notice"
-                                     actionListener="#{beanUsuario.excluirUsuario(beanUsuario.user.matricula)}"
+                                     actionListener="#{beanUsuario.excluirUsuario(beanUsuario.user)}"
                                      style="position: relative;top:0px"
 
 
@@ -116,20 +113,28 @@
                 <p:outputPanel id="usuarioDetail" style="text-align:center;" rendered="true">
                     <p:panelGrid  columns="4"  >
 
-                        <h:outputText value="Nome:" />
+                        <h:outputText value="Nome:" style="text-transform: capitalize"/>
                         <p:inputText value="#{beanUsuario.user.nome}" />
 
-                        <h:outputText  value="Endereço:" />
-                        <p:inputText id="idEnd" value="#{beanUsuario.user.endereco}" />
-
                         <h:outputText value="Tipo de Usuário:" />
-                        <p:inputText value="#{beanUsuario.user.tipoUsuario}" />
+                        <p:selectOneMenu id="usrtypesRadios" 
+                                         class="radiosContainer sessionComponent" 
+                                         value="#{beanUsuario.user.tipoUsuario}"
+                                         disabled="#{beanLogar.loggedUserType('Professor')}">
+
+                            <p:ajax event="click" 
+                                    update="@(#cbFuncao)"/>
+                            <f:selectItem itemLabel="Aluno" itemValue="Aluno"></f:selectItem>                            
+                            <f:selectItem itemLabel="Voluntário" itemValue="Voluntário"></f:selectItem>
+                            <f:selectItem itemLabel="Professor" itemValue="Professor" 
+                                          ></f:selectItem>
+                        </p:selectOneMenu>
 
                         <h:outputText value="Colegiado" />
-                        <p:inputText value="#{beanUsuario.user.colegiado}" />
+                        <p:inputText value="#{beanUsuario.user.colegiado}" style="text-transform: capitalize"/>
 
-                        <h:outputLabel for="date" value="Data Nascimento:" />
-                        <p:inputMask  id="date" value="#{beanUsuario.user.dataNasc}"  mask="99/99/9999"/>
+                        <h:outputLabel for="EmailTxt" value="Email" />
+                        <p:inputText id="EmailTxt" value="#{beanUsuario.user.email}"  />
 
                         <h:outputText value="Matricula" />
                         <p:inputText value="#{beanUsuario.user.matricula}" disabled="true"/>
@@ -138,18 +143,44 @@
                         <p:inputText value="#{beanUsuario.user.login}" />
 
                         <h:outputText value="Telefone Residencial." />
-                        <p:inputText value="#{beanUsuario.user.telefoneResidencial}" />
+                        <p:inputMask mask="(99) 9999-9999" value="#{beanUsuario.user.telefoneResidencial}" />
 
                         <h:outputText value="Telefone Comercial" />
-                        <p:inputText value="#{beanUsuario.user.telefoneComercial}" />
+                        <p:inputMask mask="(99) 9999-9999" value="#{beanUsuario.user.telefoneComercial}" />
 
                         <h:outputText value="Telefone Celular" />
-                        <p:inputText value="#{beanUsuario.user.telefoneCelular}" />
+                        <p:inputMask mask="(99) 9999-9999" value="#{beanUsuario.user.telefoneCelular}" />
 
                         <h:outputText value="Senha:" />
-                        <p:commandLink value="Reiniciar" />
+                        <p:commandButton value="Reiniciar" 
+                                         oncomplete="PF('usuarioDialogReiniciarSenha').show()">
+                                             
+                        </p:commandButton>
                     </p:panelGrid>
 
+                    <!--///Dialog para Reiniciar a Senha-->
+                    <p:dialog id="dialogReiniciarSenha" header="Reiniciar Senha" widgetVar="usuarioDialogReiniciarSenha" resizable="true" rendered="true" > 
+                        <p:panel>
+                            <h:outputLabel id="usuarioDetailReinicirSenha" style="text-align:center;" rendered="true" value="Tem certeza que deseja reiniciar a senha desse Usuario?">
+                            </h:outputLabel>
+
+                            <p:commandButton value="Não" 
+                                             icon="ui-icon-check"
+                                             oncomplete="PF('usuarioDialogReiniciarSenha').hide()"
+                                             style="position: relative;top:36px;left: 10%"></p:commandButton>
+
+                            <p:commandButton value="Sim" 
+                                             oncomplete="PF('usuarioDialogReiniciarSenha').hide()"
+                                             update="growl,tabela"
+                                             icon="ui-icon-notice"
+                                             actionListener="#{beanUsuario.resetSenha(beanUsuario.user)}"
+                                             style="position: relative;top:0px"
+                                             >
+                            </p:commandButton>
+
+                        </p:panel>
+
+                    </p:dialog>
 
                     <!--Botões para salvar alterações-->
 
@@ -176,18 +207,19 @@
                       header="Projetos Cadastrados" 
                       widgetVar="dialogExibirProjetos"
                       width="70%" 
-                      height="100%">
-                
+                      height="100%"
+                      >
+
                 <p:outputPanel id="projetoDetail" rendered="true">
-                    <p:dataTable value="Projetos Cadastrados"  >
-                        <p:column headerText="Nome">
-                            <h:outputText />
+                    <p:dataTable value="#{beanUsuario_Projeto.listaProjetos}" var="p" >
+                        <p:column headerText="Nome" colspan="3" style="text-transform: capitalize">
+                            <h:outputText value="#{p.nome}" />
                         </p:column >
-                        <p:column headerText="Situação">
-                            <h:outputText value="#{beanUsuario_Projeto.getListProjetos(us)}"/>
+                        <p:column headerText="Situação" style="text-transform: capitalize">
+                            <h:outputText value="#{p.estado}"/>
                         </p:column>
                     </p:dataTable>
-                    <p:commandButton style="top:5px"
+                    <p:commandButton style="top:5px;left: 80%"
                                      title="Fechar" value="Fechar" 
                                      oncomplete="PF('dialogExibirProjetos').hide()"
                                      >

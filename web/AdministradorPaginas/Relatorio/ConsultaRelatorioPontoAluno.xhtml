@@ -1,0 +1,136 @@
+<ui:composition template="/Templates/AdminTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+
+
+    <ui:define name="content" rendered="true">
+
+        <script src="../../resources/locale_primefaces.js"/>
+        <h:form id="fo">
+            <p:growl id="growl" sticky="true" showDetail="true"/>
+            <p:wizard flowListener="#{beanProjeto.onFlowProcess}"  
+                      nextLabel="Continuar" backLabel="Voltar"
+                      >
+
+                <p:tab id="tabProjetos" title="1 - Selecionar Projeto" transient="true">
+
+                    <p:message for="tabProjetos"/>
+                    <p:dataTable id="tabEscolhaProjetosPonto" 
+                                 value="#{beanUsuario_Projeto.getProjetosUsuarioLogado(beanLogar.usuarioLogado)}"
+                                 var="p" 
+                                 selection="#{beanProjeto.projeto}" 
+                                 rowKey="#{p.idProjeto}" 
+                                 emptyMessage="É necessário que você seja cadastrado em algum projeto!">
+
+
+
+                        <p:column selectionMode="single" style="width:16px;text-align:center" />
+                        <p:column headerText="Nome" colspan="3"  filterBy="#{p.nome}" style="text-transform: capitalize">
+                            <h:outputText value="#{p.nome}" ></h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Colegiado"  style="text-transform: capitalize">
+                            <h:outputText value="#{p.colegiado}"></h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Situação"  style="text-transform: capitalize">
+                            <h:outputText value="#{p.estado}"></h:outputText>
+                        </p:column>
+
+                    </p:dataTable>
+                </p:tab>
+
+                <p:tab id="tabAlunos" title="2 - Selecionar Aluno">
+
+                    <p:dataTable id="tabAlunosPonto" 
+                                 value="#{beanUsuario_Projeto.getAlunosDoProjeto(beanProjeto.projeto)}"
+                                 var="us" 
+                                 selection="#{beanUsuario.user}" 
+                                 rowKey="#{us.matricula}" 
+                                 emptyMessage="É necessário selecionar o aluno!">
+
+                        <p:column selectionMode="single" style="width:30px;text-align:center" />
+                        <p:column headerText="Nome" filterBy="#{us.nome}" style="text-transform: capitalize">
+                            <h:outputText value="#{us.nome}"></h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Matricula" filterBy="#{us.matricula}">
+                            <h:outputText value="#{us.matricula}"></h:outputText>
+                        </p:column>
+
+                        <p:column headerText="Tipo Usuário" filterBy="#{us.tipoUsuario}">
+                            <h:outputText value="#{us.tipoUsuario}"></h:outputText>
+                        </p:column>
+
+                    </p:dataTable>
+                </p:tab>
+
+                <p:tab id="tabData" title="3 - Selecionar Data " >
+                    <p:outputPanel id="panelEscolherData" >
+                        <div id="divSelecionarData" >
+
+                            <f:facet name="Incluir as datas nos campos abaixo:"></f:facet>
+                            <div id="divDataInicial"  >
+                                <p:outputLabel for="dataIncial" value="Data Inicial: " />
+                                <p:calendar id="dataIncial" value="#{calendarView.date1.time}" 
+                                            locale="pt"  pattern="dd/MM/yyyy" />
+                            </div>
+                            <div id="divDataFinal">
+                                <p:outputLabel for="dataFinal" value="Data Final: " />
+                                <p:calendar id="dataFinal" value="#{calendarView.date2.time}"
+                                            locale="pt" pattern="dd/MM/yyyy"/>
+                            </div>
+                        </div>
+                    </p:outputPanel>
+
+                </p:tab>
+
+                <p:tab id="tabPonto" title="4 - Gerar Relatório Ponto">
+                    <p:outputPanel id="panelPonto">
+                        <p:dataTable id="tablePonto" 
+                                     value="#{beanPonto.buscarPontoDeData(calendarView.date1,
+                                              calendarView.date2,
+                                              beanUsuario.user,beanProjeto.projeto)}" 
+                                     var="pont"
+                                     emptyMessage="Nenhum ponto localizado nesse período!">
+
+                            <f:facet name="Projeto Usuário "></f:facet>
+
+                            <p:column headerText="Data" >
+                                <h:outputText value="#{pont.data}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy"  />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Hora Entrada">
+                                <h:outputText value="#{pont.horaEntrada}">
+                                    <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Montevideo"  />
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="Hora Saída">
+                                <h:outputText value="#{pont.horaSaida}">
+                                    <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Montevideo" />
+                                </h:outputText>
+                            </p:column>
+                        </p:dataTable>
+
+
+                    </p:outputPanel>
+                    <h:commandLink id="excel">
+                        <p:graphicImage name="/demo/images/excel.png" />
+                        <p:dataExporter type="xls" target="tbl" fileName="cars" postProcessor="#{customizedDocumentsView.postProcessXLS}" />
+                    </h:commandLink>
+
+                    <h:commandLink id="pdf">
+                        <p:graphicImage name="/demo/images/pdf.png" />
+                        <p:dataExporter type="pdf" target="tbl" fileName="cars" preProcessor="#{customizedDocumentsView.preProcessPDF}" />
+                    </h:commandLink>
+
+                </p:tab>
+            </p:wizard>
+        </h:form>
+    </ui:define>
+</ui:composition>
