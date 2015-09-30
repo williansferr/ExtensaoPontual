@@ -54,15 +54,15 @@
                                  emptyMessage="É necessário selecionar o aluno!">
 
                         <p:column selectionMode="single" style="width:30px;text-align:center" />
-                        <p:column headerText="Nome" filterBy="#{us.nome}" style="text-transform: capitalize">
+                        <p:column headerText="Nome" filterBy="#{us.nome}" style="text-transform: capitalize;text-align:center">
                             <h:outputText value="#{us.nome}"></h:outputText>
                         </p:column>
 
-                        <p:column headerText="Matricula" filterBy="#{us.matricula}">
+                        <p:column headerText="Matricula" filterBy="#{us.matricula}" style="text-align:center">
                             <h:outputText value="#{us.matricula}"></h:outputText>
                         </p:column>
 
-                        <p:column headerText="Tipo Usuário" filterBy="#{us.tipoUsuario}">
+                        <p:column headerText="Tipo Usuário" filterBy="#{us.tipoUsuario}" style="text-align:center">
                             <h:outputText value="#{us.tipoUsuario}"></h:outputText>
                         </p:column>
 
@@ -100,33 +100,33 @@
 
                             <f:facet name="Projeto Usuário "></f:facet>
 
-                            <p:column headerText="Data" >
+                            <p:column headerText="Data" style="text-align:center">
                                 <h:outputText value="#{pont.data}">
                                     <f:convertDateTime pattern="dd/MM/yyyy"  />
                                 </h:outputText>
                             </p:column>
-                            <p:column headerText="Hora Entrada">
+                            <p:column headerText="Hora Entrada" style="text-align:center">
                                 <h:outputText value="#{pont.horaEntrada}">
                                     <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Montevideo"  />
                                 </h:outputText>
                             </p:column>
-                            <p:column headerText="Hora Saída">
+                            <p:column headerText="Hora Saída" style="text-align:center">
                                 <h:outputText value="#{pont.horaSaida}">
                                     <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Montevideo" />
                                 </h:outputText>
                             </p:column>
+                            
+                            <f:facet name="footer" >
+                                <h:outputText value="Total de Horas Realizadas:"></h:outputText>  
+                            </f:facet>
                         </p:dataTable>
 
 
                     </p:outputPanel>
-                    <h:commandLink id="excel">
-                        <p:graphicImage name="/demo/images/excel.png" />
-                        <p:dataExporter type="xls" target="tbl" fileName="cars" postProcessor="#{customizedDocumentsView.postProcessXLS}" />
-                    </h:commandLink>
 
-                    <h:commandLink id="pdf">
-                        <p:graphicImage name="/demo/images/pdf.png" />
-                        <p:dataExporter type="pdf" target="tbl" fileName="cars" preProcessor="#{customizedDocumentsView.preProcessPDF}" />
+                    <h:commandLink id="pdf" style="position: relative;left: 90%;top: 50px" title="Imprimir Relatório">
+                        <p:graphicImage url="/resources/img/pdf.png" />
+                        <p:dataExporter type="pdf" target="tablePonto" fileName="pont" pageOnly="true" />
                     </h:commandLink>
 
                 </p:tab>
