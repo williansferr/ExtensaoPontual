@@ -31,11 +31,11 @@ public class teste {
 //        BeanUsuario_Projeto beanUsuario_Projeto = new BeanUsuario_Projeto();
 //        BeanPonto beanPonto = new BeanPonto();
         UsuarioProjetoJpaController jpa = new UsuarioProjetoJpaController();
-//        PontoJpaController controlePonto = new PontoJpaController();
+        PontoJpaController controlePonto = new PontoJpaController();
 //        CalendarView calendarView = new CalendarView();
         BeanConverterProjeto a = new BeanConverterProjeto();
                 
 //        beanUsuario.resetSenha(new Usuario(12));
-        System.out.println("beanConverte: "+a.getProjetosUsuarioLogado(new Usuario(11112)));
+        System.out.println("Horas: "+controlePonto.findData(11112, new Projeto(1)));
     }
 }

@@ -305,5 +305,24 @@ public class PontoJpaController implements Serializable {
         }
         return null;
     }
+    
+    public String findData(int matricula, Projeto p) {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createNamedQuery("Ponto.findAmountTotalOfHours");
+            query.setParameter("matricula", matricula);
+            query.setParameter("projeto", p.getIdProjeto());
+           String dateList = (String) query.getSingleResult();
+            return dateList;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return null;
+    }
+    
 
 }

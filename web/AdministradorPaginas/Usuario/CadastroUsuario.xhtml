@@ -15,7 +15,7 @@
             <h:panelGrid id="doCadastroPnl" columns="2" rendered="true" cellspacing="15" 
                          style="width: 100%; background: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
                          rgba(255, 255, 255, 0)) repeat scroll 0 0">
-
+                
                 <f:facet name="header">
                     <h:outputText value="CADASTRAR USUÁRIO" 
                                   style="position: relative; right: 3%;margin-bottom: 40%;font-size: 15px"  />
@@ -26,7 +26,6 @@
                 <p:inputText id="txtNome1" class="txtField_sessionComponent" 
                              value="#{beanUsuario.user.nome}" 
                              label="Nome"
-                             style="text-transform: capitalize"
                              requiredMessage="Favor entrar com um nome para o Usuário"
                              title="Nome do Usuário" 
                              required="true">
@@ -43,23 +42,23 @@
                              value="#{beanUsuario.user.email}"
                              class="txtEmailColegiado"
                              requiredMessage="Favor entrar com Email para o Usuário"
-                             required="true">
+                             >
                 </p:inputText>
 
                 <p:outputLabel for="txtColegiado" value="Colegiado: " class="sessionComponent" />
                 <p:inputText id="txtColegiado" value="#{beanUsuario.user.colegiado}"
                              class="txtEmailColegiado"
-                             style="text-transform: capitalize">
+                             >
                 </p:inputText>
 
-                <h:outputLabel  for="txtLogin"  value="Login (opcional): "   />
+                <h:outputLabel  for="txtLogin"  value="Login:"   />
                 <p:inputText id="txtLogin" class="txtLogin"  value="#{beanUsuario.user.login}" 
                              label="Login"
                              title="Login do Usuário" 
                              >
                 </p:inputText >
 
-                <h:outputLabel  for="txtSenha"  value="Senha (opcional): "   />
+                <h:outputLabel  for="txtSenha"  value="Senha:"   />
                 <p:password id="txtSenha" class="txtSenhaLogin"  value="#{beanUsuario.user.senha}" 
                              label="Senha"
                              title="Senha do Usuário" 

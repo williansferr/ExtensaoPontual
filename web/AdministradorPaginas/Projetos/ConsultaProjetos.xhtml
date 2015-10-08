@@ -22,11 +22,11 @@
                     CONSULTA DE PROJETOS
                 </f:facet>
 
-                <p:column headerText="Nome" filterBy="#{p.nome}" style="text-transform: capitalize" >
+                <p:column headerText="Nome" filterBy="#{p.nome}" >
                     <h:outputText value="#{p.nome}" />
                 </p:column>
 
-                <p:column headerText="Data Inicio"  style="text-transform: capitalize"  >
+                <p:column headerText="Data Inicio"  >
                     <center>
                         <h:outputText value="#{p.dataInicio}" >
                             <f:convertDateTime pattern="dd/MM/yyyy"  />
@@ -34,7 +34,7 @@
                     </center>
                 </p:column>
 
-                <p:column headerText="Colegiado" filterBy="#{p.colegiado}" style="text-transform: capitalize" >
+                <p:column headerText="Colegiado" filterBy="#{p.colegiado}"  >
                     <h:outputText value="#{p.colegiado}" />
                 </p:column>
 
@@ -105,12 +105,12 @@
 
                         <h:outputText value="Nome:" />
                         <p:inputText value="#{beanProjeto.projeto.nome}" disabled="#{beanLogar.loggedUserType('Professor')}"
-                                     style="width: 100%;text-transform: capitalize" />
+                                     style="width: 100%; text-align: center" />
 
                         <h:outputText  value="Colegiado" />
                         <p:inputText id="idEnd" value="#{beanProjeto.projeto.colegiado}" 
                                      disabled="#{beanLogar.loggedUserType('Professor')}" 
-                                     style="width: 100%;text-transform: capitalize" />
+                                     style="width: 100%;text-align: center" />
 
 
 
@@ -189,11 +189,11 @@
 
                         <p:column selectionMode="single" style="width:16px;text-align:center"/>
 
-                        <p:column headerText="Nome" filterBy="#{u.nome}" style="text-transform: capitalize" >
+                        <p:column headerText="Nome" filterBy="#{u.nome}"  >
                             <h:outputText value="#{u.nome}" />
                         </p:column>
 
-                        <p:column headerText="Matrícula" filterBy="#{usuario.matricula}"  style="text-transform: capitalize" >
+                        <p:column headerText="Matrícula" filterBy="#{usuario.matricula}"   >
                             <h:outputText value="#{u.matricula}" />
                         </p:column>
 
@@ -226,13 +226,13 @@
                                  var="aluno"
                                  emptyMessage="Nenhum Aluno Cadastrado">
 
-                        <p:column headerText="Nome" style="text-transform: capitalize">
+                        <p:column headerText="Nome" >
                             <h:outputText value="#{aluno.nome}" />
                         </p:column>
                         
                         
 
-                        <p:column headerText="Colegiado" style="text-transform: capitalize">
+                        <p:column headerText="Colegiado" >
                             <h:outputText value="#{aluno.colegiado}" />
                         </p:column>
 
@@ -240,7 +240,7 @@
                             <h:outputText value="#{aluno.matricula}" />
                         </p:column>
 
-                        <p:column headerText="Ação" style="text-align: center;text-transform: capitalize">
+                        <p:column headerText="Ação" style="text-align: center;">
                             <p:commandButton 
                                 title="Remover Aluno desse Projeto"
                                 actionListener="#{beanUsuario_Projeto.excluirCadastro(
@@ -276,12 +276,12 @@
                                  var="professor"
                                  emptyMessage="Nenhum Professor Cadastrado">
 
-                        <p:column headerText="Nome" style="text-transform: capitalize">
+                        <p:column headerText="Nome" >
                             <h:outputText value="#{professor.nome}" />
                         </p:column>
 
                         
-                        <p:column headerText="Colegiado" style="text-transform: capitalize">
+                        <p:column headerText="Colegiado" >
                             <h:outputText value="#{professor.colegiado}" />
                         </p:column>
 
@@ -289,7 +289,7 @@
                             <h:outputText value="#{professor.matricula}" />
                         </p:column>
 
-                        <p:column headerText="Ação" style="text-align: center;text-transform: capitalize">
+                        <p:column headerText="Ação" style="text-align: center">
 
                             <p:commandButton 
                                 title="Remover Professor do Projeto"

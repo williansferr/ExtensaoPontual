@@ -29,15 +29,15 @@
 
 
                         <p:column selectionMode="single" style="width:16px;text-align:center" />
-                        <p:column headerText="Nome" colspan="3"  filterBy="#{p.nome}" style="text-transform: capitalize">
+                        <p:column headerText="Nome" colspan="3"  filterBy="#{p.nome}" >
                             <h:outputText value="#{p.nome}" ></h:outputText>
                         </p:column>
 
-                        <p:column headerText="Colegiado"  style="text-transform: capitalize">
+                        <p:column headerText="Colegiado"  >
                             <h:outputText value="#{p.colegiado}"></h:outputText>
                         </p:column>
 
-                        <p:column headerText="Situação"  style="text-transform: capitalize">
+                        <p:column headerText="Situação"  >
                             <h:outputText value="#{p.estado}"></h:outputText>
                         </p:column>
 
@@ -53,8 +53,8 @@
                                  rowKey="#{us.matricula}" 
                                  emptyMessage="É necessário selecionar o aluno!">
 
-                        <p:column selectionMode="single" style="width:30px;text-align:center" />
-                        <p:column headerText="Nome" filterBy="#{us.nome}" style="text-transform: capitalize;text-align:center">
+                        <p:column selectionMode="single" style="width:30px" />
+                        <p:column headerText="Nome" filterBy="#{us.nome}" >
                             <h:outputText value="#{us.nome}"></h:outputText>
                         </p:column>
 
@@ -98,7 +98,10 @@
                                      var="pont"
                                      emptyMessage="Nenhum ponto localizado nesse período!">
 
-                            <f:facet name="Projeto Usuário "></f:facet>
+                            
+                            <p:row>
+                                <h:outputText value="Aluno: #{us.nome}"></h:outputText>
+                            </p:row>
 
                             <p:column headerText="Data" style="text-align:center">
                                 <h:outputText value="#{pont.data}">
@@ -110,17 +113,17 @@
                                     <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Montevideo"  />
                                 </h:outputText>
                             </p:column>
-                            <p:column headerText="Hora Saída" style="text-align:center">
+                            <p:column headerText="Hora Saída" style="text-align:center" >
                                 <h:outputText value="#{pont.horaSaida}">
                                     <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Montevideo" />
                                 </h:outputText>
                             </p:column>
-                            
-                            <f:facet name="footer" >
-                                <h:outputText value="Total de Horas Realizadas:"></h:outputText>  
-                            </f:facet>
-                        </p:dataTable>
 
+                            <f:facet name="footer" >
+                                <h:outputText value="Total de Horas Realizadas: #{beanUsuario_Projeto}"></h:outputText>  
+                            </f:facet>
+                           
+                        </p:dataTable>
 
                     </p:outputPanel>
 

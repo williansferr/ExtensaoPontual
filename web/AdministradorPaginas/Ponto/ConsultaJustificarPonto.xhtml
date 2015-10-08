@@ -29,15 +29,15 @@
 
 
                         <p:column selectionMode="single" style="width:16px;text-align:center" />
-                        <p:column headerText="Nome" colspan="3"  filterBy="#{p.nome}" style="text-transform: capitalize">
+                        <p:column headerText="Nome" colspan="3"  filterBy="#{p.nome}" >
                             <h:outputText value="#{p.nome}" ></h:outputText>
                         </p:column>
 
-                        <p:column headerText="Colegiado"  style="text-transform: capitalize;text-align:center">
+                        <p:column headerText="Colegiado"  style="text-align:center">
                             <h:outputText value="#{p.colegiado}"></h:outputText>
                         </p:column>
 
-                        <p:column headerText="Situação"  style="text-transform: capitalize;text-align:center">
+                        <p:column headerText="Situação"  style="text-align:center">
                             <h:outputText value="#{p.estado}"></h:outputText>
                         </p:column>
 
@@ -54,7 +54,7 @@
                                  emptyMessage="É necessário selecionar o aluno!">
 
                         <p:column selectionMode="single" style="width:30px;text-align:center" />
-                        <p:column headerText="Nome" filterBy="#{us.nome}" style="text-transform: capitalize; text-align: center">
+                        <p:column headerText="Nome" filterBy="#{us.nome}" style=" text-align: center">
                             <h:outputText value="#{us.nome}"></h:outputText>
                         </p:column>
 
@@ -145,12 +145,12 @@
                                         </p:inputMask>   
 
                                         <h:outputText value="Horário Entrada" />
-                                        <p:inputMask value="#{beanPonto.pontoAtual.horaEntrada}" mask="99:99:99" disabled="true">
+                                        <p:inputMask value="#{beanPonto.pontoAtual.horaEntrada}" mask="99:99:99" >
                                             <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Montevideo"></f:convertDateTime>
                                         </p:inputMask>  
 
                                         <h:outputText value="Horário Saída" />
-                                        <p:inputMask value="#{beanPonto.pontoAtual.horaSaida}" mask="99:99:99" disabled="true">
+                                        <p:inputMask value="#{beanPonto.pontoAtual.horaSaida}" mask="99:99:99" >
                                             <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Montevideo"></f:convertDateTime>
                                         </p:inputMask>
 

@@ -22,7 +22,7 @@
                     CONSULTA DE USUÁRIOS
                 </f:facet>
 
-                <p:column headerText="Nome" filterBy="#{us.nome}" style="text-transform: capitalize"  >
+                <p:column headerText="Nome" filterBy="#{us.nome}"   >
                     <h:outputText value="#{us.nome}" />
                 </p:column>
 
@@ -39,7 +39,7 @@
                 </p:column>
 
                 <p:column headerText="Colegiado" filterBy="#{us.colegiado}" >
-                    <h:outputText value="#{us.colegiado}" style="text-transform: capitalize"/>
+                    <h:outputText value="#{us.colegiado}" />
                 </p:column>
 
 
@@ -109,11 +109,11 @@
 
 
             <!--Dialog para alteração-->
-            <p:dialog id="dialog" header="Editar Usuários:" widgetVar="usuarioDialog"   > 
+            <p:dialog id="dialog" header="Editar Usuário:" widgetVar="usuarioDialog"   > 
                 <p:outputPanel id="usuarioDetail" style="text-align:center;" rendered="true">
                     <p:panelGrid  columns="4"  >
 
-                        <h:outputText value="Nome:" style="text-transform: capitalize"/>
+                        <h:outputText value="Nome:" />
                         <p:inputText value="#{beanUsuario.user.nome}" />
 
                         <h:outputText value="Tipo de Usuário:" />
@@ -131,7 +131,7 @@
                         </p:selectOneMenu>
 
                         <h:outputText value="Colegiado" />
-                        <p:inputText value="#{beanUsuario.user.colegiado}" style="text-transform: capitalize"/>
+                        <p:inputText value="#{beanUsuario.user.colegiado}" />
 
                         <h:outputLabel for="EmailTxt" value="Email" />
                         <p:inputText id="EmailTxt" value="#{beanUsuario.user.email}"  />
@@ -212,10 +212,10 @@
 
                 <p:outputPanel id="projetoDetail" rendered="true">
                     <p:dataTable value="#{beanUsuario_Projeto.listaProjetos}" var="p" >
-                        <p:column headerText="Nome" colspan="3" style="text-transform: capitalize">
+                        <p:column headerText="Nome" colspan="3" >
                             <h:outputText value="#{p.nome}" />
                         </p:column >
-                        <p:column headerText="Situação" style="text-transform: capitalize">
+                        <p:column headerText="Situação" >
                             <h:outputText value="#{p.estado}"/>
                         </p:column>
                     </p:dataTable>

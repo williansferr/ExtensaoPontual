@@ -6,6 +6,7 @@
 package Beans;
 
 import Controllers.UsuarioProjetoJpaController;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +18,7 @@ import models.Usuario;
 
 @ManagedBean(name = "beanConverterProjeto", eager = true)
 @ApplicationScoped
-public class BeanConverterProjeto {
+public class BeanConverterProjeto implements Serializable{
 
     List<Projeto> listaAuxProjeto;
     UsuarioProjetoJpaController jpa;

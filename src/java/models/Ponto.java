@@ -81,7 +81,14 @@ import javax.xml.bind.annotation.XmlRootElement;
             + "WHERE p.data >= :dataInicial and p.data <= :dataFinal and "
             + "p.idUsuarioProjeto.matricula.matricula = :matricula and "
             + "up.idProjeto.idProjeto = :idProjeto "
-            + "ORDER BY p.data")})
+            + "ORDER BY p.data"),
+    
+    @NamedQuery(name = "Ponto.findAmountTotalOfHours",
+            query = "SELECT sum(p.horaSaida - p.horaEntrada) FROM Ponto p "
+            + "INNER JOIN p.idUsuarioProjeto up "
+            + "INNER JOIN up.matricula us "
+            + "where p.idUsuarioProjeto.matricula.matricula= :matricula "
+            + "and up.idProjeto.idProjeto= :projeto")})
 
 public class Ponto implements Serializable {
 

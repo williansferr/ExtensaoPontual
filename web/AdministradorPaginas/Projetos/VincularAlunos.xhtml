@@ -39,15 +39,15 @@
 
 
                         <p:column selectionMode="single" style="width:16px;text-align:center" />
-                        <p:column headerText="Nome" colspan="3"  filterBy="#{p.nome}" style="text-transform: capitalize">
+                        <p:column headerText="Nome" colspan="3"  filterBy="#{p.nome}" >
                             <h:outputText value="#{p.nome}" ></h:outputText>
                         </p:column>
 
-                        <p:column headerText="Colegiado"  style="text-transform: capitalize">
+                        <p:column headerText="Colegiado"  >
                             <h:outputText value="#{p.colegiado}"></h:outputText>
                         </p:column>
 
-                        <p:column headerText="Situação"  style="text-transform: capitalize">
+                        <p:column headerText="Situação"  >
                             <h:outputText value="#{p.estado}"></h:outputText>
                         </p:column>
 
@@ -66,17 +66,17 @@
                             <p:draggable for="ui-icon-arrow-4" revert="true" helper="clone" />
                         </p:column>
 
-                        <p:column headerText="Nome" filterBy="#{us.nome}" colspan="3" style="text-transform: capitalize">
+                        <p:column headerText="Nome" filterBy="#{us.nome}" colspan="3" >
                             <h:outputText value="#{us.nome}" />
                         </p:column>
 
                         <p:column headerText="Matrícula" filterBy="#{us.matricula}" colspan="2"
-                                  style="text-align: center;text-transform: capitalize">
+                                  style="text-align: center">
                             <h:outputText value="#{us.matricula}" />
                         </p:column>
 
                         <p:column headerText="Usuário" filterBy="#{us.tipoUsuario}" colspan="2" 
-                                  style="text-align: center;text-transform: capitalize">
+                                  style="text-align: center">
                             <h:outputText value="#{us.tipoUsuario}" />
                         </p:column>
 
@@ -88,14 +88,14 @@
 
 
                             legend="Projeto - #{beanProjeto.projeto.nome}"
-                            style="width: 95%;text-transform: capitalize"
+                            style="width: 95%"
                             >
                     <p:outputPanel id="dropArea">
                         <h:outputText value="Arraste aqui os alunos que deseja cadastrar!" 
                                       rendered="#{empty beanUsuario.dropList}" 
                                       style="font-size:15px;text-transform: uppercase" />
 
-                        <p:dataTable id="selectedUsersTable" var="listDrop" style="text-transform: capitalize"
+                        <p:dataTable id="selectedUsersTable" var="listDrop" 
                                      value="#{beanUsuario.dropList}" 
                                      rendered="#{not empty beanUsuario.dropList}"
                                      >

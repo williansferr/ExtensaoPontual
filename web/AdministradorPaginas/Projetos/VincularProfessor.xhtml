@@ -20,20 +20,20 @@
                          emptyMessage="Nenhum Projeto Cadastrado!">
 
                 <f:facet name="header"  rendered="true">
-                    ADICIONAR PROFESSOR
+                    INCLUIR PROFESSOR NO PROJETO
                 </f:facet>
 
-                <p:column headerText="Nome" filterBy="#{p.nome}" style="text-transform: capitalize"  >
+                <p:column headerText="Nome" filterBy="#{p.nome}"   >
                     <h:outputText value="#{p.nome}" />
                 </p:column>
 
-                <p:column headerText="Colegiado" filterBy="#{p.colegiado}" style="text-transform: capitalize" >
+                <p:column headerText="Colegiado" filterBy="#{p.colegiado}"  >
                     <center>
-                        <h:outputText value="#{p.colegiado}" style="text-transform: capitalize" />
+                        <h:outputText value="#{p.colegiado}"  />
                     </center>
                 </p:column>
 
-                <p:column headerText="Situação" style="text-transform: capitalize" >
+                <p:column headerText="Situação" >
                     <center>
                         <h:outputText value="#{p.estado}" />
                     </center>
@@ -60,10 +60,10 @@
             <!--Dialog para Escolha do Projeto-->
             <p:growl id="growl" autoUpdate="true" showDetail="true" />
             <p:dialog id="dialogEscolherProfessor" 
-                      header="Selecionar Professor" 
+                      header="Selecionar Professor - Projeto #{beanProjeto.projeto}" 
                       showHeader="true"
                       widgetVar="dialogEscolherProfessor"
-                      height="380"
+                      height="250"
                       width="900">
 
 
@@ -77,11 +77,11 @@
 
                         <p:column selectionMode="single" style="width:16px;text-align:center"/>
 
-                        <p:column headerText="Nome" filterBy="#{u.nome}" style="text-transform: capitalize" >
+                        <p:column headerText="Nome" filterBy="#{u.nome}"  >
                             <h:outputText value="#{u.nome}" />
                         </p:column>
 
-                        <p:column headerText="Matrícula" filterBy="#{usuario.matricula}"  style="text-transform: capitalize" >
+                        <p:column headerText="Matrícula" filterBy="#{usuario.matricula}"   >
                             <h:outputText value="#{u.matricula}" />
                         </p:column>
 

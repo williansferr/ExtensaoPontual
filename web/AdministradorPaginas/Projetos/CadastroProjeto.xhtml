@@ -6,6 +6,7 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content" rendered="true">
+        <p:messages autoUpdate="true" />
 
         <h:form rendered="#{beanLogar.loggedUserType('Coordenador')}" id="formCadastro" >
 
@@ -26,7 +27,6 @@
                 <p:inputText  class="txtField_sessionComponent" value="#{beanProjeto.nome}" 
                               required="true" 
                               label="Nome"
-                              style="text-transform: capitalize"
                               requiredMessage="Favor entrar com um nome para o Usuário."
                               title="Nome do Usuário" ></p:inputText >
 
@@ -36,10 +36,8 @@
                 <p:inputText id="txtColegiado" 
                              class="txtField_sessionComponent2"
                              title="Colegiado" 
-                             required="true"
                              requiredMessage="Digite o Colegiado"
-                             value="#{beanProjeto.colegiado}"
-                             style="text-transform: capitalize">
+                             value="#{beanProjeto.colegiado}">
                 </p:inputText>
 
                 <p:outputLabel for="txtEstado" value="Situação:"
@@ -51,11 +49,12 @@
                                  value="#{beanProjeto.estado}">
                     <p:ajax event="click" 
                             update="@(#cbFuncao)"/>
-                    <f:selectItem  itemLabel="Em Execução" itemValue="Em Execução"></f:selectItem>
+                    <f:selectItem  itemLabel="Em análise" itemValue="Em análise"></f:selectItem>
+                    <f:selectItem itemLabel="Tramitação" itemValue="Tramitação"></f:selectItem>
                     <f:selectItem itemLabel="Aprovado" itemValue="Aprovado"></f:selectItem>
-                    <f:selectItem itemLabel="Em Análise" itemValue="Em Análise"></f:selectItem>
-                    <f:selectItem itemLabel="Pendente" itemValue="Pendente"></f:selectItem>
                     <f:selectItem itemLabel="Reprovado" itemValue="Reprovado"></f:selectItem>
+                    <f:selectItem itemLabel="Em Execução" itemValue="Em Execução"></f:selectItem>
+                    <f:selectItem itemLabel="Pendente" itemValue="Pendente"></f:selectItem>
                     <f:selectItem itemLabel="Concluído" itemValue="Concluído"></f:selectItem>
                 </p:selectOneMenu>
 
