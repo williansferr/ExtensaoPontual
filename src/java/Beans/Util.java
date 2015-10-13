@@ -1,5 +1,6 @@
 package Beans;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -7,7 +8,7 @@ import java.util.Date;
  *
  * @author danielmorita
  */
-public class Util {
+public class Util implements Serializable {
 
     /**
      * Metodo formata a data conforme o parametro passado ex: dd/MM/yyyy

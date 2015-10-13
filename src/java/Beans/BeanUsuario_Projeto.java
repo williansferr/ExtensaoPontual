@@ -152,17 +152,15 @@ public class BeanUsuario_Projeto implements Serializable {
 
     public void excluirCadastro(Usuario us, Projeto p) {
         UsuarioProjeto up = new UsuarioProjeto(us, p);
-
-        try {
+        System.out.println("Usuario: "+us+"\n"+" Projeto: "+p);
+        if (us != null && p != null) {
             jpa.removeUserOfProject(up);
-            RequestContext.getCurrentInstance().update("tabelaAlunosDoProjeto");
+//            RequestContext.getCurrentInstance().update("tabelaAlunosDoProjeto");
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
                     FacesMessage.SEVERITY_INFO, "Usuário Excluido do Projeto!", ""));
-
-        } catch (Exception e) {
+        } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
                     FacesMessage.SEVERITY_ERROR, "Não foi possível excluir Usuário do Projeto!!!", ""));
-            e.printStackTrace();
         }
     }
 
@@ -176,11 +174,10 @@ public class BeanUsuario_Projeto implements Serializable {
         } else if (us.getTipoUsuario().equals("Coordenador")) {
             setListaAuxProjeto(jpa.getAllProjects());
             return getListaAuxProjeto();
-        } 
-        else {
+        } else {
 //            setListaAuxProjeto(jpa.getEntityWithParameterUser(us));
 //            return getListaAuxProjeto();
-        return null;
+            return null;
         }
     }
 
@@ -235,7 +232,6 @@ public class BeanUsuario_Projeto implements Serializable {
 //            return null;
 //        }
 //    }
-
     public Projeto getProjeto() {
         return projeto;
     }

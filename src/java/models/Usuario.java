@@ -6,6 +6,8 @@
 package models;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -33,6 +35,9 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll",
+            query = "SELECT u FROM Usuario u where u.tipoUsuario not like 'Coordenador' ORDER BY u.nome"),
+    
+    @NamedQuery(name = "Usuario.findAllWithAdmin",
             query = "SELECT u FROM Usuario u ORDER BY u.nome"),
 
     @NamedQuery(name = "Usuario.findByMatricula",
@@ -207,17 +212,7 @@ public class Usuario implements Serializable {
     public void setUsuarioProjetoList(List<UsuarioProjeto> usuarioProjetoList) {
         this.usuarioProjetoList = usuarioProjetoList;
     }
-//
-//    @XmlTransient
-//    public List<Ponto> getPontoList() {
-//        return pontoList;
-//    }
-//
-//    public void setPontoList(List<Ponto> pontoList) {
-//        this.pontoList = pontoList;
-//    }
     
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -243,4 +238,9 @@ public class Usuario implements Serializable {
         return "models.Usuario[ matricula=" + matricula + " ]";
     }
     
+    public String converterDateParaString(Date data) {
+        DateFormat formatter = new SimpleDateFormat("ddMMyyyy");
+        String newDate = formatter.format(data.getTime());
+        return newDate;
+    }
 }

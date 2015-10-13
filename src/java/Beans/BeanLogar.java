@@ -31,7 +31,7 @@ public class BeanLogar implements Serializable {
     private UsuarioJpaController usuarioController;
 
     public String verificar() {
-       
+
         boolean loginSenha = false;
 
         fc = FacesContext.getCurrentInstance();
@@ -42,33 +42,41 @@ public class BeanLogar implements Serializable {
         }
         codificar();
         if (getLogin() != null && getSenha() != null) {
-        List<Usuario> listaUsuario = usuarioController.selectAll();
-        
-        for (Usuario us : listaUsuario) {
-            
-                if ((us.getLogin().equals(getLogin()) || us.getEmail().equals(getEmail()))
-                        && us.getSenha().equals(getSenha())) {
-                    loginSenha = true;
-                    this.usuarioLogado = us;
+            List<Usuario> listaUsuario = usuarioController.selectAllWithAdmin();
+
+            for (Usuario us : listaUsuario) {
+                if (us.getLogin() == null) {
+                    if (us.getSenha() == null) {
+                    }
+                } else {
+                    if ((us.getLogin().trim().equals(getLogin()) || us.getEmail().trim().equals(getLogin()))
+                            && us.getSenha().trim().equals(getSenha().trim())) {
+                        loginSenha = true;
+                        this.usuarioLogado = us;
+                    } else {
+
+                    }
                 }
             }
+        } else {
+
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR, "", "Preencher todos os campos!"));
         }
         if (loginSenha == true) {
             return "/AdministradorPaginas/Ponto/EscolherProjetoAcessarPonto.xhtml?faces-redirect=true";
         } else {
-            System.out.println("Senha: "+getSenha());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
                     FacesMessage.SEVERITY_ERROR, "", "Login ou Senha incorretos"));
         }
         return null;
     }
-    
-    public void codificar(){
+
+    public void codificar() {
         String aux = getSenha();
-        try{
-        setSenha(Sha.generateHash(aux));
-            System.out.println("getSenha: "+getSenha());
-        }catch(Exception e ) {
+        try {
+            setSenha(Sha.generateHash(aux));
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

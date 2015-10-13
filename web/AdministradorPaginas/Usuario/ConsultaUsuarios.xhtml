@@ -22,7 +22,7 @@
                     CONSULTA DE USUÁRIOS
                 </f:facet>
 
-                <p:column headerText="Nome" filterBy="#{us.nome}"   >
+                <p:column headerText="Nome" filterBy="#{us.nome}">
                     <h:outputText value="#{us.nome}" />
                 </p:column>
 
@@ -120,7 +120,7 @@
                         <p:selectOneMenu id="usrtypesRadios" 
                                          class="radiosContainer sessionComponent" 
                                          value="#{beanUsuario.user.tipoUsuario}"
-                                         disabled="#{beanLogar.loggedUserType('Professor')}">
+                                         disabled="true">
 
                             <p:ajax event="click" 
                                     update="@(#cbFuncao)"/>
@@ -138,6 +138,11 @@
 
                         <h:outputText value="Matricula" />
                         <p:inputText value="#{beanUsuario.user.matricula}" disabled="true"/>
+                        
+                        <h:outputText value="Data Nasc." />
+                        <p:inputMask value="#{beanUsuario.user.dataNasc}" mask="99/99/9999">
+                            <f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+                        </p:inputMask>
 
                         <h:outputText value="Login:" />
                         <p:inputText value="#{beanUsuario.user.login}" />
@@ -154,31 +159,47 @@
                         <h:outputText value="Senha:" />
                         <p:commandButton value="Reiniciar" 
                                          oncomplete="PF('usuarioDialogReiniciarSenha').show()">
-                                             
+
                         </p:commandButton>
                     </p:panelGrid>
 
                     <!--///Dialog para Reiniciar a Senha-->
                     <p:dialog id="dialogReiniciarSenha" header="Reiniciar Senha" widgetVar="usuarioDialogReiniciarSenha" resizable="true" rendered="true" > 
-                        <p:panel>
-                            <h:outputLabel id="usuarioDetailReinicirSenha" style="text-align:center;" rendered="true" value="Tem certeza que deseja reiniciar a senha desse Usuario?">
+                        <p:panel id="panelReiniciarSenha" style="height: 100px">
+                            <h:outputLabel id="usuarioDetailReiniciarSenha" 
+                                           style="text-align:center;" 
+                                           rendered="true" 
+                                           value="Tem certeza que deseja reiniciar a senha desse Usuario?">
                             </h:outputLabel>
 
                             <p:commandButton value="Não" 
-                                             icon="ui-icon-check"
+                                             icon="ui-icon-notice"
                                              oncomplete="PF('usuarioDialogReiniciarSenha').hide()"
-                                             style="position: relative;top:36px;left: 10%"></p:commandButton>
+                                             style="position: absolute;top:50%; right: 10%">
+                            </p:commandButton>
 
                             <p:commandButton value="Sim" 
-                                             oncomplete="PF('usuarioDialogReiniciarSenha').hide()"
+                                             oncomplete="PF('DetailSenhaNova').show()"
                                              update="growl,tabela"
-                                             icon="ui-icon-notice"
+                                             icon="ui-icon-check"
                                              actionListener="#{beanUsuario.resetSenha(beanUsuario.user)}"
-                                             style="position: relative;top:0px"
+                                             style="position: absolute;top:50%;right: 70%"
                                              >
                             </p:commandButton>
 
                         </p:panel>
+
+                        <p:dialog id="dialoSenhaNova" widgetVar="DetailSenhaNova" header="Senha Alterada">
+                            <p:panel id="panelSenhaNova" style="height: 150px; width: 300px" header="Senha Nova">
+                                <h:outputLabel  value="Data de Nascmento sem os símbolos: '/'">
+                                </h:outputLabel>
+                                <p:commandButton value="Fechar"
+                                                 oncomplete="PF('DetailSenhaNova').hide()"
+                                                 update=":fo:dialogReiniciarSenha"
+                                                 style="left: 36%;position: absolute;top: 60%;">
+                                </p:commandButton>
+                            </p:panel>
+                        </p:dialog>
 
                     </p:dialog>
 
@@ -211,8 +232,8 @@
                       >
 
                 <p:outputPanel id="projetoDetail" rendered="true">
-                    <p:dataTable value="#{beanUsuario_Projeto.listaProjetos}" var="p" >
-                        <p:column headerText="Nome" colspan="3" >
+                    <p:dataTable value="#{beanUsuario_Projeto.listaProjetos}" var="p" emptyMessage="Nenhum Projeto Cadastrado!" >
+                        <p:column headerText="Nome" colspan="3" style="text-align: center"  >
                             <h:outputText value="#{p.nome}" />
                         </p:column >
                         <p:column headerText="Situação" >

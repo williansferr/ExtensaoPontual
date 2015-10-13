@@ -10,13 +10,13 @@ import Controllers.UsuarioJpaController;
 import Controllers.UsuarioProjetoJpaController;
 import hash.GenerateSenha;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import models.Projeto;
 import models.Usuario;
 import hash.Sha;
+import java.text.ParseException;
 
 /**
  *
@@ -24,18 +24,31 @@ import hash.Sha;
  */
 public class teste {
 
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) throws ParseException  {
 
-//        BeanProjeto beanProjeto = new BeanProjeto();
+        UsuarioJpaController controlerUsuario = new UsuarioJpaController();
         BeanUsuario beanUsuario = new BeanUsuario();
-//        BeanUsuario_Projeto beanUsuario_Projeto = new BeanUsuario_Projeto();
-//        BeanPonto beanPonto = new BeanPonto();
         UsuarioProjetoJpaController jpa = new UsuarioProjetoJpaController();
         PontoJpaController controlePonto = new PontoJpaController();
-//        CalendarView calendarView = new CalendarView();
         BeanConverterProjeto a = new BeanConverterProjeto();
-                
-//        beanUsuario.resetSenha(new Usuario(12));
-        System.out.println("Horas: "+controlePonto.findData(11112, new Projeto(1)));
+
+        
+        Calendar time =Calendar.getInstance();
+        System.out.println("Time: "+time.getTime() );
+        
+//        String dataNas = "22/09/1987";
+//        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+//        String teste = "22/09/1987";
+//        Date date = (java.util.Date) formatter.parse(dataNas);
+//        System.out.println("DataNova: " + date);
+//       
+//        System.out.println("SenhaData:"+beanUsuario.converterDateParaString(date));
+//        beanUsuario.resetSenha(new Usuario(11127));
+//       Usuario us = new Usuario(11133);
+//       us.setNome("JOsé");
+//       us.setDataNasc(date);
+//       us.setTipoUsuario("Aluno");
+//       us.setEmail("iiiik@kkk@kk");
+//       controlerUsuario.create(us);
     }
 }

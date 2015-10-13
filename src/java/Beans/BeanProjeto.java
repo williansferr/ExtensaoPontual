@@ -103,9 +103,6 @@ public class BeanProjeto implements Serializable {
         }
     }
 
-//    public List<Projeto> getTodosProjetos() {
-//        return jpa.selectAll();
-//    }
     //EVENTO DA DRAGDROP DE ARRASTAR E SOLTAR
     public void onUsuarioDrop(DragDropEvent ddEvent) {
         Usuario us = ((Usuario) ddEvent.getData());

@@ -461,11 +461,12 @@ public class UsuarioProjetoJpaController implements Serializable {
 
     //EXCLUI O CADASTRO ENTRE O USUÁRIO E O PROJETO
     public void removeUserOfProject(UsuarioProjeto usuarioProjeto) {
+            System.out.println("UsuarioProjeto: "+usuarioProjeto);
         UsuarioProjeto up = getRegistryByProjectAndUsuario(usuarioProjeto.getIdProjeto(), usuarioProjeto.getMatricula());
         try {
-            System.out.println("Entrou 1");
             if (up != null) {
                 destroy(up.getId());
+                System.out.println("Entrou Corretamente");
             }
         } catch (Exception e) {
             System.out.println("Entrou 2 erro!");

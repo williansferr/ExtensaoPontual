@@ -16,7 +16,8 @@
             <!--Tabela Principal-->
 
             <p:dataTable id="tabela"  value="#{beanPonto.buscaPontoMensal(beanLogar.usuarioLogado)}" var="p" resizableColumns="false"
-                         rendered="true" style="margin-bottom:20px; font-size: 15px">
+                         rendered="true" style="margin-bottom:20px; font-size: 15px"
+                         emptyMessage="Nenhum ponto nesse mês!">
 
                 <f:facet name="header"  rendered="true">
                     CONSULTA DE PONTO
@@ -38,7 +39,7 @@
                 <p:column headerText="Horário Entrada" >
                     <center>
                         <h:outputText value="#{p.horaEntrada}" >
-                            <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Montevideo" />
+                            <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Sao_Paulo" />
                         </h:outputText>
                     </center>
                 </p:column>
@@ -46,7 +47,7 @@
                 <p:column headerText="Horário Saída" >
                     <center>
                         <h:outputText value="#{p.horaSaida}" >
-                            <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Montevideo" />
+                            <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Sao_Paulo" />
                         </h:outputText>
                     </center>
                 </p:column>

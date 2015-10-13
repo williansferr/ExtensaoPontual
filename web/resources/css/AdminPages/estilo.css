@@ -1,50 +1,69 @@
 .fDefaultHeader{
     height: 100%;
+    -webkit-height: 100%;
     width: 100%;
+    -webkit-width: 100%;
     background:  #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
         rgba(255, 255, 255, 0)) repeat scroll 0 0;
+    -webkit-background:  #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
+        rgba(255, 255, 255, 0)) repeat scroll 0 0;
     font-weight: bold;
+    -webkit-font-weight: bold;
     color: #333;
+    -webkit-color: #333;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+    -webkit-text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
 
 
 }
 #usForm:availableStudents{
     background: white;
+    -webkit-background: white;
 }
 
 .ui-fieldset, .ui-fieldset .ui-fieldset-legend{
     background-color: transparent;
+    -webkit-background-color: transparent;
 }
 
 //botão back do wizard
 ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-wizard-nav-back{
     top:0%;
+    -webkit-top:0%;
 }
 
 .ui-layout-unit .ui-layout-unit-content
 {
     padding: 0 !important;
+    -webkit-padding: 0 !important;
 }
 
 .ui-layout-north{
     background: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
         rgba(255, 255, 255, 0)) repeat scroll 0 0;
+    -webkit-background: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
+        rgba(255, 255, 255, 0)) repeat scroll 0 0;
+    
 }
 
 .ui-panelgrid{
     width: 100%;
+    -webkit-width: 100%;
 }
 
 #center{
     background: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
         rgba(255, 255, 255, 0)) repeat scroll 0 0; 
+    -webkit-background: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
+        rgba(255, 255, 255, 0)) repeat scroll 0 0; 
     text-align-last: justify;
+    -webkit-text-align-last: justify;
 
 }
 
 #divLogoUnifil{
     top:50%;
+    -webkit-top:50%;
 }
 
 #doCadastroPnl{
@@ -52,79 +71,113 @@ ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-w
     border-right: 0.5px solid lightslategrey;
     border-top: 0.5px solid lightslategrey;
     border-left:  0.5px solid lightslategrey;
+    -webkit-border-bottom: 0.5px solid lightslategrey;
+    -webkit-border-right: 0.5px solid lightslategrey;
+    -webkit-border-top: 0.5px solid lightslategrey;
+    -webkit-border-left:  0.5px solid lightslategrey;
 }
 
 #formCadastro{
     width: 99%;  
     height: 100%;
+    -webkit-width: 99%;  
+    -webkit-height: 100%;
 }
 
 
 .txtField_sessionComponent{
     width: 600px;
+    -webkit-width: 600px;
 }
 
 .txtField_sessionComponent2{
 
     width: 500px;
+    -webkit-width: 500px;
 
 }
 
 #txtSenhaLogin{
     width: 400px;
+    -webkit-width: 400px;
 }
 
 #txtLogin{
     width: 400px;
+    -webkit-width: 400px;
 }
 
 
 #txtEmailColegiado{
     width: 400px;
+    -webkit-width: 400px;
 }
 
 .txtEmailColegiado{
     width: 400px;
+    -webkit-width: 400px;
+}
+
+.txtDataNascim{
+    width: 170px;
+    -webkit-width: 170px;
+    
 }
 #txtEmailSenha{
     width: 400px;
+    -webkit-width: 400px;
 }
 
 #formBtn{
     top:20px;
+    -webkit-top:20px;
     background: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
         rgba(255, 255, 255, 0)) repeat scroll 0 0;
+    -webkit-background: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
+        rgba(255, 255, 255, 0)) repeat scroll 0 0;
     width: 99%;
+    -webkit-width: 99%;
     margin-left: 0%;
+    -webkit-margin-left: 0%;
     height: 20%;
+    -webkit-height: 20%;
 
 }
 
 .sessionTite{
     width: 30%;    
+    -webkit-width: 30%;    
 }
 
 
 .txtTel{
     min-width: 25%;
+    -webkit-min-width: 25%;
     max-width: 25%;
+    -webkit-max-width: 25%;
 }
 
 .tctDataNasc{
     min-width: 18%;
     max-width: 18%;
+    -webkit-min-width: 18%;
+    -webkit-max-width: 18%;
 }
 
 .ui-panelgrid{
     border: none;
     border-collapse: separate;
+    -webkit-border: none;
+    -webkit-border-collapse: separate;
 }
 #formClock{
     width: 20%;
+    -webkit-width: 20%;
 }
 
 #formAcesso{
     position: absolute;
+    -webkit-position: absolute;
     /*    background:  #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
             rgba(255, 255, 255, 0)) repeat scroll 0 0;*/
     top:10%;
@@ -137,6 +190,16 @@ ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-w
     border-top: 0.5px solid lightslategrey;
     border-left:  0.5px solid lightslategrey;
     border-radius: 10px;
+    -webkit-top:10%;
+    -webkit-padding: 5%;
+    -webkit-width: 70%;
+    -webkit-left: 8%;
+    -webkit-height: 45%;
+    -webkit-border-bottom: 0.5px solid lightslategrey;
+    -webkit-border-right: 0.5px solid lightslategrey;
+    -webkit-border-top: 0.5px solid lightslategrey;
+    -webkit-border-left:  0.5px solid lightslategrey;
+    -webkit-border-radius: 10px;
 }
 #divGlobal{
     padding: 7%;
@@ -145,15 +208,23 @@ ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-w
     margin-left: 5%;
     margin-right:5%; 
     margin-top: 5%;
-    -webkit-background-origin: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
-        rgba(255, 255, 255, 0)) repeat scroll 0 0;
     border-radius: 10px;
+    -webkit-padding: 7%;
+    -webkit-background: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
+        rgba(255, 255, 255, 0)) repeat scroll 0 0;
+    -webkit-margin-left: 5%;
+    -webkit-margin-right:5%; 
+    -webkit-margin-top: 5%;
+    -webkit-border-radius: 10px;
 }
 
 #divSelectProject{
     position: relative;
     top:40px;
     right: 10%;
+    -webkit-position: relative;
+    -webkit-top:40px;
+    -webkit-right: 10%;
 
 }
 
@@ -162,26 +233,36 @@ ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-w
     position: relative;
     top:5px;
     left:5%;
+    -webkit-position: relative;
+    -webkit-top:5px;
+    -webkit-left:5%;
 
 }
 .btnEncerrar{
     position: relative;
     top:5px;
     left:60%;
+    -webkit-position: relative;
+    -webkit-top:5px;
+    -webkit-left:60%;
 
 }
 
 
 #panelAcesso{
     position: relative;
-
     background: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
+        rgba(255, 255, 255, 0)) repeat scroll 0 0;
+    -webkit-position: relative;
+    -webkit-background: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
         rgba(255, 255, 255, 0)) repeat scroll 0 0;
 }
 
 .txtHorario{
     width: 70%;
     font-size: 10px;
+    -webkit-width: 70%;
+    -webkit-font-size: 10px;
 }
 
 #divCentral{
@@ -190,6 +271,11 @@ ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-w
     width: 100%;
     height: 100%;
     padding: 0%;
+    -webkit-position: relative;
+    -webkit-margin-top: 2%;
+    -webkit-width: 100%;
+    -webkit-height: 100%;
+    -webkit-padding: 0%;
 }
 
 #panelCentralLogin{
@@ -201,6 +287,14 @@ ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-w
     margin-top: 10%;
     margin-bottom: 10%;
     font-size: 14px;
+    -webkit-background: #c4c4c4 -moz-linear-gradient(left , rgba(255, 255, 255, 0.8),
+        rgba(255, 255, 255, 0)) repeat scroll 0 0;
+    -webkit-width: 100%;
+    -webkit-height: 200px;
+    -webkit-position: relative;
+    -webkit-margin-top: 10%;
+    -webkit-margin-bottom: 10%;
+    -webkit-font-size: 14px;
 }
 
 #labelLogin{
@@ -208,23 +302,31 @@ ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-w
     width: 5%;
     height: 10%;
     left: 30%;
-    /*top:127px;*/
+    -webkit-position: relative;
+    -webkit-width: 5%;
+    -webkit-height: 10%;
+    -webkit-left: 30%;
 
 }
 
 #divLogoUnifilLogin{
     top:50%;
+    -webkit-top:50%;
 }
 
 #SenhaLogin{
     top:20%;
     left: 30%;
     position: relative;
-    /*margin-top:15px;*/
     margin-bottom: 15px;
-    /*margin-left: 30%;*/
     width: 20%;
     height: 40%;
+    -webkit-top:20%;
+    -webkit-left: 30%;
+    -webkit-position: relative;
+    -webkit-margin-bottom: 15px;
+    -webkit-width: 20%;
+    -webkit-height: 40%;
 }
 
 .ui-priority-primary{
@@ -232,7 +334,12 @@ ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-w
     background: yellow;
     left:80%;
     top:20px ;
-    font-size: 15px
+    font-size: 15px;
+    -webkit-width:  20%;
+    -webkit-background: yellow;
+    -webkit-left:80%;
+    -webkit-top:20px ;
+    -webkit-font-size: 15px
 }
 
 #divCentralCadastroProjeto{
@@ -242,6 +349,12 @@ ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-w
     border-right: 0.5px solid lightslategrey;
     border-top: 0.5px solid lightslategrey;
     border-left:  0.5px solid lightslategrey;
+    -webkit-position: relative;
+    -webkit-height: 60%;
+    -webkit-border-bottom: 0.5px solid lightslategrey;
+    -webkit-border-right: 0.5px solid lightslategrey;
+    -webkit-border-top: 0.5px solid lightslategrey;
+    -webkit-border-left:  0.5px solid lightslategrey;
 
 }
 
@@ -260,6 +373,15 @@ ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-w
     border-left:  0.5px solid lightslategrey;;
     background: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
         rgba(255, 255, 255, 0)) repeat scroll 0 0;
+    -webkit-height: 100px;
+    -webkit-padding: 5%;
+    -webkit-background: lightgrey;
+    -webkit-border-bottom: 0.5px solid lightslategrey;
+    -webkit-border-right: 0.5px solid lightslategrey;
+    -webkit-border-top: 0.5px solid lightslategrey;
+    -webkit-border-left:  0.5px solid lightslategrey;;
+    -webkit-background: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
+        rgba(255, 255, 255, 0)) repeat scroll 0 0;
 }
 
 
@@ -268,11 +390,19 @@ ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-w
     position: absolute;
     top: 20%;
     width: 25%;
+    -webkit-left: 15%;
+    -webkit-position: absolute;
+    -webkit-top: 20%;
+    -webkit-width: 25%;
 }
 #divDataFinal{
     left: 50%;
     position: absolute;
     top: 20%;
     width: 25%;
+    -webkit-left: 50%;
+    -webkit-position: absolute;
+    -webkit-top: 20%;
+    -webkit-width: 25%;
 }
 

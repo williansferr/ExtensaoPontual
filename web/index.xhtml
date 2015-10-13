@@ -17,7 +17,6 @@
         <h:form id="formLoginSenha">
             <p:growl id="growl" sticky="true" showDetail="true"/>
             <div id="panelCentralLogin">
-                <!--<div id="labelLogin">Login</div>-->
                 <div id="SenhaLogin">
                     <div id="panelCentralLogin2">
                         <h:panelGrid columns="1" style="position: relative;left: 43%" >
@@ -39,12 +38,6 @@
                                  left:39%;" action="#{beanLogar.verificar()}" 
                                  update="formLoginSenha"/>
                 
-                <p:commandLink value="Esqueceu à Senha" 
-                               action="/RecuperarSenha.xhtml"
-                                style="position: relative;font-size: 12px;
-                                 top:17%;
-                                 left:42%;
-                                 outline-offset: inherit"/>
 
             </div>
 

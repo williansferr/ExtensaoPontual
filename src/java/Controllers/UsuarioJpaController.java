@@ -246,6 +246,23 @@ public class UsuarioJpaController implements Serializable {
             }
         }
     }
+    
+    public List<Usuario> selectAllWithAdmin() {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createNamedQuery("Usuario.findAllWithAdmin");
+            List<Usuario> qlista = query.getResultList();
+
+            return qlista;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
 
     public Usuario findByMatricula(Integer matricula) {
         EntityManager em = getEntityManager();

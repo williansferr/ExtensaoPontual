@@ -1,9 +1,11 @@
 package Beans;
 
 import Controllers.UsuarioJpaController;
-import hash.GenerateSenha;
 import hash.Sha;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +16,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.swing.Action;
 import models.Usuario;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.DragDropEvent;
 
 /**
@@ -33,7 +36,7 @@ public class BeanUsuario implements Serializable {
     private String tel3;
     private String endereco;
     private String colegiado;
-    private Date dataNasc;
+    private String dataNasc;
     private String tipoUsuario;
     private Usuario user = new Usuario();
     List<Usuario> lista = new ArrayList();
@@ -53,41 +56,25 @@ public class BeanUsuario implements Serializable {
         dropList = new ArrayList<Usuario>();
     }
 
-    public String novoUsuario(Action submit) {
-        getUser().setEmail(getEmail());
-        getUser().setLogin(getLogin());
-        getUser().setNome(getNome());
-        getUser().setTipoUsuario(getTipoUsuario());
-        getUser().setSenha(getSenha());
-        getUser().setTelefoneResidencial(getTel1());
-        getUser().setTelefoneCelular(getTel2());
-        getUser().setTelefoneComercial(getTel3());
-        getUser().setEndereco(getEndereço());
-        getUser().setColegiado(getColegiado());
-
-        try {
-            usuarioControlerJpa.create(getUser());
-            setUser(new Usuario());
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_INFO, "Novo usuario cadastrado", ""));
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
-    //metodo deve ser testado!
     public void insert() {
+        try {
+            user.setDataNasc(converterStringParaDate(getDataNasc()));
+        } catch (Exception e) {
 
+        }
         if (validaUsuario(user)) {
             if (!user.getSenha().equals("")) {
                 try {
                     String aux = user.getSenha();
                     String senhaHash = Sha.generateHash(aux);
                     user.setSenha(senhaHash);
-//                    System.out.println("Senha Hash: "+user.getSenha());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                try {
+                    String senhaNull = Sha.generateHash("unifil");
+                    user.setSenha(senhaNull);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -170,14 +157,19 @@ public class BeanUsuario implements Serializable {
 
     // PROFESSOR OU COORDENADOR REALIZA RESET DA SENHA PARA DATA DE ANIVERSARIO
     public void resetSenha(Usuario us) {
-        final String senhaProvisoria = "123";
+        String senhaDataNasc = "";
         Usuario usuario = usuarioControlerJpa.findUsuario(us.getMatricula());
+        if (usuario.getDataNasc() != null) {
+            senhaDataNasc = converterDateParaString(usuario.getDataNasc());
+            System.out.println("SenhaDataNasc: " + senhaDataNasc);
+        }
         if (usuario != null) {
-            String senha = getSenhaHash(senhaProvisoria);
+            String senha = getSenhaHash(senhaDataNasc);
             usuario.setSenha(senha);
             try {
                 usuarioControlerJpa.edit(usuario);
                 setRenhaReset(usuario.getSenha());
+                RequestContext.getCurrentInstance().execute("PF('DetailSenhaNova').show()");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -236,7 +228,7 @@ public class BeanUsuario implements Serializable {
     }
 
     public String editarUsuario(Action submit) {
-
+        
         try {
             usuarioControlerJpa.edit(getUser());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
@@ -259,10 +251,10 @@ public class BeanUsuario implements Serializable {
     public List<Usuario> usuariosProfessores() {
         List list = new ArrayList();
         list = usuarioControlerJpa.getUserProfessor();
-        if(list ==  null){
-        return null;
-        }else{
-            return list; 
+        if (list == null) {
+            return null;
+        } else {
+            return list;
         }
     }
 //BUSCAR TODOS OS ALUNOS E VOLUNTÁRIOS CADASTRADOS NA TABELA USUARIO
@@ -291,6 +283,21 @@ public class BeanUsuario implements Serializable {
 
     public void removerAlunoDaLista(Usuario us) {
         dropList.remove(us);
+    }
+//Converter String para Date
+
+    public java.util.Date converterStringParaDate(String data) throws ParseException {
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = (java.util.Date) formatter.parse(data);
+        System.out.println("Date: " + date);
+        return date;
+    }
+
+    //Converter Date para String
+    public String converterDateParaString(Date data) {
+        DateFormat formatter = new SimpleDateFormat("ddMMyyyy");
+        String newDate = formatter.format(data.getTime());
+        return newDate;
     }
 
     public String getNome() {
@@ -419,11 +426,11 @@ public class BeanUsuario implements Serializable {
         this.endereco = endereco;
     }
 
-    public Date getDataNasc() {
+    public String getDataNasc() {
         return dataNasc;
     }
 
-    public void setDataNasc(Date dataNasc) {
+    public void setDataNasc(String dataNasc) {
         this.dataNasc = dataNasc;
     }
 

@@ -173,52 +173,14 @@
             </p:dialog>
 
 
-            <!--DIALOG PARA ALTERAR O PROFESSOR-->
-            <p:dialog id="dialogAlterarProfessor"
-                      header="Alterar Professor" 
-                      widgetVar="escolherProfessorDialog"
-                      height="380"
-                      width="900">
-                <p:panel id="panelAlterarProfessor">
-                    <p:dataTable id="tabelaAlterarProfessor" value="#{beanUsuario.usuariosProfessores()}" 
-                                 var="u" 
-                                 style="margin-bottom:20px; font-size: 15px"
-                                 selection="#{beanUsuario.user}"
-                                 rowKey="#{u.matricula}">
 
-
-                        <p:column selectionMode="single" style="width:16px;text-align:center"/>
-
-                        <p:column headerText="Nome" filterBy="#{u.nome}"  >
-                            <h:outputText value="#{u.nome}" />
-                        </p:column>
-
-                        <p:column headerText="Matrícula" filterBy="#{usuario.matricula}"   >
-                            <h:outputText value="#{u.matricula}" />
-                        </p:column>
-
-                        <p:column headerText="Colegiado" filterBy="#{usuario.colegiado}">
-                            <h:outputText value="#{u.colegiado}" />
-                        </p:column>
-
-
-                        <p:column headerText="Email" >
-                            <h:outputText value="#{u.email}" />
-                        </p:column>
-                    </p:dataTable>
-                    <!--BOTOES PARA ALTERAR O PROFESSOR (outro dialog)-->
-
-                </p:panel>
-
-
-            </p:dialog>
 
             <!--DIALOG PARA VISUALIZAR ALUNOS DO PROJETO-->
             <p:dialog id="dialogVisualizarAlunos"
                       header="Alunos ou Voluntários desse Projeto" 
                       widgetVar="ProjetoDialogVisualizarAlunos"
                       width="800"
-                      height="300px">
+                      height="150px">
                 <p:outputPanel id='panelAlunosDoProjeto' >
 
                     <p:dataTable id="tabelaAlunosDoProjeto" 
@@ -229,8 +191,8 @@
                         <p:column headerText="Nome" >
                             <h:outputText value="#{aluno.nome}" />
                         </p:column>
-                        
-                        
+
+
 
                         <p:column headerText="Colegiado" >
                             <h:outputText value="#{aluno.colegiado}" />
@@ -243,11 +205,9 @@
                         <p:column headerText="Ação" style="text-align: center;">
                             <p:commandButton 
                                 title="Remover Aluno desse Projeto"
-                                actionListener="#{beanUsuario_Projeto.excluirCadastro(
-                                                  aluno, beanProjeto.projeto)}"
-                                update=":fo:panelAlunosDoProjeto"
+                                action="#{beanUsuario.setUser(aluno)}"
                                 icon="ui-icon-trash"
-                                oncomplete="PF('ProjetoDialogVisualizarAlunos').hide()"
+                                oncomplete="PF('RemoverDetailAluno').show()"
                                 >
 
                             </p:commandButton>
@@ -264,6 +224,36 @@
             </p:dialog>
 
 
+            <!--DIALOG  PARA CONFIRMAR REMOÇÃO DO ALUNO DO PROJETO-->
+
+            <p:dialog id="dialogRemoverAluno"
+                      header="Remover do Projeto"
+                      widgetVar="RemoverDetailAluno"
+                      position="center">
+                <p:panel id="panelRemoveAluno" rendered="true" style="height: 80px;width: 500px">
+                    <h:outputLabel id="projetoDialogRemover" style="text-align:center;" 
+                                   rendered="true" value="Deseja Remover o Usuário desse Projeto?">
+                    </h:outputLabel>
+
+                    <p:commandButton value="Não" 
+                                     icon="ui-icon-check"
+                                     oncomplete="PF('RemoverDetailAluno').hide()"
+                                     style="position: absolute;top:50%; "
+                                     ></p:commandButton>
+
+                    <p:commandButton value="Sim" 
+                                     icon="ui-icon-notice"
+                                     actionListener="#{beanUsuario_Projeto.excluirCadastro(
+                                                       beanUsuario.user, beanProjeto.projeto)}"
+                                     style="position: absolute; top:50%;right: 70%"
+                                     update="fo,tabelaAlunosDoProjeto"
+                                     oncomplete="PF('RemoverDetailAluno').hide()"
+                                     ></p:commandButton>
+
+                </p:panel>
+
+            </p:dialog>
+
             <!--DIALOG PARA VISUALIZAR PROFESSOR DO PROJETO-->
             <p:dialog id="dialogVisualizarProfessor"
                       header="Professor Coordenador do Projeto" 
@@ -275,12 +265,11 @@
                                  value="#{beanUsuario_Projeto.listaProfessores}" 
                                  var="professor"
                                  emptyMessage="Nenhum Professor Cadastrado">
-
                         <p:column headerText="Nome" >
                             <h:outputText value="#{professor.nome}" />
                         </p:column>
 
-                        
+
                         <p:column headerText="Colegiado" >
                             <h:outputText value="#{professor.colegiado}" />
                         </p:column>
@@ -293,11 +282,10 @@
 
                             <p:commandButton 
                                 title="Remover Professor do Projeto"
-                                actionListener="#{beanUsuario_Projeto.excluirCadastro(
-                                                  professor, beanProjeto.projeto)}"
+                                oncomplete="PF('RemoverDetailProfessor').show()"
+                                action="#{beanUsuario.setUser(professor)}"
                                 update=":fo:panelAlunosDoProjeto"
                                 icon="ui-icon-trash"
-                                oncomplete="PF('ProjetoDialogVisualizarProfessor').hide()"
                                 disabled="#{beanLogar.loggedUserType('Professor')}">
 
                             </p:commandButton>
@@ -309,6 +297,36 @@
                                      oncomplete="PF('ProjetoDialogVisualizarProfessor').hide()">
 
                     </p:commandButton>
+                </p:panel>
+
+            </p:dialog>
+
+            <!--DIALOG PARA REMOVER PROFESSOR DO PROJETO-->
+
+            <p:dialog id="dialogRemoverProfessor"
+                      header="Remover do Projeto"
+                      widgetVar="RemoverDetailProfessor"
+                      position="center">
+                <p:panel id="panelRemoveProfessor" rendered="true" style="height: 80px;width: 500px">
+                    <h:outputLabel id="projetoDialogRemoverProfessor" style="text-align:center;" 
+                                   rendered="true" value="Deseja Remover o Professor desse Projeto?">
+                    </h:outputLabel>
+
+                    <p:commandButton value="Não" 
+                                     icon="ui-icon-check"
+                                     oncomplete="PF('RemoverDetailProfessor').hide()"
+                                     style="position: absolute;top:50%; "
+                                     ></p:commandButton>
+
+                    <p:commandButton value="Sim" 
+                                     icon="ui-icon-notice"
+                                     actionListener="#{beanUsuario_Projeto.excluirCadastro(
+                                                       beanUsuario.user, beanProjeto.projeto)}"
+                                     style="position: absolute; top:50%;right: 70%"
+                                     update="fo,tabelaProfessorDoProjeto"
+                                     oncomplete="PF('RemoverDetailProfessor').hide()"
+                                     ></p:commandButton>
+
                 </p:panel>
 
             </p:dialog>

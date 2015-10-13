@@ -33,23 +33,23 @@
 
 
                 <p:submenu icon="ui-icon-wrench" label="Projeto" rendered="#{beanLogar.loggedUserType('Coordenador','Professor')}">
-                    <p:menuitem value="Cadastrar" rendered="#{beanLogar.loggedUserType('Coordenador')}" 
+                    <p:menuitem value="Novo" rendered="#{beanLogar.loggedUserType('Coordenador')}" 
                                 outcome="/AdministradorPaginas/Projetos/CadastroProjeto.xhtml">
 
                     </p:menuitem>
                     <p:menuitem value="Consultar" rendered="#{beanLogar.loggedUserType('Coordenador','Professor')}" 
                                 outcome="/AdministradorPaginas/Projetos/ConsultaProjetos.xhtml"/>
 
-                    <p:menuitem value="Incluir Aluno" rendered="#{beanLogar.loggedUserType('Coordenador','Professor')}" 
+                    <p:menuitem value="Cadastrar Aluno" rendered="#{beanLogar.loggedUserType('Coordenador','Professor')}" 
                                 outcome="/AdministradorPaginas/Projetos/VincularAlunos.xhtml"/>
 
-                    <p:menuitem value="Incluir Professor" rendered="#{beanLogar.loggedUserType('Coordenador')}" 
+                    <p:menuitem value="Cadastrar Professor" rendered="#{beanLogar.loggedUserType('Coordenador')}" 
                                 outcome="/AdministradorPaginas/Projetos/VincularProfessor.xhtml"/>
                 </p:submenu>
 
 
                 <p:submenu icon="ui-icon-person" label="Usuario" rendered="#{beanLogar.loggedUserType('Coordenador','Professor')}">
-                    <p:menuitem value="Cadastrar" rendered="#{beanLogar.loggedUserType('Coordenador','Professor')}"
+                    <p:menuitem value="Novo" rendered="#{beanLogar.loggedUserType('Coordenador','Professor')}"
                                 outcome="/AdministradorPaginas/Usuario/CadastroUsuario.xhtml" ajax="false" ></p:menuitem>
 
                     <p:menuitem value="Consultar" rendered="#{beanLogar.loggedUserType('Coordenador','Professor')}"
@@ -71,8 +71,10 @@
                             width="196" height="70" style="position: relative;top: 50px;margin-left: 10px;" />
         </div>
         <div>
-            <h:graphicImage id="imgNpi"  url="/resources/img/logoNPI.png" 
-                            width="196" height="70" style="position: relative;top: 80px;margin-left: 10px;" />
+            <h:outputText value="Seja Bem-vindo #{beanLogar.usuarioLogado.nome}!"
+                         style="position: relative;top: 70px;margin-left: 10px;" >
+                
+            </h:outputText>
 
         </div>
 

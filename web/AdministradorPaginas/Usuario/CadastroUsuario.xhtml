@@ -15,18 +15,17 @@
             <h:panelGrid id="doCadastroPnl" columns="2" rendered="true" cellspacing="15" 
                          style="width: 100%; background: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
                          rgba(255, 255, 255, 0)) repeat scroll 0 0">
-                
+
                 <f:facet name="header">
                     <h:outputText value="CADASTRAR USUÁRIO" 
                                   style="position: relative; right: 3%;margin-bottom: 40%;font-size: 15px"  />
                 </f:facet>
 
 
-                <h:outputLabel  for="txtNome1"  value="Nome: "   />
+                <p:outputLabel  for="txtNome1"  value="Nome: "   />
                 <p:inputText id="txtNome1" class="txtField_sessionComponent" 
                              value="#{beanUsuario.user.nome}" 
-                             label="Nome"
-                             requiredMessage="Favor entrar com um nome para o Usuário"
+                             requiredMessage="Favor entrar com um nome para o Novo Usuário!"
                              title="Nome do Usuário" 
                              required="true">
 
@@ -36,14 +35,26 @@
 
                 <p:outputLabel for="txtEmail" value="Email:"
                                title="Será utilizado p/ realizar login."
-                               class="outLabel" />
+                                />
                 <p:inputText id="txtEmail" 
                              title="Endereço eletrônico do Usuário" 
                              value="#{beanUsuario.user.email}"
                              class="txtEmailColegiado"
                              requiredMessage="Favor entrar com Email para o Usuário"
+                             required="true"
                              >
                 </p:inputText>
+
+                <p:outputLabel value="Data Nascimento:"
+                               title="Data de Nascimento"
+                               class="outLabel" for="txtDataNasc"/>
+                <p:inputMask id="txtDataNasc" 
+                             value="#{beanUsuario.dataNasc}"
+                            class="txtDataNascim"
+                            mask="99/99/9999"
+                            required="true"
+                            requiredMessage="Favor entrar com Data de Nascimento para o Usuário"
+                            />
 
                 <p:outputLabel for="txtColegiado" value="Colegiado: " class="sessionComponent" />
                 <p:inputText id="txtColegiado" value="#{beanUsuario.user.colegiado}"
@@ -51,18 +62,20 @@
                              >
                 </p:inputText>
 
-                <h:outputLabel  for="txtLogin"  value="Login:"   />
+                <p:outputLabel  for="txtLogin"  value="Login:"   />
                 <p:inputText id="txtLogin" class="txtLogin"  value="#{beanUsuario.user.login}" 
                              label="Login"
+                             required="true"
+                            requiredMessage="Favor entrar com Login "
                              title="Login do Usuário" 
                              >
                 </p:inputText >
 
                 <h:outputLabel  for="txtSenha"  value="Senha:"   />
                 <p:password id="txtSenha" class="txtSenhaLogin"  value="#{beanUsuario.user.senha}" 
-                             label="Senha"
-                             title="Senha do Usuário" 
-                             >
+                            label="Senha"
+                            title="Senha do Usuário" 
+                            >
                 </p:password>
 
 
@@ -101,12 +114,13 @@
                     <f:selectItem itemLabel="Voluntário" itemValue="Voluntário"></f:selectItem>
                 </p:selectOneMenu>
 
-                <p:outputLabel for="usrtypesRadios" value="Usuario: " rendered="#{beanLogar.loggedUserType('Coordenador')}"
+                <p:outputLabel for="usrtypesRadios" value="Tipo de Usuário: " rendered="#{beanLogar.loggedUserType('Coordenador')}"
                                class="sessionComponent"/>
                 <p:selectOneMenu id="usrtypesRadios" 
                                  class="radiosContainer sessionComponent" 
                                  value="#{beanUsuario.user.tipoUsuario}"
-                                 rendered="#{beanLogar.loggedUserType('Coordenador')}">
+                                 rendered="#{beanLogar.loggedUserType('Coordenador')}"
+                                 required="true">
 
                     <p:ajax event="click" 
                             update="@(#cbFuncao)"/>
