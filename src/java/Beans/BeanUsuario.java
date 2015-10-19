@@ -57,6 +57,7 @@ public class BeanUsuario implements Serializable {
     }
 
     public void insert() {
+        System.out.println("");
         try {
             user.setDataNasc(converterStringParaDate(getDataNasc()));
         } catch (Exception e) {

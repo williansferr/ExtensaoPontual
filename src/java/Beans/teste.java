@@ -8,15 +8,22 @@ package Beans;
 import Controllers.PontoJpaController;
 import Controllers.UsuarioJpaController;
 import Controllers.UsuarioProjetoJpaController;
-import hash.GenerateSenha;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import models.Projeto;
-import models.Usuario;
-import hash.Sha;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.text.ParseException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.type.WhenNoDataTypeEnum;
+import net.sf.jasperreports.engine.util.JRLoader;
 
 /**
  *
@@ -24,7 +31,7 @@ import java.text.ParseException;
  */
 public class teste {
 
-    public static void main(String[] args) throws ParseException  {
+    public static void main(String[] args) throws ParseException, JRException {
 
         UsuarioJpaController controlerUsuario = new UsuarioJpaController();
         BeanUsuario beanUsuario = new BeanUsuario();
@@ -32,23 +39,35 @@ public class teste {
         PontoJpaController controlePonto = new PontoJpaController();
         BeanConverterProjeto a = new BeanConverterProjeto();
 
-        
-        Calendar time =Calendar.getInstance();
-        System.out.println("Time: "+time.getTime() );
-        
-//        String dataNas = "22/09/1987";
-//        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-//        String teste = "22/09/1987";
-//        Date date = (java.util.Date) formatter.parse(dataNas);
-//        System.out.println("DataNova: " + date);
-//       
-//        System.out.println("SenhaData:"+beanUsuario.converterDateParaString(date));
-//        beanUsuario.resetSenha(new Usuario(11127));
-//       Usuario us = new Usuario(11133);
-//       us.setNome("JOsé");
-//       us.setDataNasc(date);
-//       us.setTipoUsuario("Aluno");
-//       us.setEmail("iiiik@kkk@kk");
-//       controlerUsuario.create(us);
+        InputStream relatorio = null;
+
+        try {
+
+            String pdfFile = "C:\\sampleReport.pdf";
+
+            ByteArrayOutputStream Teste = new ByteArrayOutputStream();
+
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(teste.class.getClassLoader().getResourceAsStream("Report/sampleReport.jasper"));
+            jasperReport.setWhenNoDataType(WhenNoDataTypeEnum.ALL_SECTIONS_NO_DETAIL);
+
+            Map<String, Integer> params = new HashMap<>();
+            JasperPrint print = JasperFillManager.fillReport(jasperReport, null);
+
+            JRExporter exporter = new net.sf.jasperreports.engine.export.JRPdfExporter();
+     //JRExporter exporter = new net.sf.jasperreports.engine.export.JRHtmlExporter();
+            //JRExporter exporter = new net.sf.jasperreports.engine.export.JRXlsExporter();
+            //JRExporter exporter = new net.sf.jasperreports.engine.export.JRXmlExporter();
+            //JRExporter exporter = new net.sf.jasperreports.engine.export.JRCsvExporter();
+
+            //exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, pdfFile);
+            exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, Teste);
+            exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
+            exporter.exportReport();
+
+            relatorio = new ByteArrayInputStream(Teste.toByteArray());
+
+        } catch (JRException ex) {
+            Logger.getLogger(teste.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
