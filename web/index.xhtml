@@ -3,7 +3,8 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions">
 
 
     <ui:define name="left-menu">
@@ -32,10 +33,8 @@
                         </h:panelGrid>
                     </div>
                 </div>
-                <p:commandButton value="Acessar" id="btnAcessar" 
-                                 style="font-size: 12px;
-                                 top:15%;
-                                 left:39%;" action="#{beanLogar.verificar()}" 
+                <p:commandButton value="Acessar" class="btnAcessar" 
+                                  action="#{beanLogar.verificar()}" 
                                  update="formLoginSenha"/>
                 
 

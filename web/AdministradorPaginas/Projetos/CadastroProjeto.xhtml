@@ -8,23 +8,24 @@
     <ui:define name="content" rendered="true">
         <p:messages autoUpdate="true" />
 
-        <h:form rendered="#{beanLogar.loggedUserType('Coordenador')}" id="formCadastro" >
+        <h:form rendered="#{beanLogar.loggedUserType('Coordenador')}" id="formCadastroProjeto" >
 
             <p:growl id="growl" autoUpdate="true" showDetail="true" />
 
-            <h:panelGrid id="doCadastroPnl" columns="2" rendered="true" cellspacing="10" 
-                         style="width: 100%; height: 50%; 
-                         background: #c4c4c4 -moz-linear-gradient(center left , rgba(255, 255, 255, 0.8),
-                         rgba(255, 255, 255, 0)) repeat scroll 0 0">
+            <h:panelGrid class="panelCadastroProjeto" columns="2" rendered="true" cellspacing="25" 
+                         >
 
                 <f:facet name="header">
+                    <center>
                     <h:outputText value="CADASTRAR PROJETO" 
                                   style="position: relative; right: 3.5%;margin-bottom: 40%;font-size: 15px" />
+                
+                    </center>
                 </f:facet>
 
 
                 <p:outputLabel class="outLabel" value="Nome: "  ></p:outputLabel>
-                <p:inputText  class="txtField_sessionComponent" value="#{beanProjeto.nome}" 
+                <p:inputText  class="inputNomeProjeto" value="#{beanProjeto.nome}" 
                               required="true" 
                               label="Nome"
                               requiredMessage="Favor entrar com um nome para o Usuário."
@@ -34,7 +35,7 @@
                 <p:outputLabel for="txtColegiado" value="Colegiado:"
                                class="outLabel" />
                 <p:inputText id="txtColegiado" 
-                             class="txtField_sessionComponent2"
+                             class="inputColegiadoProjeto"
                              title="Colegiado" 
                              requiredMessage="Digite o Colegiado"
                              value="#{beanProjeto.colegiado}">
@@ -62,17 +63,17 @@
             </h:panelGrid>
 
             <br/><br/>
-            <p:commandButton update="formCadastro"  process="@this"
+            <p:commandButton update="formCadastroProjeto"  process="@this"
                              value="Limpar" 
                              icon="ui-icon-trash"
-                             style="left: 10%;
-                             position: absolute"
+                             style="left: 10%; top: 60px;
+                             position: relative"
                              />
 
-            <p:commandButton value="Cadastrar" style="position: absolute;left:80%"
+            <p:commandButton value="Cadastrar" style="position: relative;left:60%;top: 60px"
                              icon="ui-icon-check"
                              action="#{beanProjeto.insert()}"
-                             update="formCadastro"/>
+                             update="formCadastroProjeto"/>
         </h:form>
 
     </ui:define>

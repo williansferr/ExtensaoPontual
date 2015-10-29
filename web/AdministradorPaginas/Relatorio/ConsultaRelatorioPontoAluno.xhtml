@@ -3,7 +3,8 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui">
+                xmlns:p="http://primefaces.org/ui"
+                >
 
 
 
@@ -22,7 +23,7 @@
                     <p:dataTable id="tabEscolhaProjetosPonto" 
                                  value="#{beanUsuario_Projeto.getProjetosUsuarioLogado(beanLogar.usuarioLogado)}"
                                  var="p" 
-                                 selection="#{beanProjeto.projeto}" 
+                                 selection="#{relatorioBean.projeto}" 
                                  rowKey="#{p.idProjeto}" 
                                  emptyMessage="É necessário que você seja cadastrado em algum projeto!">
 
@@ -47,9 +48,9 @@
                 <p:tab id="tabAlunos" title="2 - Selecionar Aluno">
 
                     <p:dataTable id="tabAlunosPonto" 
-                                 value="#{beanUsuario_Projeto.getAlunosDoProjeto(beanProjeto.projeto)}"
+                                 value="#{beanUsuario_Projeto.getAlunosDoProjeto(relatorioBean.projeto)}"
                                  var="us" 
-                                 selection="#{beanUsuario.user}" 
+                                 selection="#{relatorioBean.usuario}" 
                                  rowKey="#{us.matricula}" 
                                  emptyMessage="É necessário selecionar o aluno!">
 
@@ -89,18 +90,34 @@
 
                 </p:tab>
 
-                <p:tab id="tabPonto" title="4 - Gerar Relatório Ponto">
+                <p:tab id="tabPonto" title="4 - Gerar Relatório Ponto" titleStyle="">
                     <p:outputPanel id="panelPonto">
                         <p:dataTable id="tablePonto" 
                                      value="#{beanPonto.buscarPontoDeData(calendarView.date1,
                                               calendarView.date2,
-                                              beanUsuario.user,beanProjeto.projeto)}" 
+                                              relatorioBean.usuario,relatorioBean.projeto)}" 
                                      var="pont"
                                      emptyMessage="Nenhum ponto localizado nesse período!">
 
-                            
+
+                            <f:facet name="header"  rendered="true" class="facetNomeProjeto">
+                                <h:outputText value="Projeto: #{relatorioBean.projeto.nome} " 
+                                              style="font-size: 18px">
+                                </h:outputText>
+                            </f:facet>
+
+                            <f:facet name="header" rendered="true" >
+                                <br/>
+                                <h:outputText value="Aluno: #{relatorioBean.usuario.nome}" 
+                                              style="font-size: 18px">
+                                </h:outputText>
+                            </f:facet>
+
+
                             <p:row>
-                                <h:outputText value="Aluno: #{us.nome}"></h:outputText>
+                                <f:facet name="header" rendered="true">
+                                    <h:outputText value="Aluno: #{us.nome}"></h:outputText>
+                                </f:facet>
                             </p:row>
 
                             <p:column headerText="Data" style="text-align:center">
@@ -120,17 +137,26 @@
                             </p:column>
 
                             <f:facet name="footer" >
-                                <h:outputText value="Total de Horas Realizadas: #{beanUsuario_Projeto}"></h:outputText>  
+                                <h:outputText 
+                                    value="Total de Horas Realizadas: #{beanPonto.getHorasTotais(relatorioBean.usuario,
+                                                                        relatorioBean.projeto,
+                                                                        calendarView.date1,calendarView.date2)}"
+                                    style="font-size: 18px">
+                                </h:outputText>  
                             </f:facet>
-                           
+
                         </p:dataTable>
 
                     </p:outputPanel>
 
-                    <h:commandLink id="pdf" style="position: relative;left: 90%;top: 50px" title="Imprimir Relatório">
-                        <p:graphicImage url="/resources/img/pdf.png" />
-                        <p:dataExporter type="pdf" target="tablePonto" fileName="pont" pageOnly="true" />
-                    </h:commandLink>
+                    <p:commandButton id="pdf"
+                                     
+                                     value="Gerar PDF"                                     
+                                     style="position: relative;left: 85%;top: 30px" title="Gerar PDF"
+                                     action="#{relatorioBean.relatorio(relatorioBean.usuario,
+                                               relatorioBean.projeto,
+                                               calendarView.date1,calendarView.date2)}">
+                    </p:commandButton>
 
                 </p:tab>
             </p:wizard>

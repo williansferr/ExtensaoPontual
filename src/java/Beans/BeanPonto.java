@@ -37,6 +37,7 @@ public class BeanPonto implements Serializable {
     private Ponto pontoAtual = new Ponto();
     Ponto ponto;
     String mes;
+    String totalHorasRealizada;
 
     UsuarioProjeto up;
     BeanConverterProjeto beanConverteProjeto = new BeanConverterProjeto();
@@ -55,7 +56,6 @@ public class BeanPonto implements Serializable {
     public void iniciarPonto(Projeto p) {
         Calendar dataAtual = Calendar.getInstance();
         boolean aux = false;
-        System.out.println("Projeto Selecionado: "+p.getNome());
         getListaPonto();
         up = beanUsuarioProjeto.getCadastroUsuarioProjeto(p, beanLogar.getUsuarioLogado());
         if (pontoControle == null) {
@@ -164,7 +164,7 @@ public class BeanPonto implements Serializable {
     //BUSCA TODOS OS PONTO DO DIA CORRENTE DO USUARIO LOGADO
     public List<Ponto> buscaPontoDiarioDoUsuario() {
         Calendar data = Calendar.getInstance();
-        
+
         setAllPontos(pontoControle.findByUsuarioAndData(beanLogar.getUsuarioLogado().getMatricula(), data.getTime()));
         return getAllPontos();
     }
@@ -172,7 +172,7 @@ public class BeanPonto implements Serializable {
     //BUSCA TODOS OS PONTOS DO MES CORRENTE DE DETERMINADO USUARIO (USUARIO)
     public List<Ponto> buscaPontoMensal(Usuario us) {
         Calendar m = Calendar.getInstance();
-        int mes = (m.getTime().getMonth()+1);
+        int mes = (m.getTime().getMonth() + 1);
         try {
             List<Ponto> listPonto = new ArrayList();
             listPonto = pontoControle.findByMonth(mes, us);
@@ -184,14 +184,22 @@ public class BeanPonto implements Serializable {
     }
 
     //BUSCA TODOS OS PONTOS DO MES CORRENTE DE DETERMINADO USUARIO (Usuário, Mes)
-
     public List<Ponto> buscarPontoDeData(Calendar dataInicial, Calendar dataFinal, Usuario us, Projeto p) {
-        CalendarView calendarView = new CalendarView();
         try {
             List<Ponto> listPonto = new ArrayList();
-            listPonto = pontoControle.findByData(dataInicial, dataFinal, 
+            listPonto = pontoControle.findByData(dataInicial, dataFinal,
                     us.getMatricula(), p.getIdProjeto());
             return listPonto;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+//RETORNA UMA 'STRING' COM TOTAL DE HORAS QUE O USUÁRIO SELECIONA REALIZOU DENTRO DO PERÍODO
+    public String getHorasTotais(Usuario us, Projeto p, Calendar dataInicial, Calendar dataFinal) {
+        try {
+            return pontoControle.getTotalHorasRealizadas(us, p, dataInicial.getTime(), dataFinal.getTime());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -253,6 +261,10 @@ public class BeanPonto implements Serializable {
 
     public void setMes(String mes) {
         this.mes = mes;
+    }
+
+    public String getTotalHorasRealizada() {
+        return totalHorasRealizada;
     }
 
 }

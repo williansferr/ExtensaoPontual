@@ -11,19 +11,18 @@ import Controllers.UsuarioProjetoJpaController;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporter;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.type.WhenNoDataTypeEnum;
-import net.sf.jasperreports.engine.util.JRLoader;
+import models.Ponto;
+import models.Projeto;
+import models.Usuario;
 
 /**
  *
@@ -31,43 +30,18 @@ import net.sf.jasperreports.engine.util.JRLoader;
  */
 public class teste {
 
-    public static void main(String[] args) throws ParseException, JRException {
+    public static void main(String[] args) throws ParseException {
 
         UsuarioJpaController controlerUsuario = new UsuarioJpaController();
         BeanUsuario beanUsuario = new BeanUsuario();
+        BeanPonto pontoBean = new BeanPonto();
         UsuarioProjetoJpaController jpa = new UsuarioProjetoJpaController();
         PontoJpaController controlePonto = new PontoJpaController();
         BeanConverterProjeto a = new BeanConverterProjeto();
-
-        InputStream relatorio = null;
-
-        try {
-
-            String pdfFile = "C:\\sampleReport.pdf";
-
-            ByteArrayOutputStream Teste = new ByteArrayOutputStream();
-
-            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(teste.class.getClassLoader().getResourceAsStream("Report/sampleReport.jasper"));
-            jasperReport.setWhenNoDataType(WhenNoDataTypeEnum.ALL_SECTIONS_NO_DETAIL);
-
-            Map<String, Integer> params = new HashMap<>();
-            JasperPrint print = JasperFillManager.fillReport(jasperReport, null);
-
-            JRExporter exporter = new net.sf.jasperreports.engine.export.JRPdfExporter();
-     //JRExporter exporter = new net.sf.jasperreports.engine.export.JRHtmlExporter();
-            //JRExporter exporter = new net.sf.jasperreports.engine.export.JRXlsExporter();
-            //JRExporter exporter = new net.sf.jasperreports.engine.export.JRXmlExporter();
-            //JRExporter exporter = new net.sf.jasperreports.engine.export.JRCsvExporter();
-
-            //exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, pdfFile);
-            exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, Teste);
-            exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
-            exporter.exportReport();
-
-            relatorio = new ByteArrayInputStream(Teste.toByteArray());
-
-        } catch (JRException ex) {
-            Logger.getLogger(teste.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Ponto p = new Ponto(12345);
+        Usuario us= new Usuario(1234);
+        
+        System.out.println("Con: "+controlePonto.getConnection());
+        
     }
 }

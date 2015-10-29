@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Relatorio" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6ccabb8a-5602-40a4-97d4-3fb0d0aebdb9">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="aluno" class="java.lang.String"/>
+	<parameter name="projeto" class="java.lang.String"/>
+	<parameter name="dataInicial" class="java.lang.String"/>
+	<parameter name="dataFinal" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select sec_to_time(sum(time_to_sec(timediff(p.horaSaida,p.horaEntrada)))) Total_de_Horas,
+u.nome aluno, pj.nome projeto, p.horaEntrada, p.horaSaida, p.data from ponto p
+inner join usuario_projeto up on up.id = p.idUsuarioProjeto
+inner join usuario u on u.matricula = up.matricula
+inner join projeto pj on pj.idProjeto = up.idProjeto
+where pj.idProjeto = $P{projeto} and p.data >= $P{dataInicial} and p.data <= $P{dataFinal} and u.matricula = $P{aluno}
+group by p.horaEntrada 
+order by data asc;]]>
+	</queryString>
+	<field name="Total_de_Horas" class="java.sql.Time"/>
+	<field name="aluno" class="java.lang.String"/>
+	<field name="projeto" class="java.lang.String"/>
+	<field name="horaEntrada" class="java.sql.Time">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="horaSaida" class="java.sql.Time">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="data" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="41" splitType="Stretch">
+			<staticText>
+				<reportElement x="163" y="11" width="246" height="20" uuid="04b0e5d9-1ad3-4d08-8826-84cb7914456e"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[RELATÓRIO DE PONTOS DE ALUNO ]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="54" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="31" splitType="Stretch">
+			<staticText>
+				<reportElement x="141" y="1" width="100" height="20" uuid="163df74a-df3a-4cf1-ab34-2ba136710547"/>
+				<text><![CDATA[Hora Entrada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="284" y="1" width="100" height="20" uuid="a18d4910-eed9-4e66-b100-a8f88ae9b800"/>
+				<text><![CDATA[Hora Saída]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="1" width="100" height="20" uuid="be5a8260-adde-40bf-a32d-57f2004286be"/>
+				<text><![CDATA[Data]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="454" y="1" width="100" height="20" uuid="0f3ceffb-d540-4342-b737-bbb4274958ff"/>
+				<text><![CDATA[Total_de_Horas]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="64" splitType="Stretch">
+			<textField pattern="HH:mm">
+				<reportElement x="141" y="12" width="100" height="20" uuid="aa46863b-6519-4885-afc4-1a255d709e5a"/>
+				<textFieldExpression><![CDATA[$F{horaEntrada}]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH:mm">
+				<reportElement x="284" y="12" width="100" height="20" uuid="6474ee21-4be9-4e60-9386-50eb4ff9e230"/>
+				<textFieldExpression><![CDATA[$F{horaSaida}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="0" y="12" width="100" height="20" uuid="7c74078e-22e8-4fff-ad20-e9818fb8ed42"/>
+				<textFieldExpression><![CDATA[$F{data}]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH:mm">
+				<reportElement x="454" y="12" width="100" height="20" uuid="11507e4d-0641-47e1-9973-cbdffc7bbbc9"/>
+				<textFieldExpression><![CDATA[$F{Total_de_Horas}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -7,9 +7,11 @@ package Controllers;
 
 import Controllers.exceptions.NonexistentEntityException;
 import java.io.Serializable;
+import java.sql.Connection;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import javax.mail.Session;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
@@ -184,7 +186,6 @@ public class PontoJpaController implements Serializable {
     }
 
     //BUSCA TODOS PONTOS SEM RESTRIÇÕES
-
     public List<Ponto> findAll() {
 
         EntityManager em = getEntityManager();
@@ -223,7 +224,6 @@ public class PontoJpaController implements Serializable {
 
     //BUSCA PONTOS DO MES E ANO COM HORA_ENTRADA OU HORA_SAIDA NULL, PASSADOS COMO PARAMETRO 
     //(DIA_INICIAL, DIA_FINAL, USUARIO, PROJETO)
-
     public List<Ponto> findByDataHourNull(Calendar dataInicial, Calendar dataFinal, Integer us, Integer p) {
         Date ini = dataInicial.getTime();
         Date fim = dataFinal.getTime();
@@ -245,6 +245,7 @@ public class PontoJpaController implements Serializable {
         }
         return null;
     }
+
     //BUSCA PONTOS DO MES E ANO USUARIO E PROJETO (DATA_INICIAL, DATA_FINAL, MATRICULA, ID_PROJETO)
     public List<Ponto> findByData(Calendar dataInicial, Calendar dataFinal, Integer us, Integer p) {
         Date ini = dataInicial.getTime();
@@ -267,9 +268,8 @@ public class PontoJpaController implements Serializable {
         }
         return null;
     }
-    
-//BUSCA A LISTA DE PONTOS SOBRE DETERMINADA DATA E USUÁRIO (DATA, USUARIO)
 
+//BUSCA A LISTA DE PONTOS SOBRE DETERMINADA DATA E USUÁRIO (DATA, USUARIO)
     public List<Ponto> findByUsuarioAndData(Integer matricula, Date data) {
         EntityManager em = getEntityManager();
         try {
@@ -305,15 +305,18 @@ public class PontoJpaController implements Serializable {
         }
         return null;
     }
-    
-    public String findData(int matricula, Projeto p) {
+//RETORNA O TOTAL DE HORAS REALIZADAS DENTRO DO PERIODO (DATAINICIAL, DATAFINAL)
+
+    public String getTotalHorasRealizadas(Usuario us, Projeto p, Date dataInicial, Date dataFinal) {
         EntityManager em = getEntityManager();
         try {
             Query query = em.createNamedQuery("Ponto.findAmountTotalOfHours");
-            query.setParameter("matricula", matricula);
+            query.setParameter("matricula", us.getMatricula());
             query.setParameter("projeto", p.getIdProjeto());
-           String dateList = (String) query.getSingleResult();
-            return dateList;
+            query.setParameter("dataInicial", dataInicial);
+            query.setParameter("dataFinal", dataFinal);
+            String point = String.valueOf(query.getSingleResult());
+            return point;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -323,6 +326,18 @@ public class PontoJpaController implements Serializable {
         }
         return null;
     }
-    
 
+    public Connection getConnection() {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            Connection con = em.unwrap(Connection.class);
+            em.getTransaction().commit();
+            return con;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
 }
