@@ -11,7 +11,6 @@ import java.sql.Connection;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import javax.mail.Session;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
@@ -52,7 +51,6 @@ public class PontoJpaController implements Serializable {
     }
 
     public void create(Ponto ponto) {
-        System.out.println("ponto: " + ponto);
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -309,14 +307,20 @@ public class PontoJpaController implements Serializable {
 
     public String getTotalHorasRealizadas(Usuario us, Projeto p, Date dataInicial, Date dataFinal) {
         EntityManager em = getEntityManager();
+        Object obj = new Object();
         try {
             Query query = em.createNamedQuery("Ponto.findAmountTotalOfHours");
             query.setParameter("matricula", us.getMatricula());
             query.setParameter("projeto", p.getIdProjeto());
             query.setParameter("dataInicial", dataInicial);
             query.setParameter("dataFinal", dataFinal);
-            String point = String.valueOf(query.getSingleResult());
-            return point;
+            obj = (query.getSingleResult());
+            if (obj == null) {
+                return "";
+            } else {
+                String point = String.valueOf(obj);
+                return point;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -340,4 +344,5 @@ public class PontoJpaController implements Serializable {
             }
         }
     }
+
 }

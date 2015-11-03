@@ -43,31 +43,26 @@ public class BeanProjeto implements Serializable {
         getProjeto().setColegiado(getColegiado());
         getProjeto().setEstado(getEstado());
         getProjeto().setDataInicio(dataAtual.getTime());
-         if (jpa == null) {
+        if (jpa == null) {
             jpa = new ProjetoJpaController();
         }
-        if (validaProjeto(projeto)) {
-            jpa.create(this.projeto);
-            setProjeto(new Projeto());
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_INFO, "Cadastro realizado com sucesso!", ""));
-        } else {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_WARN, "Não foi possível realizar cadastro!", ""));
-        }
+
+        jpa.create(projeto);
+        setProjeto(new Projeto());
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                FacesMessage.SEVERITY_INFO, "Cadastro realizado com sucesso!", ""));
 
     }
 
-    public boolean validaProjeto(Projeto projeto) {
-        if (projeto.getNome().equals("")) {
-            return false;
-        }
-        return true;
-
-    }
-
+//    public boolean validaProjeto(Projeto projeto) {
+//        if (projeto.getNome().equals("")) {
+//            return false;
+//        }
+//        return true;
+//
+//    }
     public void excluirProjeto(int id) {
-         if (jpa == null) {
+        if (jpa == null) {
             jpa = new ProjetoJpaController();
         }
         try {
@@ -94,10 +89,8 @@ public class BeanProjeto implements Serializable {
                     FacesMessage.SEVERITY_INFO, "", "Necessário Escolher Projeto!"));
         }
         if (proceed) {
-            BeanUsuario.init();
             return next;
         } else {
-            BeanUsuario.init();
 
             return current;
         }
@@ -185,7 +178,7 @@ public class BeanProjeto implements Serializable {
 
     //Busca Todos os Projetos Cadastrados
     public List<Projeto> todosProjetos() {
-         if (jpa == null) {
+        if (jpa == null) {
             jpa = new ProjetoJpaController();
         }
         List<Projeto> list = new ArrayList();

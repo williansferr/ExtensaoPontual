@@ -57,7 +57,7 @@
                 <p:tab id="alunos" title="2 - Adicionar Alunos" >
                     <p:dataTable id="availableStudents" var="us" 
                                  value="#{beanUsuario.buscarAlunosEVoluntarios}"
-                                 >
+                                 emptyMessage="Nenhum aluno encontrado nesse projeto!">
 
                         <p:column style="width:20px" >
                             <h:outputText id="ui-icon-arrow-4" styleClass="ui-icon ui-icon-arrow-4"
@@ -130,7 +130,7 @@
                 <p:commandButton value="Adicionar" 
                                  actionListener="#{beanUsuario_Projeto.incluirAlunosNoProjeto(beanUsuario.dropList, 
                                                    beanProjeto.projeto )}"
-                                 style="left: 87%;top: 40px;position: relative" 
+                                 style="left: 85%;top: 40px;position: relative" 
                                  update="@all"
                                  icon="ui-icon-circle-check">
                 </p:commandButton>

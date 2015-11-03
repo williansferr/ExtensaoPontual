@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,6 +23,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -109,14 +109,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "UsuarioProjeto.getProjectByUser",
             query = "SELECT DISTINCT(up.idProjeto) FROM UsuarioProjeto up "
             + "INNER JOIN up.idProjeto proj "
-            + "INNER JOIN up.matricula us where  us.matricula = :matricula")
-
-})
+            + "INNER JOIN up.matricula us where  us.matricula = :matricula")})
 
 public class UsuarioProjeto implements Serializable {
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuarioProjeto")
-    private List<Ponto> pontoList;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -132,6 +127,8 @@ public class UsuarioProjeto implements Serializable {
     @JoinColumn(name = "idProjeto", referencedColumnName = "idProjeto")
     @ManyToOne(optional = false)
     private Projeto idProjeto;
+    @OneToMany(mappedBy = "idUsuarioProjeto")
+    private List<Ponto> pontoList;
 
     public UsuarioProjeto() {
     }
@@ -139,10 +136,9 @@ public class UsuarioProjeto implements Serializable {
     public UsuarioProjeto(Integer id) {
         this.id = id;
     }
-
-    public UsuarioProjeto(Usuario matricula, Projeto idProjeto) {
-        this.matricula = matricula;
-        this.idProjeto = idProjeto;
+    public UsuarioProjeto(Usuario us, Projeto projeto) {
+        this.matricula = us;
+        this.idProjeto =projeto;
     }
 
     public Integer getId() {
@@ -177,6 +173,15 @@ public class UsuarioProjeto implements Serializable {
         this.idProjeto = idProjeto;
     }
 
+    @XmlTransient
+    public List<Ponto> getPontoList() {
+        return pontoList;
+    }
+
+    public void setPontoList(List<Ponto> pontoList) {
+        this.pontoList = pontoList;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -197,13 +202,9 @@ public class UsuarioProjeto implements Serializable {
         return true;
     }
 
-    public List<Ponto> getPontoList() {
-        return pontoList;
-    }
-
     @Override
     public String toString() {
         return "models.UsuarioProjeto[ id=" + id + " ]";
     }
-
+    
 }

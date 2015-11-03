@@ -29,15 +29,13 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Willians
  */
 @Entity
-@Table(name = "projeto", catalog = "sipow", schema = "")
+@Table(name = "projeto")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Projeto.findAll",
             query = "SELECT p FROM Projeto p")})
 
-
-public class Projeto implements Serializable{
-
+public class Projeto implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,8 +57,6 @@ public class Projeto implements Serializable{
 
     public Projeto() {
     }
-
-    
 
     public Projeto(Integer idProjeto) {
         this.idProjeto = idProjeto;
@@ -142,7 +138,7 @@ public class Projeto implements Serializable{
 
     @Override
     public String toString() {
-        return getNome();
+        return "models.Projeto[ idProjeto=" + idProjeto + " ]";
     }
-
+    
 }

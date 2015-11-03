@@ -6,7 +6,6 @@
 package models;
 
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -91,7 +90,6 @@ import javax.xml.bind.annotation.XmlRootElement;
             + "and up.idProjeto.idProjeto= :projeto and p.data >= :dataInicial and p.data <= :dataFinal")})
 
 public class Ponto implements Serializable {
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -114,7 +112,7 @@ public class Ponto implements Serializable {
     @Column(name = "justificativa")
     private String justificativa;
     @JoinColumn(name = "idUsuarioProjeto", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private UsuarioProjeto idUsuarioProjeto;
 
     public Ponto() {
@@ -212,5 +210,5 @@ public class Ponto implements Serializable {
     public String toString() {
         return "models.Ponto[ idPonto=" + idPonto + " ]";
     }
-
+    
 }

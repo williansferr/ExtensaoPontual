@@ -197,9 +197,10 @@ public class BeanPonto implements Serializable {
     }
 //RETORNA UMA 'STRING' COM TOTAL DE HORAS QUE O USUÁRIO SELECIONA REALIZOU DENTRO DO PERÍODO
     public String getHorasTotais(Usuario us, Projeto p, Calendar dataInicial, Calendar dataFinal) {
+        String horasTotais = new String();
         try {
-            return pontoControle.getTotalHorasRealizadas(us, p, dataInicial.getTime(), dataFinal.getTime());
-
+            horasTotais =  pontoControle.getTotalHorasRealizadas(us, p, dataInicial.getTime(), dataFinal.getTime());
+            return horasTotais;
         } catch (Exception e) {
             e.printStackTrace();
         }

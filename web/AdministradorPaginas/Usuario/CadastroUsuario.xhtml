@@ -16,8 +16,10 @@
                         >
 
                 <f:facet name="header">
+                    <center>
                     <h:outputText value="CADASTRAR USUÁRIO" 
                                   style="position: relative; left: 9%;margin-bottom: 40%;font-size: 15px"  />
+                    </center>
                 </f:facet>
 
 
@@ -61,24 +63,7 @@
                              >
                 </p:inputText>
 
-                <p:outputLabel  for="txtLogin"  value="Login:"   />
-                <p:inputText id="txtLogin" class="txtLogin"  value="#{beanUsuario.user.login}" 
-                             label="Login"
-                             required="true"
-                            requiredMessage="Favor entrar com Login "
-                             title="Login do Usuário" 
-                             >
-                </p:inputText >
-
-                <h:outputLabel  for="txtSenha"  value="Senha:"   />
-                <p:password id="txtSenha" class="txtSenhaLogin"  value="#{beanUsuario.user.senha}" 
-                            label="Senha"
-                            title="Senha do Usuário" 
-                            >
-                </p:password>
-
-
-
+                
                 <p:outputLabel for="txtTelResid" value="Telefone Residencial: " class="sessionComponent" />
                 <p:inputMask id="txtTelResid" value="#{beanUsuario.user.telefoneResidencial}"
                              mask="(99) 9999-9999"
@@ -128,6 +113,8 @@
                     <f:selectItem itemLabel="Professor" itemValue="Professor" 
                                   ></f:selectItem>
                 </p:selectOneMenu>
+                
+                <p:outputLabel value=" *   Campos Obrigatórios"/>
 
             </h:panelGrid>
             <br/><br/>

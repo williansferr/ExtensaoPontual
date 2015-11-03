@@ -1,4 +1,4 @@
-package hash;
+package models;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

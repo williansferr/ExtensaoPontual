@@ -133,7 +133,7 @@
                         <h:outputText value="Colegiado" />
                         <p:inputText value="#{beanUsuario.user.colegiado}" />
 
-                        <h:outputLabel for="EmailTxt" value="Email" />
+                        <h:outputLabel for="EmailTxt" value="E-mail" />
                         <p:inputText id="EmailTxt" value="#{beanUsuario.user.email}"  />
 
                         <h:outputText value="Matricula" />
@@ -143,9 +143,6 @@
                         <p:inputMask value="#{beanUsuario.user.dataNasc}" mask="99/99/9999">
                             <f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
                         </p:inputMask>
-
-                        <h:outputText value="Login:" />
-                        <p:inputText value="#{beanUsuario.user.login}" />
 
                         <h:outputText value="Telefone Residencial." />
                         <p:inputMask mask="(99) 9999-9999" value="#{beanUsuario.user.telefoneResidencial}" />

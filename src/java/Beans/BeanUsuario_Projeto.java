@@ -9,9 +9,7 @@ import Controllers.UsuarioProjetoJpaController;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -19,7 +17,6 @@ import javax.faces.context.FacesContext;
 import models.Projeto;
 import models.Usuario;
 import models.UsuarioProjeto;
-import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -151,10 +148,9 @@ public class BeanUsuario_Projeto implements Serializable {
 //REALIZA A EXCLUSÃO DO CADASTRO DO USUARIO E PROJETO ESPECIFICO
 
     public void excluirCadastro(Usuario us, Projeto p) {
-        UsuarioProjeto up = new UsuarioProjeto(us, p);
-        System.out.println("Usuario: "+us+"\n"+" Projeto: "+p);
+        
         if (us != null && p != null) {
-            jpa.removeUserOfProject(up);
+            jpa.removeUserOfProject(p,us);
 //            RequestContext.getCurrentInstance().update("tabelaAlunosDoProjeto");
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
                     FacesMessage.SEVERITY_INFO, "Usuário Excluido do Projeto!", ""));
@@ -222,16 +218,6 @@ public class BeanUsuario_Projeto implements Serializable {
         }
     }
 
-//    public Date getDataInicioProjeto(Usuario us, Projeto p) {
-//        System.out.println("us: " + us);
-//        System.out.println("p: " + p);
-//        UsuarioProjeto up = getCadastroUsuarioProjeto(p, us);
-//        if (up != null) {
-//            return up.getDataCadastro();
-//        } else {
-//            return null;
-//        }
-//    }
     public Projeto getProjeto() {
         return projeto;
     }

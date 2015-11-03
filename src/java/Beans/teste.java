@@ -39,9 +39,16 @@ public class teste {
         PontoJpaController controlePonto = new PontoJpaController();
         BeanConverterProjeto a = new BeanConverterProjeto();
         Ponto p = new Ponto(12345);
-        Usuario us= new Usuario(1234);
+        Usuario us= new Usuario(11111);
+        us.setTipoUsuario("Coordenador");
+        Calendar calInicio = Calendar.getInstance();
+        Calendar calFim = Calendar.getInstance();
+        calInicio.set(2015, 8, 1);
+        calFim.set(2015, 12, 1);
         
-        System.out.println("Con: "+controlePonto.getConnection());
+        System.out.println("Horas Totais: "+pontoBean.getHorasTotais(
+                new Usuario(11113), new Projeto(1), calInicio,calFim));
+        
         
     }
 }

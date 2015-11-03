@@ -1,7 +1,7 @@
 package Beans;
 
 import Controllers.UsuarioJpaController;
-import hash.Sha;
+import models.Sha;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
@@ -24,7 +24,6 @@ public class BeanLogar implements Serializable {
     private Usuario usuarioLogado;
     private String senha;
     private String email;
-    private String login;
     private HttpSession session;
     private FacesContext fc;
 
@@ -32,7 +31,7 @@ public class BeanLogar implements Serializable {
 
     public String verificar() {
 
-        boolean loginSenha = false;
+        boolean emailSenha = false;
 
         fc = FacesContext.getCurrentInstance();
         session = (HttpSession) fc.getExternalContext().
@@ -45,13 +44,13 @@ public class BeanLogar implements Serializable {
             List<Usuario> listaUsuario = usuarioController.selectAllWithAdmin();
 
             for (Usuario us : listaUsuario) {
-                if (us.getLogin() == null) {
+                
                     if (us.getSenha() == null) {
-                    }
+                    
                 } else {
-                    if ((us.getLogin().trim().equals(getLogin()) || us.getEmail().trim().equals(getLogin()))
+                    if (us.getEmail().trim().equals(getLogin())
                             && us.getSenha().trim().equals(getSenha().trim())) {
-                        loginSenha = true;
+                        emailSenha = true;
                         this.usuarioLogado = us;
                     } else {
 
@@ -63,7 +62,7 @@ public class BeanLogar implements Serializable {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
                     FacesMessage.SEVERITY_ERROR, "", "Preencher todos os campos!"));
         }
-        if (loginSenha == true) {
+        if (emailSenha == true) {
             return "/AdministradorPaginas/Ponto/EscolherProjetoAcessarPonto.xhtml?faces-redirect=true";
         } else {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
@@ -122,19 +121,13 @@ public class BeanLogar implements Serializable {
     }
 
     public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setLogin(String email) {
         this.email = email;
     }
+
+    
 
 }

@@ -149,14 +149,14 @@
 
                     </p:outputPanel>
 
-                    <p:commandButton id="pdf"
-                                     
-                                     value="Gerar PDF"                                     
+                    <h:commandButton id="pdf"
+                                     image="/resources/img/pdf.png"
+                                     value="Baixar PDF"                                     
                                      style="position: relative;left: 85%;top: 30px" title="Gerar PDF"
                                      action="#{relatorioBean.relatorio(relatorioBean.usuario,
                                                relatorioBean.projeto,
                                                calendarView.date1,calendarView.date2)}">
-                    </p:commandButton>
+                    </h:commandButton>
 
                 </p:tab>
             </p:wizard>

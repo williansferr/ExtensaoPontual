@@ -31,7 +31,7 @@ public class UsuarioJpaController implements Serializable {
     }
     private EntityManagerFactory emf = null;
 
-    public UsuarioJpaController() {
+     public UsuarioJpaController() {
     }
 
     public EntityManager getEntityManager() {
@@ -72,7 +72,6 @@ public class UsuarioJpaController implements Serializable {
                 }
             }
             em.getTransaction().commit();
-            
         } finally {
             if (em != null) {
                 em.close();
@@ -213,7 +212,7 @@ public class UsuarioJpaController implements Serializable {
             em.close();
         }
     }
-
+    
     public List<Usuario> getUsuarioAllProfessor() {
         EntityManager em = getEntityManager();
         try {
@@ -334,4 +333,21 @@ public class UsuarioJpaController implements Serializable {
             }
         }
     }
+    
+    public List<String> findAllEmails(){
+       EntityManager em = getEntityManager();
+        try {
+            Query query = em.createNamedQuery("Usuario.findAllEmails");
+            List<String> listEmails = query.getResultList();
+            return listEmails;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+    
 }

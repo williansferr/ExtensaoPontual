@@ -12,23 +12,23 @@
 
             <p:growl id="growl" autoUpdate="true" showDetail="true" />
 
-            <h:panelGrid class="panelCadastroProjeto" columns="2" rendered="true" cellspacing="25" 
+            <h:panelGrid class="panelCadastroProjeto" columns="2" rendered="true" cellspacing="15" 
                          >
 
                 <f:facet name="header">
                     <center>
-                    <h:outputText value="CADASTRAR PROJETO" 
-                                  style="position: relative; right: 3.5%;margin-bottom: 40%;font-size: 15px" />
-                
+                        <h:outputText value="CADASTRAR PROJETO" 
+                                      style="position: relative; right: 3.5%;margin-bottom: 40%;font-size: 15px" />
+
                     </center>
                 </f:facet>
 
 
-                <p:outputLabel class="outLabel" value="Nome: "  ></p:outputLabel>
-                <p:inputText  class="inputNomeProjeto" value="#{beanProjeto.nome}" 
+                <p:outputLabel for="inputNomeProjeto" value="Nome: "  />
+                <p:inputText  id="inputNomeProjeto"
+                              class="inputNomeProjeto" value="#{beanProjeto.nome}" 
                               required="true" 
-                              label="Nome"
-                              requiredMessage="Favor entrar com um nome para o Usuário."
+                              requiredMessage="Digite o Nome do Projeto"
                               title="Nome do Usuário" ></p:inputText >
 
 
@@ -37,7 +37,6 @@
                 <p:inputText id="txtColegiado" 
                              class="inputColegiadoProjeto"
                              title="Colegiado" 
-                             requiredMessage="Digite o Colegiado"
                              value="#{beanProjeto.colegiado}">
                 </p:inputText>
 
@@ -46,6 +45,7 @@
                                class="outLabel" />
 
                 <p:selectOneMenu id="txtEstado" 
+                                 required="true"
                                  class="radiosContainer sessionComponent" 
                                  value="#{beanProjeto.estado}">
                     <p:ajax event="click" 
@@ -59,21 +59,24 @@
                     <f:selectItem itemLabel="Concluído" itemValue="Concluído"></f:selectItem>
                 </p:selectOneMenu>
 
+                <p:outputLabel value="* Obrigatório"/>
 
             </h:panelGrid>
 
             <br/><br/>
-            <p:commandButton update="formCadastroProjeto"  process="@this"
-                             value="Limpar" 
-                             icon="ui-icon-trash"
-                             style="left: 10%; top: 60px;
-                             position: relative"
-                             />
+            <p:commandButton  process="@this"
+                              value="Limpar" 
+                              icon="ui-icon-trash"
+                              style="left: 10%; top: 60px;
+                              position: relative"
+                              update="formCadastroProjeto"  />
 
-            <p:commandButton value="Cadastrar" style="position: relative;left:60%;top: 60px"
+            <p:commandButton value="Cadastrar" 
                              icon="ui-icon-check"
                              action="#{beanProjeto.insert()}"
-                             update="formCadastroProjeto"/>
+                             update="formCadastroProjeto"
+                             style="position: relative;left:60%;top: 60px"
+                             />
         </h:form>
 
     </ui:define>

@@ -7,18 +7,19 @@ package Controllers;
 
 import Controllers.exceptions.NonexistentEntityException;
 import java.io.Serializable;
+import javax.persistence.Query;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import models.Usuario;
+import models.Projeto;
+import models.Ponto;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.Persistence;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import models.Usuario;
-import models.Projeto;
 import models.UsuarioProjeto;
 
 /**
@@ -32,7 +33,7 @@ public class UsuarioProjetoJpaController implements Serializable {
     }
     private EntityManagerFactory emf = null;
 
-   public UsuarioProjetoJpaController() {
+     public UsuarioProjetoJpaController() {
     }
 
      public EntityManager getEntityManager() {
@@ -49,6 +50,9 @@ public class UsuarioProjetoJpaController implements Serializable {
     }
 
     public void create(UsuarioProjeto usuarioProjeto) {
+        if (usuarioProjeto.getPontoList() == null) {
+            usuarioProjeto.setPontoList(new ArrayList<Ponto>());
+        }
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -63,6 +67,12 @@ public class UsuarioProjetoJpaController implements Serializable {
                 idProjeto = em.getReference(idProjeto.getClass(), idProjeto.getIdProjeto());
                 usuarioProjeto.setIdProjeto(idProjeto);
             }
+            List<Ponto> attachedPontoList = new ArrayList<Ponto>();
+            for (Ponto pontoListPontoToAttach : usuarioProjeto.getPontoList()) {
+                pontoListPontoToAttach = em.getReference(pontoListPontoToAttach.getClass(), pontoListPontoToAttach.getIdPonto());
+                attachedPontoList.add(pontoListPontoToAttach);
+            }
+            usuarioProjeto.setPontoList(attachedPontoList);
             em.persist(usuarioProjeto);
             if (matricula != null) {
                 matricula.getUsuarioProjetoList().add(usuarioProjeto);
@@ -71,6 +81,15 @@ public class UsuarioProjetoJpaController implements Serializable {
             if (idProjeto != null) {
                 idProjeto.getUsuarioProjetoList().add(usuarioProjeto);
                 idProjeto = em.merge(idProjeto);
+            }
+            for (Ponto pontoListPonto : usuarioProjeto.getPontoList()) {
+                UsuarioProjeto oldIdUsuarioProjetoOfPontoListPonto = pontoListPonto.getIdUsuarioProjeto();
+                pontoListPonto.setIdUsuarioProjeto(usuarioProjeto);
+                pontoListPonto = em.merge(pontoListPonto);
+                if (oldIdUsuarioProjetoOfPontoListPonto != null) {
+                    oldIdUsuarioProjetoOfPontoListPonto.getPontoList().remove(pontoListPonto);
+                    oldIdUsuarioProjetoOfPontoListPonto = em.merge(oldIdUsuarioProjetoOfPontoListPonto);
+                }
             }
             em.getTransaction().commit();
         } finally {
@@ -90,6 +109,8 @@ public class UsuarioProjetoJpaController implements Serializable {
             Usuario matriculaNew = usuarioProjeto.getMatricula();
             Projeto idProjetoOld = persistentUsuarioProjeto.getIdProjeto();
             Projeto idProjetoNew = usuarioProjeto.getIdProjeto();
+            List<Ponto> pontoListOld = persistentUsuarioProjeto.getPontoList();
+            List<Ponto> pontoListNew = usuarioProjeto.getPontoList();
             if (matriculaNew != null) {
                 matriculaNew = em.getReference(matriculaNew.getClass(), matriculaNew.getMatricula());
                 usuarioProjeto.setMatricula(matriculaNew);
@@ -98,6 +119,13 @@ public class UsuarioProjetoJpaController implements Serializable {
                 idProjetoNew = em.getReference(idProjetoNew.getClass(), idProjetoNew.getIdProjeto());
                 usuarioProjeto.setIdProjeto(idProjetoNew);
             }
+            List<Ponto> attachedPontoListNew = new ArrayList<Ponto>();
+            for (Ponto pontoListNewPontoToAttach : pontoListNew) {
+                pontoListNewPontoToAttach = em.getReference(pontoListNewPontoToAttach.getClass(), pontoListNewPontoToAttach.getIdPonto());
+                attachedPontoListNew.add(pontoListNewPontoToAttach);
+            }
+            pontoListNew = attachedPontoListNew;
+            usuarioProjeto.setPontoList(pontoListNew);
             usuarioProjeto = em.merge(usuarioProjeto);
             if (matriculaOld != null && !matriculaOld.equals(matriculaNew)) {
                 matriculaOld.getUsuarioProjetoList().remove(usuarioProjeto);
@@ -114,6 +142,23 @@ public class UsuarioProjetoJpaController implements Serializable {
             if (idProjetoNew != null && !idProjetoNew.equals(idProjetoOld)) {
                 idProjetoNew.getUsuarioProjetoList().add(usuarioProjeto);
                 idProjetoNew = em.merge(idProjetoNew);
+            }
+            for (Ponto pontoListOldPonto : pontoListOld) {
+                if (!pontoListNew.contains(pontoListOldPonto)) {
+                    pontoListOldPonto.setIdUsuarioProjeto(null);
+                    pontoListOldPonto = em.merge(pontoListOldPonto);
+                }
+            }
+            for (Ponto pontoListNewPonto : pontoListNew) {
+                if (!pontoListOld.contains(pontoListNewPonto)) {
+                    UsuarioProjeto oldIdUsuarioProjetoOfPontoListNewPonto = pontoListNewPonto.getIdUsuarioProjeto();
+                    pontoListNewPonto.setIdUsuarioProjeto(usuarioProjeto);
+                    pontoListNewPonto = em.merge(pontoListNewPonto);
+                    if (oldIdUsuarioProjetoOfPontoListNewPonto != null && !oldIdUsuarioProjetoOfPontoListNewPonto.equals(usuarioProjeto)) {
+                        oldIdUsuarioProjetoOfPontoListNewPonto.getPontoList().remove(pontoListNewPonto);
+                        oldIdUsuarioProjetoOfPontoListNewPonto = em.merge(oldIdUsuarioProjetoOfPontoListNewPonto);
+                    }
+                }
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -153,6 +198,11 @@ public class UsuarioProjetoJpaController implements Serializable {
             if (idProjeto != null) {
                 idProjeto.getUsuarioProjetoList().remove(usuarioProjeto);
                 idProjeto = em.merge(idProjeto);
+            }
+            List<Ponto> pontoList = usuarioProjeto.getPontoList();
+            for (Ponto pontoListPonto : pontoList) {
+                pontoListPonto.setIdUsuarioProjeto(null);
+                pontoListPonto = em.merge(pontoListPonto);
             }
             em.remove(usuarioProjeto);
             em.getTransaction().commit();
@@ -386,7 +436,6 @@ public class UsuarioProjetoJpaController implements Serializable {
 
                 Usuario us = new Usuario();
                 us = (Usuario) obj;
-                System.out.println("us: "+us.getMatricula());
                 em.getTransaction().begin();
                 Query query = em.createQuery(
                         "DELETE FROM UsuarioProjeto up where up.matricula.matricula =:valor");
@@ -460,16 +509,13 @@ public class UsuarioProjetoJpaController implements Serializable {
     }
 
     //EXCLUI O CADASTRO ENTRE O USUÁRIO E O PROJETO
-    public void removeUserOfProject(UsuarioProjeto usuarioProjeto) {
-            System.out.println("UsuarioProjeto: "+usuarioProjeto);
-        UsuarioProjeto up = getRegistryByProjectAndUsuario(usuarioProjeto.getIdProjeto(), usuarioProjeto.getMatricula());
+    public void removeUserOfProject( Projeto projeto, Usuario us) {
+        UsuarioProjeto up = getRegistryByProjectAndUsuario(projeto, us);
         try {
             if (up != null) {
                 destroy(up.getId());
-                System.out.println("Entrou Corretamente");
             }
         } catch (Exception e) {
-            System.out.println("Entrou 2 erro!");
             e.printStackTrace();
         }
     }
@@ -512,5 +558,4 @@ public class UsuarioProjetoJpaController implements Serializable {
             }
         }
     }
-    
 }

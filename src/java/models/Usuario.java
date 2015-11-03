@@ -6,8 +6,6 @@
 package models;
 
 import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -31,7 +29,7 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Willians
  */
 @Entity
-@Table(name = "usuario", catalog = "sipow", schema = "")
+@Table(name = "usuario")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll",
@@ -54,9 +52,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
     @NamedQuery(name = "Usuario.findEmail",
             query = "SELECT u FROM Usuario u "
-                    + "where u.email = :email")
-})
-
+                    + "where u.email = :email")})
 
 public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -212,7 +208,7 @@ public class Usuario implements Serializable {
     public void setUsuarioProjetoList(List<UsuarioProjeto> usuarioProjetoList) {
         this.usuarioProjetoList = usuarioProjetoList;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -238,9 +234,4 @@ public class Usuario implements Serializable {
         return "models.Usuario[ matricula=" + matricula + " ]";
     }
     
-    public String converterDateParaString(Date data) {
-        DateFormat formatter = new SimpleDateFormat("ddMMyyyy");
-        String newDate = formatter.format(data.getTime());
-        return newDate;
-    }
 }

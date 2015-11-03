@@ -20,7 +20,7 @@
                          emptyMessage="Nenhum Projeto Cadastrado!">
 
                 <f:facet name="header"  rendered="true">
-                    INCLUIR PROFESSOR NO PROJETO
+                    CADASTRAR PROFESSOR NO PROJETO
                 </f:facet>
 
                 <p:column headerText="Nome" filterBy="#{p.nome}"   >
@@ -60,7 +60,7 @@
             <!--Dialog para Escolha do Projeto-->
             <p:growl id="growl" autoUpdate="true" showDetail="true" />
             <p:dialog id="dialogEscolherProfessor" 
-                      header="Selecionar Professor - Projeto #{beanProjeto.projeto}" 
+                      header="Selecionar Professor - Projeto #{beanProjeto.projeto.nome}" 
                       showHeader="true"
                       widgetVar="dialogEscolherProfessor"
                       height="250"

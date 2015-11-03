@@ -1,7 +1,7 @@
 package Beans;
 
 import Controllers.UsuarioJpaController;
-import hash.Sha;
+import models.Sha;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.primefaces.model.DualListModel;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -40,51 +41,47 @@ public class BeanUsuario implements Serializable {
     private String tipoUsuario;
     private Usuario user = new Usuario();
     List<Usuario> lista = new ArrayList();
-    static List<Usuario> listaUsuarios;
+    List<Usuario> listaUsuarios;
     static List<Usuario> dropList;
     private String senhaConfirm;
     private String senhaAntiga;
     private String renhaReset;
 
     BeanUsuario_Projeto beanUsuarioProjeto = new BeanUsuario_Projeto();
-    static UsuarioJpaController usuarioControlerJpa = new UsuarioJpaController();
+    UsuarioJpaController usuarioControlerJpa = new UsuarioJpaController();
     BeanUsuario_Projeto usuarioProjeto = new BeanUsuario_Projeto();
 
     @PostConstruct
-    static public void init() {
+    public void init() {
         listaUsuarios = usuarioControlerJpa.getAllUserStudentsAndVolunteers();
         dropList = new ArrayList<Usuario>();
     }
 
     public void insert() {
-        System.out.println("");
+        user.setLogin(user.getEmail());
         try {
             user.setDataNasc(converterStringParaDate(getDataNasc()));
         } catch (Exception e) {
 
         }
-        if (validaUsuario(user)) {
-            if (!user.getSenha().equals("")) {
-                try {
-                    String aux = user.getSenha();
-                    String senhaHash = Sha.generateHash(aux);
-                    user.setSenha(senhaHash);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else {
-                try {
-                    String senhaNull = Sha.generateHash("unifil");
-                    user.setSenha(senhaNull);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        if (!isEmail(user)) {
+
+            try {
+                String senhaNull = Sha.generateHash("unifil");
+                user.setSenha(senhaNull);
+                usuarioControlerJpa.create(this.user);
+                setUser(new Usuario());
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                        FacesMessage.SEVERITY_INFO, "Cadastro realizado com sucesso!", ""));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            usuarioControlerJpa.create(this.user);
-            setUser(new Usuario());
+        } else {
+
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_INFO, "Cadastro realizado com sucesso!", ""));
+                    FacesMessage.SEVERITY_INFO, "E-mail já cadastrado!", ""));
         }
+
     }
 
     public void esqueceuSenha(String senha, String senhaConfirm, String email) {
@@ -162,7 +159,6 @@ public class BeanUsuario implements Serializable {
         Usuario usuario = usuarioControlerJpa.findUsuario(us.getMatricula());
         if (usuario.getDataNasc() != null) {
             senhaDataNasc = converterDateParaString(usuario.getDataNasc());
-            System.out.println("SenhaDataNasc: " + senhaDataNasc);
         }
         if (usuario != null) {
             String senha = getSenhaHash(senhaDataNasc);
@@ -185,34 +181,15 @@ public class BeanUsuario implements Serializable {
         }
     }
 
-    public boolean validaUsuario(Usuario usuario) {
-        List<Usuario> listaUser = listaUsuarios();
-        if (!listaUser.isEmpty()) {
-            for (int i = 0; i < listaUser.size(); i++) {
-                if (usuario.getEmail().equals(listaUser.get(i).getEmail())) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                            FacesMessage.SEVERITY_ERROR, "Email já Cadastrado!", ""));
-
-                    return false;
-
-                } else if (usuario.getEmail().equals("")) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                            FacesMessage.SEVERITY_ERROR, "Incluir o Nome", ""));
-                    return false;
-                }
+    public boolean isEmail(Usuario usuario) {
+        List<String> listaEmail = usuarioControlerJpa.findAllEmails();
+        for (int i = 0; i < listaEmail.size(); i++) {
+            if (usuario.getEmail().equals(listaEmail.get(i))) {
+                return true;
             }
         }
-        try {
-            if (usuario.getTipoUsuario().equals("")
-                    || usuario.getNome().equals("")) {
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                        FacesMessage.SEVERITY_INFO, "Necessário incluir o nome!", ""));
-                return false;
-            }
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
+
+        return false;
     }
 
     public void excluirUsuario(Usuario us) {
@@ -229,7 +206,7 @@ public class BeanUsuario implements Serializable {
     }
 
     public String editarUsuario(Action submit) {
-        
+
         try {
             usuarioControlerJpa.edit(getUser());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
@@ -274,10 +251,10 @@ public class BeanUsuario implements Serializable {
         return null;
     }
 
+
     //EVENTO DA DRAGDROP DE ARRASTAR E SOLTAR
     public void onUsuarioDrop(DragDropEvent ddEvent) {
         Usuario us = ((Usuario) ddEvent.getData());
-        System.out.println("us: " + us);
         dropList.add(us);
         listaUsuarios.remove(us);
     }
@@ -290,7 +267,6 @@ public class BeanUsuario implements Serializable {
     public java.util.Date converterStringParaDate(String data) throws ParseException {
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         Date date = (java.util.Date) formatter.parse(data);
-        System.out.println("Date: " + date);
         return date;
     }
 

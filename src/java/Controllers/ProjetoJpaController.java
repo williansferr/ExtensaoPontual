@@ -26,16 +26,13 @@ import models.Projeto;
  */
 public class ProjetoJpaController implements Serializable {
 
-    public ProjetoJpaController() {
-    }
-
-    
     public ProjetoJpaController(EntityManagerFactory emf) {
         this.emf = emf;
     }
     private EntityManagerFactory emf = null;
 
-    
+    public ProjetoJpaController() {
+    }
     
     public EntityManager getEntityManager() {
         try {
@@ -215,7 +212,6 @@ public class ProjetoJpaController implements Serializable {
             em.close();
         }
     }
-    
     public List<Projeto> selectAll() {
         EntityManager em = getEntityManager();
         try{
@@ -231,6 +227,4 @@ public class ProjetoJpaController implements Serializable {
             }
         }
     }
-    
-    
 }
