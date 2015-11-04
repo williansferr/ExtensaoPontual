@@ -38,11 +38,12 @@ public class BeanProjeto implements Serializable {
 
     public void insert() {
         Calendar dataAtual = Calendar.getInstance();
-        getProjeto().setNome(getNome());
-        getProjeto().setDataInicio(getDataAtual());
-        getProjeto().setColegiado(getColegiado());
-        getProjeto().setEstado(getEstado());
-        getProjeto().setDataInicio(dataAtual.getTime());
+        projeto.setDataInicio(dataAtual.getTime());
+//        getProjeto().setNome(getNome());
+//        getProjeto().setDataInicio(getDataAtual());
+//        getProjeto().setColegiado(getColegiado());
+//        getProjeto().setEstado(getEstado());
+//        getProjeto().setDataInicio(dataAtual.getTime());
         if (jpa == null) {
             jpa = new ProjetoJpaController();
         }

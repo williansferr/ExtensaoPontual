@@ -46,8 +46,12 @@ public class teste {
         calInicio.set(2015, 8, 1);
         calFim.set(2015, 12, 1);
         
-        System.out.println("Horas Totais: "+pontoBean.getHorasTotais(
-                new Usuario(11113), new Projeto(1), calInicio,calFim));
+        if(calFim.compareTo(calInicio)>0){
+            System.out.println("Inicio Maior");
+        }else{
+            System.out.println("Inicio Menor");
+            
+        }
         
         
     }

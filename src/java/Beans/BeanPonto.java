@@ -116,20 +116,26 @@ public class BeanPonto implements Serializable {
         return false;
     }
 
-    public String editarPonto(Action submit) {
+    public void editarPonto() {
+
         if (pontoControle == null) {
             pontoControle = new PontoJpaController();
         }
-        try {
-            pontoControle.edit(getPontoAtual());
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_INFO, "Alteração realizada!", ""));
-        } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_WARN, "Não foi possível realizar alteração!", ""));
+
+        if (pontoAtual.getHoraSaida().compareTo(pontoAtual.getHoraEntrada()) > 0) {
+
+            try {
+                pontoControle.edit(getPontoAtual());
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                        FacesMessage.SEVERITY_INFO, "Alteração realizada!", ""));
+            } catch (Exception e) {
+            }
+        }else{
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                        FacesMessage.SEVERITY_WARN, "Horário Inválido!", ""));
+            
         }
 
-        return null;
     }
 
     public List<Ponto> getListaPonto() {
@@ -196,10 +202,11 @@ public class BeanPonto implements Serializable {
         return null;
     }
 //RETORNA UMA 'STRING' COM TOTAL DE HORAS QUE O USUÁRIO SELECIONA REALIZOU DENTRO DO PERÍODO
+
     public String getHorasTotais(Usuario us, Projeto p, Calendar dataInicial, Calendar dataFinal) {
         String horasTotais = new String();
         try {
-            horasTotais =  pontoControle.getTotalHorasRealizadas(us, p, dataInicial.getTime(), dataFinal.getTime());
+            horasTotais = pontoControle.getTotalHorasRealizadas(us, p, dataInicial.getTime(), dataFinal.getTime());
             return horasTotais;
         } catch (Exception e) {
             e.printStackTrace();

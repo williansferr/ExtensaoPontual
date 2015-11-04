@@ -26,7 +26,7 @@
 
                 <p:outputLabel for="inputNomeProjeto" value="Nome: "  />
                 <p:inputText  id="inputNomeProjeto"
-                              class="inputNomeProjeto" value="#{beanProjeto.nome}" 
+                              class="inputNomeProjeto" value="#{beanProjeto.projeto.nome}" 
                               required="true" 
                               requiredMessage="Digite o Nome do Projeto"
                               title="Nome do Usuário" ></p:inputText >
@@ -37,7 +37,7 @@
                 <p:inputText id="txtColegiado" 
                              class="inputColegiadoProjeto"
                              title="Colegiado" 
-                             value="#{beanProjeto.colegiado}">
+                             value="#{beanProjeto.projeto.colegiado}">
                 </p:inputText>
 
                 <p:outputLabel for="txtEstado" value="Situação:"
@@ -47,7 +47,7 @@
                 <p:selectOneMenu id="txtEstado" 
                                  required="true"
                                  class="radiosContainer sessionComponent" 
-                                 value="#{beanProjeto.estado}">
+                                 value="#{beanProjeto.projeto.estado}">
                     <p:ajax event="click" 
                             update="@(#cbFuncao)"/>
                     <f:selectItem  itemLabel="Em análise" itemValue="Em análise"></f:selectItem>
