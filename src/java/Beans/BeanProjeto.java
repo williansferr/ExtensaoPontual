@@ -9,12 +9,14 @@ import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.swing.Action;
 import models.Projeto;
 import models.Usuario;
 import org.primefaces.event.DragDropEvent;
 import org.primefaces.event.FlowEvent;
+import org.w3c.dom.html.HTMLButtonElement;
 
 /**
  *
@@ -39,11 +41,6 @@ public class BeanProjeto implements Serializable {
     public void insert() {
         Calendar dataAtual = Calendar.getInstance();
         projeto.setDataInicio(dataAtual.getTime());
-//        getProjeto().setNome(getNome());
-//        getProjeto().setDataInicio(getDataAtual());
-//        getProjeto().setColegiado(getColegiado());
-//        getProjeto().setEstado(getEstado());
-//        getProjeto().setDataInicio(dataAtual.getTime());
         if (jpa == null) {
             jpa = new ProjetoJpaController();
         }
@@ -55,13 +52,6 @@ public class BeanProjeto implements Serializable {
 
     }
 
-//    public boolean validaProjeto(Projeto projeto) {
-//        if (projeto.getNome().equals("")) {
-//            return false;
-//        }
-//        return true;
-//
-//    }
     public void excluirProjeto(int id) {
         if (jpa == null) {
             jpa = new ProjetoJpaController();
@@ -96,6 +86,27 @@ public class BeanProjeto implements Serializable {
             return current;
         }
     }
+    
+    public String onFlowProcess2(FlowEvent event) {
+
+        String current = event.getOldStep();
+        String next = event.getNewStep();
+        boolean proceed = true;
+
+        if (current.equals("projeto") && next.equals("alunos") && (getProjeto() == null)) {
+
+            proceed = false;
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_INFO, "", "Necessário Escolher Projeto!"));
+        }
+        if (proceed) {
+            return next;
+        } else {
+
+            return current;
+        }
+    }
+    
 
     //EVENTO DA DRAGDROP DE ARRASTAR E SOLTAR
     public void onUsuarioDrop(DragDropEvent ddEvent) {
@@ -160,7 +171,7 @@ public class BeanProjeto implements Serializable {
         this.projeto = projeto;
     }
 
-    public String editarProjeto(Action submit) {
+    public String editarProjeto() {
         if (jpa == null) {
             jpa = new ProjetoJpaController();
         }

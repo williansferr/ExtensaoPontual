@@ -13,10 +13,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 import models.Usuario;
 
-/**
- *
- * @author danielmorita
- */
+
 @ManagedBean
 @SessionScoped
 public class BeanLogar implements Serializable {
@@ -44,9 +41,9 @@ public class BeanLogar implements Serializable {
             List<Usuario> listaUsuario = usuarioController.selectAllWithAdmin();
 
             for (Usuario us : listaUsuario) {
-                
-                    if (us.getSenha() == null) {
-                    
+
+                if (us.getSenha() == null) {
+
                 } else {
                     if (us.getEmail().trim().equals(getLogin())
                             && us.getSenha().trim().equals(getSenha().trim())) {
@@ -104,6 +101,17 @@ public class BeanLogar implements Serializable {
 
     }
 
+    public String getPrimeiroNome() {
+        String aux = getUsuarioLogado().getNome();
+        if (!aux.contains(" ")) {
+            return aux;
+        } else {
+            String nome = aux.substring(0, aux.indexOf(" "));
+            return nome;
+
+        }
+    }
+
     public Usuario getUsuarioLogado() {
         return usuarioLogado;
     }
@@ -127,7 +135,5 @@ public class BeanLogar implements Serializable {
     public void setLogin(String email) {
         this.email = email;
     }
-
-    
 
 }

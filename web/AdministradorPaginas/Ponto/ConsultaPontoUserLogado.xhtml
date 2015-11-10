@@ -104,12 +104,12 @@
 
                             <h:outputText value="Horário Entrada" />
                             <p:inputMask value="#{beanPonto.pontoAtual.horaEntrada}" mask="99:99:99" disabled="true">
-                                <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Montevideo"></f:convertDateTime>
+                                <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Sao_Paulo" ></f:convertDateTime>
                             </p:inputMask>  
 
                             <h:outputText value="Horário Saída" />
                             <p:inputMask value="#{beanPonto.pontoAtual.horaSaida}" mask="99:99:99" disabled="true">
-                                <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Montevideo"></f:convertDateTime>
+                                <f:convertDateTime pattern="HH:mm:ss" timeZone="America/Sao_Paulo" ></f:convertDateTime>
                             </p:inputMask>
 
                         </p:panelGrid>

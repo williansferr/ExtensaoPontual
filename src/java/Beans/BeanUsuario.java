@@ -7,15 +7,14 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import org.primefaces.model.DualListModel;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.swing.Action;
 import models.Usuario;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.DragDropEvent;
@@ -46,6 +45,7 @@ public class BeanUsuario implements Serializable {
     private String senhaConfirm;
     private String senhaAntiga;
     private String renhaReset;
+    private Calendar dataNas;
 
     BeanUsuario_Projeto beanUsuarioProjeto = new BeanUsuario_Projeto();
     UsuarioJpaController usuarioControlerJpa = new UsuarioJpaController();
@@ -60,14 +60,15 @@ public class BeanUsuario implements Serializable {
     public void insert() {
         user.setLogin(user.getEmail());
         try {
-            user.setDataNasc(converterStringParaDate(getDataNasc()));
+            user.setDataNasc(converterStringParaDate(dataNasc));
         } catch (Exception e) {
 
         }
         if (!isEmail(user)) {
 
             try {
-                String senhaNull = Sha.generateHash("unifil");
+                String dataNasc = converterDateParaString(user.getDataNasc());
+                String senhaNull = Sha.generateHash(dataNasc);
                 user.setSenha(senhaNull);
                 usuarioControlerJpa.create(this.user);
                 setUser(new Usuario());
@@ -205,9 +206,9 @@ public class BeanUsuario implements Serializable {
         }
     }
 
-    public String editarUsuario(Action submit) {
-
+    public String editarUsuario() {
         try {
+            
             usuarioControlerJpa.edit(getUser());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
                     FacesMessage.SEVERITY_INFO, "Alteração realizada!", ""));
@@ -457,6 +458,14 @@ public class BeanUsuario implements Serializable {
 
     public void setRenhaReset(String renhaReset) {
         this.renhaReset = renhaReset;
+    }
+
+    public Calendar getDataNas() {
+        return dataNas;
+    }
+
+    public void setDataNas(Calendar dataNas) {
+        this.dataNas = dataNas;
     }
 
 }

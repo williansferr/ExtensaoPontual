@@ -37,7 +37,7 @@ public class UsuarioJpaController implements Serializable {
     public EntityManager getEntityManager() {
         try {
             if (emf == null) {
-                emf = Persistence.createEntityManagerFactory("PrimeFacesSipowPU");
+                emf = Persistence.createEntityManagerFactory("ExtensaoPontualPU");
             }
 
             return emf.createEntityManager();

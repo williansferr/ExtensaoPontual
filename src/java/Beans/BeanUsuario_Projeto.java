@@ -151,7 +151,6 @@ public class BeanUsuario_Projeto implements Serializable {
         
         if (us != null && p != null) {
             jpa.removeUserOfProject(p,us);
-//            RequestContext.getCurrentInstance().update("tabelaAlunosDoProjeto");
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
                     FacesMessage.SEVERITY_INFO, "Usuário Excluido do Projeto!", ""));
         } else {
@@ -171,8 +170,6 @@ public class BeanUsuario_Projeto implements Serializable {
             setListaAuxProjeto(jpa.getAllProjects());
             return getListaAuxProjeto();
         } else {
-//            setListaAuxProjeto(jpa.getEntityWithParameterUser(us));
-//            return getListaAuxProjeto();
             return null;
         }
     }

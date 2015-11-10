@@ -16,7 +16,8 @@
                          value="#{beanUsuario.getUsuarioCadastrados(beanLogar.usuarioLogado)}" 
                          var="us" 
                          rendered="true" 
-                         style="margin-bottom:20px; font-size: 15px;">
+                         style="margin-bottom:20px; font-size: 15px;"
+                         emptyMessage="Usuários não localizados!">
 
                 <f:facet name="header"  rendered="true">
                     CONSULTA DE USUÁRIOS
@@ -141,7 +142,7 @@
                         
                         <h:outputText value="Data Nasc." />
                         <p:inputMask value="#{beanUsuario.user.dataNasc}" mask="99/99/9999">
-                            <f:convertDateTime pattern="dd/MM/yyyy"></f:convertDateTime>
+                            <f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" ></f:convertDateTime>
                         </p:inputMask>
 
                         <h:outputText value="Telefone Residencial." />
@@ -204,7 +205,7 @@
 
                     <p:commandButton value="Salvar" 
                                      style="right: 20%;top:8px"
-                                     actionListener="#{beanUsuario.editarUsuario(submit)}" 
+                                     actionListener="#{beanUsuario.editarUsuario}" 
                                      update="growl,tabela"
                                      oncomplete="PF('usuarioDialog').hide()"
                                      icon="ui-icon-circle-check"

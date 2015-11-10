@@ -17,13 +17,20 @@
                         offset = ui.offset;
             }
         </script> 
+        
+        <style>
+            .ui-wizard-nav-back
+            {
+                display: none !important;
+            }
+        </style>
 
 
         <h:form id="usForm"  >
 
             <p:growl id="growl" sticky="true" showDetail="true"/>
-            <p:wizard flowListener="#{beanProjeto.onFlowProcess}"  
-                      nextLabel="Continuar" backLabel="Voltar"
+            <p:wizard flowListener="#{beanProjeto.onFlowProcess2}"  
+                      nextLabel="Continuar" backLabel="Voltar"   
                       >
 
                 <p:tab id="projeto" title="1 - Selecionar Projeto" transient="true">
@@ -81,66 +88,66 @@
                         </p:column>
 
                     </p:dataTable>
-               
-                
-                <p:fieldset id="selectedUsers" 
+
+
+                    <p:fieldset id="selectedUsers" 
 
 
 
-                            legend="Projeto - #{beanProjeto.projeto.nome}"
-                            style="width: 95%"
-                            >
-                    <p:outputPanel id="dropArea">
-                        <h:outputText value="Arraste aqui os alunos que deseja cadastrar!" 
-                                      rendered="#{empty beanUsuario.dropList}" 
-                                      style="font-size:15px;text-transform: uppercase" />
+                                legend="Projeto - #{beanProjeto.projeto.nome}"
+                                style="width: 95%"
+                                >
+                        <p:outputPanel id="dropArea">
+                            <h:outputText value="Arraste aqui os alunos que deseja cadastrar!" 
+                                          rendered="#{empty beanUsuario.dropList}" 
+                                          style="font-size:15px;text-transform: uppercase" />
 
-                        <p:dataTable id="selectedUsersTable" var="listDrop" 
-                                     value="#{beanUsuario.dropList}" 
-                                     rendered="#{not empty beanUsuario.dropList}"
-                                     >
-
-
-                            <p:column headerText="Nome">
-                                <h:outputText value="#{listDrop.nome}" />
-                            </p:column>
-
-                            <p:column headerText="Matrícula">
-                                <h:outputText value="#{listDrop.matricula}" />
-                            </p:column>
-
-                            <p:column headerText="Usuário">
-                                <h:outputText value="#{listDrop.tipoUsuario}" />
-                            </p:column>
+                            <p:dataTable id="selectedUsersTable" var="listDrop" 
+                                         value="#{beanUsuario.dropList}" 
+                                         rendered="#{not empty beanUsuario.dropList}"
+                                         >
 
 
-                            <p:column headerText="Remover" style="text-align: center">
-                                <p:commandButton style="width: 30%; "
-                                                 actionListener="#{beanUsuario.removerAlunoDaLista(listDrop)}"
-                                                 update=":usForm:dropArea"
-                                                 icon="ui-icon-trash" 
-                                                 title="Remover Usuário">
-                                </p:commandButton>
-                            </p:column>
-                        </p:dataTable>
-                    </p:outputPanel>
-                </p:fieldset>
+                                <p:column headerText="Nome">
+                                    <h:outputText value="#{listDrop.nome}" />
+                                </p:column>
 
-                <!--Falta apenas incluir o Projeto Escolhido-->
-                <p:commandButton value="Adicionar" 
-                                 actionListener="#{beanUsuario_Projeto.incluirAlunosNoProjeto(beanUsuario.dropList, 
-                                                   beanProjeto.projeto )}"
-                                 style="left: 85%;top: 40px;position: relative" 
-                                 update="@all"
-                                 icon="ui-icon-circle-check">
-                </p:commandButton>
+                                <p:column headerText="Matrícula">
+                                    <h:outputText value="#{listDrop.matricula}" />
+                                </p:column>
 
-                <p:droppable for="selectedUsers" tolerance="touch" activeStyleClass="ui-state-highlight" 
-                             datasource="availableStudents" onDrop="handleDrop">
-                    <p:ajax listener="#{beanUsuario.onUsuarioDrop}" update="dropArea availableStudents" />
-                </p:droppable>
+                                <p:column headerText="Usuário">
+                                    <h:outputText value="#{listDrop.tipoUsuario}" />
+                                </p:column>
 
-             </p:tab>
+
+                                <p:column headerText="Remover" style="text-align: center">
+                                    <p:commandButton style="width: 30%; "
+                                                     actionListener="#{beanUsuario.removerAlunoDaLista(listDrop)}"
+                                                     update=":usForm:dropArea"
+                                                     icon="ui-icon-trash" 
+                                                     title="Remover Usuário">
+                                    </p:commandButton>
+                                </p:column>
+                            </p:dataTable>
+                        </p:outputPanel>
+                    </p:fieldset>
+
+                    <!--Falta apenas incluir o Projeto Escolhido-->
+                    <p:commandButton value="Adicionar" 
+                                     actionListener="#{beanUsuario_Projeto.incluirAlunosNoProjeto(beanUsuario.dropList, 
+                                                       beanProjeto.projeto )}"
+                                     style="left: 85%;top: 40px;position: relative" 
+                                     update="@all"
+                                     icon="ui-icon-circle-check">
+                    </p:commandButton>
+
+                    <p:droppable for="selectedUsers" tolerance="touch" activeStyleClass="ui-state-highlight" 
+                                 datasource="availableStudents" onDrop="handleDrop">
+                        <p:ajax listener="#{beanUsuario.onUsuarioDrop}" update="dropArea availableStudents" />
+                    </p:droppable>
+
+                </p:tab>
 
 
             </p:wizard>

@@ -11,7 +11,7 @@ import javax.faces.bean.ViewScoped;
 @ViewScoped
 public class BeanDataHora implements Serializable{
 
-    UsuarioJpaController jpa = new UsuarioJpaController(Persistence.createEntityManagerFactory("PrimeFacesSipowPU"));
+    UsuarioJpaController jpa = new UsuarioJpaController(Persistence.createEntityManagerFactory("ExtensaoPontualPU"));
     GregorianCalendar data = new GregorianCalendar();
     GregorianCalendar horaEntrada = new GregorianCalendar();
     GregorianCalendar horaSaida = new GregorianCalendar();

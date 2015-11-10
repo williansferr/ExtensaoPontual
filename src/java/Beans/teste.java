@@ -38,6 +38,7 @@ public class teste {
         UsuarioProjetoJpaController jpa = new UsuarioProjetoJpaController();
         PontoJpaController controlePonto = new PontoJpaController();
         BeanConverterProjeto a = new BeanConverterProjeto();
+        BeanLogar logarBean = new BeanLogar();
         Ponto p = new Ponto(12345);
         Usuario us= new Usuario(11111);
         us.setTipoUsuario("Coordenador");
@@ -45,13 +46,15 @@ public class teste {
         Calendar calFim = Calendar.getInstance();
         calInicio.set(2015, 8, 1);
         calFim.set(2015, 12, 1);
-        
-        if(calFim.compareTo(calInicio)>0){
-            System.out.println("Inicio Maior");
-        }else{
-            System.out.println("Inicio Menor");
+        String nome = "Administrador ";
+//        String aux = nome.substring(0,nome.indexOf(" "));
+        if(!nome.contains(" ")){
             
+        System.out.println("Sem Sobrenome");
+        }else{
+        System.out.println("nome: "+nome.indexOf(" "));
         }
+        
         
         
     }

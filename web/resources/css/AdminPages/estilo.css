@@ -345,8 +345,10 @@ ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-w
     left:39%;
 }
 
-#panelCadastroUsuario{
+.panelCadastroUsuario{
+    position: relative;
     width: 100%; 
+    height: 100%;
 }
 
 .panelCadastroProjeto{

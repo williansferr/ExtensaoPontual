@@ -12,13 +12,13 @@
 
             <p:growl id="growl" autoUpdate="true" showDetail="true" />
 
-            <h:panelGrid id="panelCadastroUsuario" columns="2" rendered="true" cellspacing="15" 
+            <h:panelGrid class="panelCadastroUsuario" columns="2" rendered="true" cellspacing="10" 
                         >
 
                 <f:facet name="header">
                     <center>
                     <h:outputText value="CADASTRAR USUÁRIO" 
-                                  style="position: relative; left: 9%;margin-bottom: 40%;font-size: 15px"  />
+                                  style="position: relative; margin-bottom: 40%;font-size: 15px"  />
                     </center>
                 </f:facet>
 
@@ -49,13 +49,18 @@
                 <p:outputLabel value="Data Nascimento:"
                                title="Data de Nascimento"
                                class="outLabel" for="txtDataNasc"/>
-                <p:inputMask id="txtDataNasc" 
-                             value="#{beanUsuario.dataNasc}"
+                <p:inputText id="txtDataNasc" 
+                             value="#{beanUsuario.user.dataNasc}"
                             class="txtDataNascim"
-                            mask="99/99/9999"
                             required="true"
                             requiredMessage="Favor entrar com Data de Nascimento para o Usuário"
-                            />
+                            type="date"
+                            
+                            maxlength="10"
+                            placeholder="__/__/____"
+                            >
+                      <f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" ></f:convertDateTime>
+                </p:inputText>
 
                 <p:outputLabel for="txtColegiado" value="Colegiado: " class="sessionComponent" />
                 <p:inputText id="txtColegiado" value="#{beanUsuario.user.colegiado}"

@@ -98,7 +98,7 @@
 
             <!--Dialog para alteração do projeto escolhido-->
 
-            <p:dialog id="dialog" header="Editar Projeto" widgetVar="ProjetoDialog" width="70%"  > 
+            <p:dialog id="dialog" header="Editar Projeto" widgetVar="ProjetoDialog" width="50%"   > 
                 <p:outputPanel id="projetoDetail" style="text-align:center;" rendered="true">
                     <p:panelGrid  id="PanelGridAlterar" columns="2"   >
 
@@ -155,20 +155,23 @@
 
 
                     <!--Botões para salvar alterações-->
-                    <p:commandButton value="Cancelar" oncomplete="PF('ProjetoDialog').hide()"  
+                    
+                    <p:commandButton value="Salvar" 
                                      style="right:  20%;top:8px"
+                                     actionListener="#{beanProjeto.editarProjeto()}" 
+                                     update="fo,dialog"
+                                     oncomplete="PF('ProjetoDialog').hide()"
+                                     icon="ui-icon-circle-check"
+                                     ></p:commandButton>
+                    
+                    <p:commandButton value="Cancelar" oncomplete="PF('ProjetoDialog').hide()"  
+                                     style="left:   20%;top:8px"
                                      icon="ui-icon-cancel"
                                      ></p:commandButton>
 
 
 
-                    <p:commandButton value="Salvar" 
-                                     style="left: 20%;top:8px"
-                                     actionListener="#{beanProjeto.editarProjeto(submit)}" 
-                                     update="fo,dialog"
-                                     oncomplete="PF('ProjetoDialog').hide()"
-                                     icon="ui-icon-circle-check"
-                                     ></p:commandButton>
+                    
                 </p:outputPanel>
             </p:dialog>
 
@@ -179,7 +182,7 @@
             <p:dialog id="dialogVisualizarAlunos"
                       header="Alunos ou Voluntários desse Projeto" 
                       widgetVar="ProjetoDialogVisualizarAlunos"
-                      width="800"
+                      width="600px"
                       height="150px">
                 <p:outputPanel id='panelAlunosDoProjeto' >
 
@@ -230,7 +233,7 @@
                       header="Remover do Projeto"
                       widgetVar="RemoverDetailAluno"
                       position="center">
-                <p:panel id="panelRemoveAluno" rendered="true" style="height: 80px;width: 500px">
+                <p:panel id="panelRemoveAluno" rendered="true" style="height: 100px;width: 500px">
                     <h:outputLabel id="projetoDialogRemover" style="text-align:center;" 
                                    rendered="true" value="Deseja Remover o Usuário desse Projeto?">
                     </h:outputLabel>
@@ -258,7 +261,8 @@
             <p:dialog id="dialogVisualizarProfessor"
                       header="Professor Coordenador do Projeto" 
                       widgetVar="ProjetoDialogVisualizarProfessor"
-                      width="70%">
+                      width="600px"
+                      height="50%">
                 <p:panel id='panelProfessorDoProjeto' rendered="true">
 
                     <p:dataTable id="tabelaProfessorDoProjeto" 
