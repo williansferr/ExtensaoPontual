@@ -6,6 +6,31 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:pe="http://primefaces.org/ui/extensions">
 
+    <script type="text/javascript">
+        function startPDF() {
+            PF('statusDialog').show();
+            setTimeout(function () {
+                PF('statusDialog').hide();
+            }, 2655);
+        }
+        function start() {
+            PF('statusDialog').show();
+            setTimeout(function () {
+                PF('statusDialog').hide();
+            }, 1000);
+        }
+    </script>
+    <!--<link rel="stylesheet" type="text/css" href="../../style/style.css"/>-->
+    <style>
+        p{
+            text-align: left;
+            margin: 0;
+            font-size: 1em;
+        }
+        li{
+            list-style: none;
+        }
+    </style>
 
     <ui:define name="left-menu">
         <div id="divLogoUnifilLogin">
@@ -33,13 +58,16 @@
                         </h:panelGrid>
                     </div>
                 </div>
-                <p:commandButton value="Acessar" class="btnAcessar" 
-                                  action="#{beanLogar.verificar()}" 
+                <p:commandButton value="Acessar" class="btnAcessar" ajax="false" 
+                                 action="#{beanLogar.verificar}" 
+                                 onclick="PrimeFaces.monitorDownload(start)"
                                  update="formLoginSenha"/>
-                
+
 
             </div>
-
+            <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="flase">
+                <img src="/resources/img/carregando.gif" alt=""/>
+            </p:dialog>
         </h:form>
 
 

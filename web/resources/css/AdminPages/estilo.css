@@ -16,11 +16,18 @@
     background: white;
 }
 
+.ui-layout-unit-header, .ui-widget-header ui-corner-all{
+    background: #c4c4c4 repeat scroll 0 0;
+    background-image: -webkit-linear-gradient(left , rgba(255, 255, 255, 0.8),
+        rgba(255, 255, 255, 0)) ;
+    background-image: -moz-linear-gradient(left , rgba(255, 255, 255, 0.8),
+        rgba(255, 255, 255, 0)) ;
+}
+
 .ui-fieldset, .ui-fieldset .ui-fieldset-legend{
     background-color: transparent;
 }
 
-//botão back do wizard
 ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-wizard-nav-back{
     top:0%;
 }
@@ -59,6 +66,7 @@ ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-w
 
 
 #formCadastroUsuario{
+    position: relative;
     margin-left: 2%;
     margin-right: 2%;
     margin-top: 2%;
@@ -88,6 +96,22 @@ ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-w
 
 .txtField_sessionComponent{
     width: 600px;
+}
+
+.vinte-percent {
+    width: 20%;
+}
+
+.oitenta-percent {
+    width: 80%;
+}
+
+.top-alignment {
+    vertical-align: top;
+}
+
+.cadastrarLabel{
+    width: 10%;
 }
 
 .inputNomeProjeto{
@@ -122,7 +146,7 @@ ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-w
 }
 
 .txtDataNascim{
-    width: 170px;
+    width: 110%;
 
 }
 #txtEmailSenha{
@@ -248,7 +272,7 @@ ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-w
     position: relative;
     margin-bottom: 10%;
     font-size: 14px;
-    
+
 }
 
 #labelLogin{
@@ -356,10 +380,7 @@ ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left ui-w
     height: 40%
 }
 
-/*.ui-wizard-step-title{
- font-size: 13px;  
- background: yellow;
-}*/
+
 
 .facetNomeProjeto{
     background: white;

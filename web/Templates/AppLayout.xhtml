@@ -17,7 +17,7 @@
     <h:body>
 
         <p:layout id="layout" fullPage="true">  
-            <p:layoutUnit position="north" id="header" size="45" >
+            <p:layoutUnit position="north" id="header" size="45"  >
                 <ui:insert name="header-left">
 
                     <div class="fDefaultHeader"  >
@@ -35,7 +35,9 @@
                 </ui:insert>
             </p:layoutUnit> 
 
-            <p:layoutUnit position="west" id="left-menu" size="280">
+            <p:layoutUnit position="west" size="300" header="Menu" id="left-menu" 
+                           resizable="true" closable="false" collapsible="true" 
+                          >
                 <ui:insert name="left-menu" >
                     <p:panel >
                         This is the default left-menu.

@@ -68,14 +68,7 @@
 
                         </p:commandButton>
 
-                        <p:commandButton icon="ui-icon-trash" title="Excluir" 
-                                         update=":fo:usuarioDialogExcluir"
-                                         rendered="#{beanLogar.loggedUserType('Coordenador')}"
-                                         oncomplete="PF('usuarioDialogExcluir').show()" >
-
-                            <f:setPropertyActionListener value="#{us}" target="#{beanUsuario.user}" /> 
-
-                        </p:commandButton>
+                        
 
 
                     </center>
@@ -121,14 +114,13 @@
                         <p:selectOneMenu id="usrtypesRadios" 
                                          class="radiosContainer sessionComponent" 
                                          value="#{beanUsuario.user.tipoUsuario}"
-                                         disabled="true">
+                                         disabled="#{beanLogar.loggedUserType('Professor')}" >
 
                             <p:ajax event="click" 
                                     update="@(#cbFuncao)"/>
                             <f:selectItem itemLabel="Aluno" itemValue="Aluno"></f:selectItem>                            
                             <f:selectItem itemLabel="Voluntário" itemValue="Voluntário"></f:selectItem>
-                            <f:selectItem itemLabel="Professor" itemValue="Professor" 
-                                          ></f:selectItem>
+                            <f:selectItem  itemLabel="Professor" itemValue="Professor" />
                         </p:selectOneMenu>
 
                         <h:outputText value="Colegiado" />
@@ -189,7 +181,7 @@
 
                         <p:dialog id="dialoSenhaNova" widgetVar="DetailSenhaNova" header="Senha Alterada">
                             <p:panel id="panelSenhaNova" style="height: 150px; width: 300px" header="Senha Nova">
-                                <h:outputLabel  value="Data de Nascmento sem os símbolos: '/'">
+                                <h:outputLabel  value="Data de Nascimento, sem os Símbolos: '/'">
                                 </h:outputLabel>
                                 <p:commandButton value="Fechar"
                                                  oncomplete="PF('DetailSenhaNova').hide()"

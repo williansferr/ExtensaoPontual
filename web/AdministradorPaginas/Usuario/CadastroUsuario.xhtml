@@ -6,6 +6,7 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content" rendered="true">
+        <h:outputScript name="locale_primefaces.js"/>   
         <p:messages autoUpdate="true" />
 
         <h:form rendered="true" id="formCadastroUsuario"  >
@@ -13,12 +14,12 @@
             <p:growl id="growl" autoUpdate="true" showDetail="true" />
 
             <h:panelGrid class="panelCadastroUsuario" columns="2" rendered="true" cellspacing="10" 
-                        >
+                         >
 
                 <f:facet name="header">
                     <center>
-                    <h:outputText value="CADASTRAR USUÁRIO" 
-                                  style="position: relative; margin-bottom: 40%;font-size: 15px"  />
+                        <h:outputText value="CADASTRAR USUÁRIO" 
+                                      style="position: relative; margin-bottom: 40%;font-size: 15px"  />
                     </center>
                 </f:facet>
 
@@ -36,7 +37,7 @@
 
                 <p:outputLabel for="txtEmail" value="Email:"
                                title="Será utilizado p/ realizar login."
-                                />
+                               />
                 <p:inputText id="txtEmail" 
                              title="Endereço eletrônico do Usuário" 
                              value="#{beanUsuario.user.email}"
@@ -49,18 +50,19 @@
                 <p:outputLabel value="Data Nascimento:"
                                title="Data de Nascimento"
                                class="outLabel" for="txtDataNasc"/>
-                <p:inputText id="txtDataNasc" 
-                             value="#{beanUsuario.user.dataNasc}"
+                <p:calendar id="txtDataNasc" 
+                            value="#{beanUsuario.user.dataNasc}"
                             class="txtDataNascim"
                             required="true"
                             requiredMessage="Favor entrar com Data de Nascimento para o Usuário"
-                            type="date"
-                            
-                            maxlength="10"
-                            placeholder="__/__/____"
+                            navigator="true"
+                            mask="true"
+                            timeZone="America/Sao_Paulo"
+                            yearRange="c-100:c+0"
+                            locale="pt"
+                            pattern="dd/MM/yyyy"
                             >
-                      <f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" ></f:convertDateTime>
-                </p:inputText>
+                </p:calendar>
 
                 <p:outputLabel for="txtColegiado" value="Colegiado: " class="sessionComponent" />
                 <p:inputText id="txtColegiado" value="#{beanUsuario.user.colegiado}"
@@ -68,7 +70,7 @@
                              >
                 </p:inputText>
 
-                
+
                 <p:outputLabel for="txtTelResid" value="Telefone Residencial: " class="sessionComponent" />
                 <p:inputMask id="txtTelResid" value="#{beanUsuario.user.telefoneResidencial}"
                              mask="(99) 9999-9999"
@@ -118,22 +120,22 @@
                     <f:selectItem itemLabel="Professor" itemValue="Professor" 
                                   ></f:selectItem>
                 </p:selectOneMenu>
-                
+
                 <p:outputLabel value=" *   Campos Obrigatórios"/>
+                <p:commandButton id="btnLimpar" update="formCadastroUsuario" process="@this"
+                                 value="Limpar"
+                                 icon="ui-icon-trash"
+                                 style="position: relative;top:49px"/>
 
+                <p:commandButton value="Cadastrar" 
+                                 action="#{beanUsuario.insert()}"
+                                 icon="ui-icon-circle-check"
+                                 update="formCadastroUsuario"
+                                 style="position: relative ;left: 320%"
+                                 />
             </h:panelGrid>
-            <br/><br/>
-            <p:commandButton id="btnLimpar" update="formCadastroUsuario" process="@this"
-                             value="Limpar"
-                             icon="ui-icon-trash"
-                             style="position: absolute ;left: 15%"/>
 
-            <p:commandButton value="Cadastrar" 
-                             action="#{beanUsuario.insert()}"
-                             icon="ui-icon-circle-check"
-                             update="formCadastroUsuario"
-                             style="position: absolute ;left: 70%"
-                             />
+
 
         </h:form>
 

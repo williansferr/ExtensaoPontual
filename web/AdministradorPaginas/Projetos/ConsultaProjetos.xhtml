@@ -56,14 +56,6 @@
 
                         </p:commandButton>
 
-                        <p:commandButton icon="ui-icon-trash" title="Excluir" 
-                                         update=":fo:projetoDialogExcluir"
-                                         oncomplete="PF('projetoDialogExcluir').show()" 
-                                         rendered="#{beanLogar.loggedUserType('Coordenador')}">
-
-                            <f:setPropertyActionListener value="#{p}" target="#{beanProjeto.projeto}" /> 
-
-                        </p:commandButton>
 
 
                     </center>

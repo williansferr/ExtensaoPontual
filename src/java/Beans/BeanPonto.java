@@ -12,7 +12,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.swing.Action;
+import javax.persistence.Query;
 import models.Ponto;
 import models.Projeto;
 import models.Usuario;
@@ -130,10 +130,10 @@ public class BeanPonto implements Serializable {
                         FacesMessage.SEVERITY_INFO, "Alteração realizada!", ""));
             } catch (Exception e) {
             }
-        }else{
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                        FacesMessage.SEVERITY_WARN, "Horário Inválido!", ""));
-            
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+                    FacesMessage.SEVERITY_WARN, "Horário Inválido!", ""));
+
         }
 
     }
@@ -203,10 +203,10 @@ public class BeanPonto implements Serializable {
     }
 //RETORNA UMA 'STRING' COM TOTAL DE HORAS QUE O USUÁRIO SELECIONA REALIZOU DENTRO DO PERÍODO
 
-    public String getHorasTotais(Usuario us, Projeto p, Calendar dataInicial, Calendar dataFinal) {
+    public String getHorasTotal(Usuario us, Projeto p, Calendar dataInicial, Calendar dataFinal) {
         String horasTotais = new String();
         try {
-            horasTotais = pontoControle.getTotalHorasRealizadas(us, p, dataInicial.getTime(), dataFinal.getTime());
+            horasTotais = pontoControle.getHorasTotal(us, p, dataInicial, dataFinal);
             return horasTotais;
         } catch (Exception e) {
             e.printStackTrace();

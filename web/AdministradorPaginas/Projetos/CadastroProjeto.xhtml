@@ -10,9 +10,8 @@
 
         <h:form rendered="#{beanLogar.loggedUserType('Coordenador')}" id="formCadastroProjeto" >
 
-<!--            <p:growl id="growl" autoUpdate="true" showDetail="true" />-->
 
-            <h:panelGrid class="panelCadastroProjeto" columns="2" rendered="true" cellspacing="15" 
+            <h:panelGrid class="panelCadastroProjeto" columns="2" rendered="true" cellspacing="15" columnClasses="vinte-percent top-alignment, oitenta-percent top-alignment"
                          >
 
                 <f:facet name="header">
@@ -24,25 +23,25 @@
                 </f:facet>
 
 
-                <p:outputLabel for="inputNomeProjeto" value="Nome: "  />
-                <p:inputText  id="inputNomeProjeto"
+                <p:outputLabel class="cadastrarLabel" for="inputNomeProj" value="Nome: "  />
+                <p:inputText  id="inputNomeProj"
                               class="inputNomeProjeto" value="#{beanProjeto.projeto.nome}" 
                               required="true" 
                               requiredMessage="Digite o Nome do Projeto"
                               title="Nome do Usuário" ></p:inputText >
 
 
-                <p:outputLabel for="txtColegiado" value="Colegiado:"
-                               class="outLabel" />
+                <p:outputLabel class="cadastrarLabel" for="txtColegiado" value="Colegiado:"
+                               />
                 <p:inputText id="txtColegiado" 
                              class="inputColegiadoProjeto"
                              title="Colegiado" 
                              value="#{beanProjeto.projeto.colegiado}">
                 </p:inputText>
 
-                <p:outputLabel for="txtEstado" value="Situação:"
+                <p:outputLabel class="cadastrarLabel" for="txtEstado" value="Situação:"
                                title="Será utilizado p/ realizar Estado."
-                               class="outLabel" />
+                               />
 
                 <p:selectOneMenu id="txtEstado" 
                                  required="true"

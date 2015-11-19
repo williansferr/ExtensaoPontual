@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Relatorio" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6ccabb8a-5602-40a4-97d4-3fb0d0aebdb9">
 	<property name="ireport.zoom" value="1.5"/>
-	<property name="ireport.x" value="111"/>
-	<property name="ireport.y" value="102"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="aluno" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -17,16 +17,13 @@
 	</parameter>
 	<parameter name="total" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[select sec_to_time(sum(time_to_sec(timediff(p.horaSaida,p.horaEntrada)))) Total_de_Horas, u.matricula,
-u.nome nomeAluno, pj.nome nomeProjeto, p.horaEntrada, p.horaSaida, p.data from ponto p
+		<![CDATA[select u.matricula,u.nome nomeAluno, pj.nome nomeProjeto, p.horaEntrada, p.horaSaida, p.data from ponto p
 inner join usuario_projeto up on up.id = p.idUsuarioProjeto
 inner join usuario u on u.matricula = up.matricula
 inner join projeto pj on pj.idProjeto = up.idProjeto
-where pj.idProjeto = $P{projeto} and p.data >= $P{dataInicial} and p.data <= $P{dataFinal} and u.matricula = $P{aluno}
-group by p.horaEntrada 
+where pj.idProjeto = $P{projeto} and p.data >= $P{dataInicial} and p.data <= $P{dataFinal} and u.matricula = $P{aluno} 
 order by data asc;]]>
 	</queryString>
-	<field name="Total_de_Horas" class="java.sql.Time"/>
 	<field name="matricula" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -56,44 +53,44 @@ order by data asc;]]>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="51" splitType="Stretch">
+		<band height="69" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="72" height="20" uuid="1cedc54e-544c-4c0e-b7b0-3bf3e7f95e62"/>
+				<reportElement x="40" y="0" width="72" height="20" uuid="1cedc54e-544c-4c0e-b7b0-3bf3e7f95e62"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<text><![CDATA[Projeto:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="20" width="72" height="20" uuid="df5a5a5e-d24e-4413-b6fc-3e3cdd4c74f1"/>
+				<reportElement x="40" y="20" width="72" height="20" uuid="df5a5a5e-d24e-4413-b6fc-3e3cdd4c74f1"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<text><![CDATA[Aluno:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="72" y="0" width="482" height="20" uuid="5d9c808d-b6d7-48a2-b15c-bc36a31659d3"/>
+				<reportElement x="112" y="0" width="442" height="20" uuid="5d9c808d-b6d7-48a2-b15c-bc36a31659d3"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nomeProjeto}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="72" y="20" width="348" height="20" uuid="39a41680-c917-492a-a528-684a75a879b1"/>
+				<reportElement x="112" y="20" width="442" height="20" uuid="39a41680-c917-492a-a528-684a75a879b1"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nomeAluno}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="420" y="20" width="67" height="20" uuid="ec632441-016e-4226-bd25-04d2e864fb2c"/>
+				<reportElement x="40" y="40" width="67" height="20" uuid="ec632441-016e-4226-bd25-04d2e864fb2c"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
 				<text><![CDATA[Matrícula:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="487" y="20" width="68" height="20" uuid="457eaaa5-e97a-42e3-842c-b67cdcbf40f0"/>
+				<reportElement x="107" y="40" width="101" height="20" uuid="457eaaa5-e97a-42e3-842c-b67cdcbf40f0"/>
 				<textFieldExpression><![CDATA[$F{matricula}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -101,51 +98,43 @@ order by data asc;]]>
 	<columnHeader>
 		<band height="25" splitType="Stretch">
 			<staticText>
-				<reportElement x="128" y="1" width="100" height="20" uuid="163df74a-df3a-4cf1-ab34-2ba136710547"/>
+				<reportElement x="244" y="0" width="100" height="20" uuid="163df74a-df3a-4cf1-ab34-2ba136710547"/>
 				<text><![CDATA[Hora Entrada]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="271" y="1" width="100" height="20" uuid="a18d4910-eed9-4e66-b100-a8f88ae9b800"/>
+				<reportElement x="440" y="0" width="100" height="20" uuid="a18d4910-eed9-4e66-b100-a8f88ae9b800"/>
 				<text><![CDATA[Hora Saída]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="1" width="100" height="20" uuid="be5a8260-adde-40bf-a32d-57f2004286be"/>
+				<reportElement x="40" y="0" width="100" height="20" uuid="be5a8260-adde-40bf-a32d-57f2004286be"/>
 				<text><![CDATA[Data]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="454" y="1" width="100" height="20" uuid="0f3ceffb-d540-4342-b737-bbb4274958ff"/>
-				<text><![CDATA[Horas Realizadas]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="23" splitType="Stretch">
 			<textField pattern="HH:mm">
-				<reportElement x="141" y="0" width="100" height="20" uuid="aa46863b-6519-4885-afc4-1a255d709e5a"/>
+				<reportElement x="254" y="3" width="100" height="20" uuid="aa46863b-6519-4885-afc4-1a255d709e5a"/>
 				<textFieldExpression><![CDATA[$F{horaEntrada}]]></textFieldExpression>
 			</textField>
 			<textField pattern="HH:mm" isBlankWhenNull="true">
-				<reportElement x="284" y="0" width="100" height="20" uuid="6474ee21-4be9-4e60-9386-50eb4ff9e230"/>
+				<reportElement x="454" y="0" width="100" height="20" uuid="6474ee21-4be9-4e60-9386-50eb4ff9e230"/>
 				<textFieldExpression><![CDATA[$F{horaSaida}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="0" y="0" width="100" height="20" uuid="7c74078e-22e8-4fff-ad20-e9818fb8ed42"/>
+				<reportElement x="40" y="0" width="100" height="20" uuid="7c74078e-22e8-4fff-ad20-e9818fb8ed42"/>
 				<textFieldExpression><![CDATA[$F{data}]]></textFieldExpression>
-			</textField>
-			<textField pattern="HH:mm" isBlankWhenNull="true">
-				<reportElement x="454" y="0" width="100" height="20" uuid="11507e4d-0641-47e1-9973-cbdffc7bbbc9"/>
-				<textFieldExpression><![CDATA[$F{Total_de_Horas}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="45" splitType="Stretch">
+		<band height="33" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="11" width="100" height="20" uuid="95e0a9a8-d4fb-4a16-a623-2aebc191c584"/>
+				<reportElement x="40" y="11" width="100" height="20" uuid="95e0a9a8-d4fb-4a16-a623-2aebc191c584"/>
 				<text><![CDATA[Total Horas:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="454" y="11" width="100" height="20" uuid="5a626806-2cd6-4409-89c4-5819b311bfbc"/>
+				<reportElement x="440" y="11" width="100" height="20" uuid="5a626806-2cd6-4409-89c4-5819b311bfbc"/>
 				<textFieldExpression><![CDATA[$P{total}]]></textFieldExpression>
 			</textField>
 		</band>

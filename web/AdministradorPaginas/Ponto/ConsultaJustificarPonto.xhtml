@@ -54,7 +54,7 @@
                                  emptyMessage="É necessário selecionar o aluno!">
 
                         <p:column selectionMode="single" style="width:30px;text-align:center" />
-                        <p:column headerText="Nome" filterBy="#{us.nome}" style=" text-align: center">
+                        <p:column headerText="Nome" filterBy="#{us.nome}" >
                             <h:outputText value="#{us.nome}"></h:outputText>
                         </p:column>
 
@@ -155,8 +155,7 @@
                                         </p:inputMask>
 
                                     </p:panelGrid>
-                                    <h:outputText  value="Descrição da Justificativa - Máximo de 200 Caracteres" />
-                                    <p:inputTextarea value="#{beanPonto.pontoAtual.justificativa}" rows="10" cols="50" autoResize="false"/>
+                                    
 
                                 </p:panelGrid>
 

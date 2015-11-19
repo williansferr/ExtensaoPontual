@@ -58,6 +58,7 @@ public class BeanUsuario implements Serializable {
     }
 
     public void insert() {
+        System.out.println("Data Nascimento: " + user.getDataNasc());
         user.setLogin(user.getEmail());
         try {
             user.setDataNasc(converterStringParaDate(dataNasc));
@@ -208,13 +209,14 @@ public class BeanUsuario implements Serializable {
 
     public String editarUsuario() {
         try {
-            
+
             usuarioControlerJpa.edit(getUser());
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
                     FacesMessage.SEVERITY_INFO, "Alteração realizada!", ""));
         } catch (Exception e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_WARN, "Não foi possível realizar alteração!", ""));
+                    FacesMessage.SEVERITY_WARN, "Não foi possível realizar alteração! "
+                            + "Verifique se esse E-mail já não consta como cadastrado!", ""));
         }
 
         return null;
@@ -251,7 +253,6 @@ public class BeanUsuario implements Serializable {
         }
         return null;
     }
-
 
     //EVENTO DA DRAGDROP DE ARRASTAR E SOLTAR
     public void onUsuarioDrop(DragDropEvent ddEvent) {

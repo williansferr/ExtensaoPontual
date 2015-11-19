@@ -10,7 +10,6 @@
     <ui:define name="content" rendered="true">
         <p:messages autoUpdate="true" />
         <h:form id="fo" >
-            <p:growl id="growl_1" autoUpdate="true" showDetail="true" />
             <!--Tabela Principal-->
             <p:dataTable id="singleDT"
                          value="#{beanProjeto.todosProjetos()}" 
@@ -57,7 +56,6 @@
             </p:dataTable>
 
             <!--Dialog para Escolha do Projeto-->
-            <p:growl id="growl" autoUpdate="true" showDetail="true" />
             <p:dialog id="dialogEscolherProfessor" 
                       header="Selecionar Professor - Projeto #{beanProjeto.projeto.nome}" 
                       showHeader="true"
@@ -110,7 +108,7 @@
                                  action="#{beanUsuario_Projeto.insert(beanUsuario.user,beanProjeto.projeto)}"
                                  style="left:55%;font-size: 13px;padding: 0.5%"
                                  icon="ui-icon-check"
-                                 update="growl_1,singleDT"
+                                 update="fo,singleDT"
                                  oncomplete="PF('dialogEscolherProfessor').hide()"
                                  >
                 </p:commandButton>

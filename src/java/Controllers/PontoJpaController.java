@@ -200,8 +200,29 @@ public class PontoJpaController implements Serializable {
         }
         return null;
     }
-//BUSCA PONTOS DO MES CORRENTE PASSADOS COMO PARAMETRO (MES/USUARIO)
 
+    
+
+    public String getHorasTotal( Usuario us,Projeto p,Calendar dtI, Calendar dtF  ) {
+
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            Query query = em.createNativeQuery("SELECT viewHoras(?1,?2,?3,?4);");
+            query.setParameter(1, dtI.getTime());
+            query.setParameter(2, dtF.getTime());
+            query.setParameter(3, p.getIdProjeto());
+            query.setParameter(4, us.getMatricula());
+            return (String) query.getSingleResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    
+
+//BUSCA PONTOS DO MES CORRENTE PASSADOS COMO PARAMETRO (MES/USUARIO)
     public List<Ponto> findByMonth(Integer mes, Usuario us) {
         EntityManager em = getEntityManager();
         try {
@@ -305,31 +326,31 @@ public class PontoJpaController implements Serializable {
     }
 //RETORNA O TOTAL DE HORAS REALIZADAS DENTRO DO PERIODO (DATAINICIAL, DATAFINAL)
 
-    public String getTotalHorasRealizadas(Usuario us, Projeto p, Date dataInicial, Date dataFinal) {
-        EntityManager em = getEntityManager();
-        Object obj = new Object();
-        try {
-            Query query = em.createNamedQuery("Ponto.findAmountTotalOfHours");
-            query.setParameter("matricula", us.getMatricula());
-            query.setParameter("projeto", p.getIdProjeto());
-            query.setParameter("dataInicial", dataInicial);
-            query.setParameter("dataFinal", dataFinal);
-            obj = (query.getSingleResult());
-            if (obj == null) {
-                return "";
-            } else {
-                String point = String.valueOf(obj);
-                return point;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
-            }
-        }
-        return null;
-    }
+//    public String getTotalHorasRealizadas(Usuario us, Projeto p, Date dataInicial, Date dataFinal) {
+//        EntityManager em = getEntityManager();
+//        Object obj = new Object();
+//        try {
+//            Query query = em.createNamedQuery("Ponto.findAmountTotalOfHours");
+//            query.setParameter("matricula", us.getMatricula());
+//            query.setParameter("projeto", p.getIdProjeto());
+//            query.setParameter("dataInicial", dataInicial);
+//            query.setParameter("dataFinal", dataFinal);
+//            obj = (query.getSingleResult());
+//            if (obj == null) {
+//                return "";
+//            } else {
+//                String point = String.valueOf(obj);
+//                return point;
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (em != null) {
+//                em.close();
+//            }
+//        }
+//        return null;
+//    }
 
     public Connection getConnection() {
         EntityManager em = getEntityManager();

@@ -17,7 +17,7 @@
                         offset = ui.offset;
             }
         </script> 
-        
+
         <style>
             .ui-wizard-nav-back
             {
@@ -25,17 +25,16 @@
             }
         </style>
 
-
+        <p:messages autoUpdate="true" />
         <h:form id="usForm"  >
 
-            <p:growl id="growl" sticky="true" showDetail="true"/>
             <p:wizard flowListener="#{beanProjeto.onFlowProcess2}"  
                       nextLabel="Continuar" backLabel="Voltar"   
                       >
 
                 <p:tab id="projeto" title="1 - Selecionar Projeto" transient="true">
 
-                    <p:message for="projeto"/>
+                    <p:message for="projeto" />
                     <p:dataTable id="tabEscolhaProjetos" 
                                  value="#{beanUsuario_Projeto.getProjetosUsuarioLogado(beanLogar.usuarioLogado)}"
                                  var="p" 
