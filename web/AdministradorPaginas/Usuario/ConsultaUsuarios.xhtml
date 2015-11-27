@@ -13,7 +13,7 @@
             <p:growl id="growl" autoUpdate="true" showDetail="true" />
             <!--Tabela Principal-->
             <p:dataTable id="tabela"  
-                         value="#{beanUsuario.getUsuarioCadastrados(beanLogar.usuarioLogado)}" 
+                         value="#{beanUsuario.buscarUsuarioCadastrados(beanLogar.usuarioLogado)}" 
                          var="us" 
                          rendered="true" 
                          style="margin-bottom:20px; font-size: 15px;"

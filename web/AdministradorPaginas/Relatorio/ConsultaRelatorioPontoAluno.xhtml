@@ -21,7 +21,7 @@
 
                     <p:message for="tabProjetos"/>
                     <p:dataTable id="tabEscolhaProjetosPonto" 
-                                 value="#{beanUsuario_Projeto.getProjetosUsuarioLogado(beanLogar.usuarioLogado)}"
+                                 value="#{beanUsuario_Projeto.buscarProjetosUsuarioLogado(beanLogar.usuarioLogado)}"
                                  var="p" 
                                  selection="#{relatorioBean.projeto}" 
                                  rowKey="#{p.idProjeto}" 
@@ -48,7 +48,7 @@
                 <p:tab id="tabAlunos" title="2 - Selecionar Aluno">
 
                     <p:dataTable id="tabAlunosPonto" 
-                                 value="#{beanUsuario_Projeto.getAlunosDoProjeto(relatorioBean.projeto)}"
+                                 value="#{beanUsuario_Projeto.buscarAlunosDoProjeto(relatorioBean.projeto)}"
                                  var="us" 
                                  selection="#{relatorioBean.usuario}" 
                                  rowKey="#{us.matricula}" 
@@ -138,7 +138,7 @@
 
                             <f:facet name="footer" >
                                 <h:outputText 
-                                    value="Total de Horas Realizadas: #{beanPonto.getHorasTotal(relatorioBean.usuario,
+                                    value="Total de Horas Realizadas: #{beanPonto.buscaHorasTotal(relatorioBean.usuario,
                                                                         relatorioBean.projeto,
                                                                         calendarView.date1,calendarView.date2)}"
                                     style="font-size: 18px">
@@ -155,7 +155,8 @@
                                      style="position: relative;left: 85%;top: 30px" title="Gerar PDF"
                                      action="#{relatorioBean.relatorio(relatorioBean.usuario,
                                                relatorioBean.projeto,
-                                               calendarView.date1,calendarView.date2)}">
+                                               calendarView.date1,calendarView.date2)}"
+                                               >
                     </h:commandButton>
 
                 </p:tab>

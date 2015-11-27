@@ -45,10 +45,10 @@ public class teste {
 //        System.out.println("horaFim: "+calFim.getTime());
         
 //        System.out.println(controlePonto.getHorasTotal(calInicio.getTime(), calFim.getTime(), 14, 11126));
-        System.out.println("teste: "+pontoBean.getHorasTotal(new Usuario(11126),new Projeto(14),calInicio, calFim));
+        System.out.println("teste: "+pontoBean.buscaHorasTotal(new Usuario(11126),new Projeto(14),calInicio, calFim));
         
         
-        
+        System.out.println("senha: ");
         
     }
 }

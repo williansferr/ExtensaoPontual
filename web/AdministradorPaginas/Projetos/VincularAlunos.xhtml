@@ -28,7 +28,7 @@
         <p:messages autoUpdate="true" />
         <h:form id="usForm"  >
 
-            <p:wizard flowListener="#{beanProjeto.onFlowProcess2}"  
+            <p:wizard flowListener="#{beanProjeto.onFlowProcess}"  
                       nextLabel="Continuar" backLabel="Voltar"   
                       >
 
@@ -36,7 +36,7 @@
 
                     <p:message for="projeto" />
                     <p:dataTable id="tabEscolhaProjetos" 
-                                 value="#{beanUsuario_Projeto.getProjetosUsuarioLogado(beanLogar.usuarioLogado)}"
+                                 value="#{beanUsuario_Projeto.buscarProjetosUsuarioLogado(beanLogar.usuarioLogado)}"
                                  var="p" 
                                  selection="#{beanProjeto.projeto}" 
                                  rowKey="#{p.idProjeto}" 

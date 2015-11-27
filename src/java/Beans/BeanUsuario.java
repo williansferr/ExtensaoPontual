@@ -57,7 +57,7 @@ public class BeanUsuario implements Serializable {
         dropList = new ArrayList<Usuario>();
     }
 
-    public void insert() {
+    public void inserirUsuario() {
         System.out.println("Data Nascimento: " + user.getDataNasc());
         user.setLogin(user.getEmail());
         try {
@@ -245,7 +245,7 @@ public class BeanUsuario implements Serializable {
     }
 
     //BUSCAR USUÁRIOS CADASTRADOS CONFORME O PERFIL LOGADO (USUARIO_LOGADO)
-    public List<Usuario> getUsuarioCadastrados(Usuario us) {
+    public List<Usuario> buscarUsuarioCadastrados(Usuario us) {
         if (us.getTipoUsuario().equals("Coordenador")) {
             return usuarioControlerJpa.selectAll();
         } else if (us.getTipoUsuario().equals("Professor")) {

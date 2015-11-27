@@ -11,7 +11,7 @@
         <h:form rendered="#{beanLogar.loggedUserType('Coordenador')}" id="formCadastroProjeto" >
 
 
-            <h:panelGrid class="panelCadastroProjeto" columns="2" rendered="true" cellspacing="15" columnClasses="vinte-percent top-alignment, oitenta-percent top-alignment"
+            <h:panelGrid class="panelCadastroProjeto" columns="2" rendered="true" cellspacing="25" columnClasses="vinte-percent top-alignment, oitenta-percent top-alignment"
                          >
 
                 <f:facet name="header">
@@ -62,19 +62,19 @@
 
             </h:panelGrid>
 
-            <br/><br/>
+            <br/>
             <p:commandButton  process="@this"
                               value="Limpar" 
                               icon="ui-icon-trash"
-                              style="left: 10%; top: 60px;
+                              style="left: 10%; top: 50px;
                               position: relative"
                               update="formCadastroProjeto"  />
 
             <p:commandButton value="Cadastrar" 
                              icon="ui-icon-check"
-                             action="#{beanProjeto.insert()}"
+                             action="#{beanProjeto.inserir()}"
                              update="formCadastroProjeto"
-                             style="position: relative;left:60%;top: 60px"
+                             style="position: relative;left:60%;top: 50px"
                              />
         </h:form>
 

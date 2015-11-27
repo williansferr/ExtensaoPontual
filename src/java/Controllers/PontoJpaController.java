@@ -206,6 +206,7 @@ public class PontoJpaController implements Serializable {
     public String getHorasTotal( Usuario us,Projeto p,Calendar dtI, Calendar dtF  ) {
 
         EntityManager em = null;
+        
         try {
             em = getEntityManager();
             Query query = em.createNativeQuery("SELECT viewHoras(?1,?2,?3,?4);");

@@ -33,10 +33,10 @@ public class UsuarioProjetoJpaController implements Serializable {
     }
     private EntityManagerFactory emf = null;
 
-     public UsuarioProjetoJpaController() {
+    public UsuarioProjetoJpaController() {
     }
 
-     public EntityManager getEntityManager() {
+    public EntityManager getEntityManager() {
         try {
             if (emf == null) {
                 emf = Persistence.createEntityManagerFactory("ExtensaoPontualPU");
@@ -258,9 +258,8 @@ public class UsuarioProjetoJpaController implements Serializable {
             em.close();
         }
     }
-    
-    //RETORNA PROJETOS QUE O DETERMINADO USUARIO ESTÁ CADASTRADO (USUARIO)
 
+    //RETORNA PROJETOS QUE O DETERMINADO USUARIO ESTÁ CADASTRADO (USUARIO)
     public List<Projeto> getEntityWithParameterUser(Usuario us) {
         EntityManager em = getEntityManager();
         try {
@@ -278,7 +277,9 @@ public class UsuarioProjetoJpaController implements Serializable {
         }
         return null;
     }
+
     //RETORNA PROJETOS QUE O DETERMINADO USUARIO ESTÁ CADASTRADO (USUARIO) CONFORME A DATA
+
     public List<Projeto> getProjectByUser(Usuario us) {
         EntityManager em = getEntityManager();
         try {
@@ -296,7 +297,7 @@ public class UsuarioProjetoJpaController implements Serializable {
         }
         return null;
     }
-    
+
     //RETORNA PONTOS QUE O DETERMINADO USUARIO ESTÁ CADASTRADO (USUARIO) CONFORME A DATA
     public List<Projeto> getPontoWithParameterUser(Usuario us, Date data) {
         EntityManager em = getEntityManager();
@@ -316,7 +317,6 @@ public class UsuarioProjetoJpaController implements Serializable {
         }
         return null;
     }
-    
 
     //BUSCA TODOS OS USUÁRIO QUE POSSUEM ALGUM PROJETO CADASTRADO
     public List<Usuario> getUserWithProjectAll() {
@@ -340,23 +340,25 @@ public class UsuarioProjetoJpaController implements Serializable {
     //BUSCA TODOS OS ALUNO DE DETERMINADO PROJETO
     public List<Usuario> getUserStudentsByProjeto(Projeto p) {
         EntityManager em = getEntityManager();
-        try {
-            Query query = em.createNamedQuery("UsuarioProjeto.StudentsOfProject");
-            query.setParameter("idProjeto", p.getIdProjeto());
-            List<Usuario> lista = query.getResultList();
-            return lista;
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (em != null) {
-                em.close();
+        if (p == null) {
+            return null;
+        } else {
+            try {
+                Query query = em.createNamedQuery("UsuarioProjeto.StudentsOfProject");
+                query.setParameter("idProjeto", p.getIdProjeto());
+                List<Usuario> lista = query.getResultList();
+                return lista;
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (em != null) {
+                    em.close();
+                }
             }
+            return null;
+
         }
-        return null;
-
     }
-
-
 
     //BUSCA TODAS AS ENTIDADES DE USUARIOPROJETO
     public List<UsuarioProjeto> findAll() {
@@ -509,7 +511,7 @@ public class UsuarioProjetoJpaController implements Serializable {
     }
 
     //EXCLUI O CADASTRO ENTRE O USUÁRIO E O PROJETO
-    public void removeUserOfProject( Projeto projeto, Usuario us) {
+    public void removeUserOfProject(Projeto projeto, Usuario us) {
         UsuarioProjeto up = getRegistryByProjectAndUsuario(projeto, us);
         try {
             if (up != null) {

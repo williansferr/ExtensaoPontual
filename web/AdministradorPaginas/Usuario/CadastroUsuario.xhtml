@@ -13,7 +13,7 @@
 
             <p:growl id="growl" autoUpdate="true" showDetail="true" />
 
-            <h:panelGrid class="panelCadastroUsuario" columns="2" rendered="true" cellspacing="10" 
+            <h:panelGrid class="panelCadastroUsuario" columns="2" rendered="true" cellspacing="20" columnClasses="vinte-percent top-alignment, oitenta-percent top-alignment"
                          >
 
                 <f:facet name="header">
@@ -122,16 +122,17 @@
                 </p:selectOneMenu>
 
                 <p:outputLabel value=" *   Campos Obrigatórios"/>
+                <br/>
                 <p:commandButton id="btnLimpar" update="formCadastroUsuario" process="@this"
                                  value="Limpar"
                                  icon="ui-icon-trash"
-                                 style="position: relative;top:49px"/>
+                                 style="position: relative;top:90%;"/>
 
                 <p:commandButton value="Cadastrar" 
-                                 action="#{beanUsuario.insert()}"
+                                 action="#{beanUsuario.inserirUsuario()}"
                                  icon="ui-icon-circle-check"
                                  update="formCadastroUsuario"
-                                 style="position: relative ;left: 320%"
+                                 style="position: relative ;left: 80%;top:90%"
                                  />
             </h:panelGrid>
 

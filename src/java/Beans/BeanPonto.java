@@ -2,6 +2,7 @@ package Beans;
 
 import Controllers.PontoJpaController;
 import Controllers.UsuarioJpaController;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -11,8 +12,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.persistence.Query;
 import models.Ponto;
 import models.Projeto;
 import models.Usuario;
@@ -56,7 +57,7 @@ public class BeanPonto implements Serializable {
     public void iniciarPonto(Projeto p) {
         Calendar dataAtual = Calendar.getInstance();
         boolean aux = false;
-        getListaPonto();
+        buscaListaPonto();
         up = beanUsuarioProjeto.getCadastroUsuarioProjeto(p, beanLogar.getUsuarioLogado());
         if (pontoControle == null) {
             pontoControle = new PontoJpaController();
@@ -68,6 +69,7 @@ public class BeanPonto implements Serializable {
                 pontoAtual.setDescricaoAtividade(txtDescricao);
                 pontoAtual.setHoraEntrada(dataAtual.getTime());
                 pontoAtual.setIdUsuarioProjeto(up);
+                pontoAtual.setHoraSaida(null);
                 if (txtDescricao == null || txtDescricao.equals("")) {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro: favor informar a atividade", ""));
                 } else {
@@ -138,7 +140,7 @@ public class BeanPonto implements Serializable {
 
     }
 
-    public List<Ponto> getListaPonto() {
+    public List<Ponto> buscaListaPonto() {
         if (pontoControle == null) {
             pontoControle = new PontoJpaController();
         }
@@ -190,26 +192,38 @@ public class BeanPonto implements Serializable {
     }
 
     //BUSCA TODOS OS PONTOS DO MES CORRENTE DE DETERMINADO USUARIO (Usuário, Mes)
-    public List<Ponto> buscarPontoDeData(Calendar dataInicial, Calendar dataFinal, Usuario us, Projeto p) {
-        try {
-            List<Ponto> listPonto = new ArrayList();
-            listPonto = pontoControle.findByData(dataInicial, dataFinal,
-                    us.getMatricula(), p.getIdProjeto());
-            return listPonto;
-        } catch (Exception e) {
-            e.printStackTrace();
+    public List<Ponto> buscarPontoDeData(Calendar dataInicial, Calendar dataFinal, Usuario us, Projeto p) throws IOException {
+        if (us != null && p != null) {
+            try {
+                List<Ponto> listPonto = new ArrayList();
+                listPonto = pontoControle.findByData(dataInicial, dataFinal,
+                        us.getMatricula(), p.getIdProjeto());
+                return listPonto;
+            } catch (Exception e) {
+                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+                ec.redirect(ec.getRequestContextPath() + "/MesagemErroRelatorio.xhtml");
+            }
+        } else {
+            return null;
         }
         return null;
     }
 //RETORNA UMA 'STRING' COM TOTAL DE HORAS QUE O USUÁRIO SELECIONA REALIZOU DENTRO DO PERÍODO
 
-    public String getHorasTotal(Usuario us, Projeto p, Calendar dataInicial, Calendar dataFinal) {
+    public String buscaHorasTotal(Usuario us, Projeto p, Calendar dataInicial, Calendar dataFinal) {
         String horasTotais = new String();
-        try {
-            horasTotais = pontoControle.getHorasTotal(us, p, dataInicial, dataFinal);
-            return horasTotais;
-        } catch (Exception e) {
-            e.printStackTrace();
+        System.out.println("Usuario: " + us);
+        System.out.println("Projeto: " + p);
+        if (us != null && p != null) {
+            try {
+                horasTotais = pontoControle.getHorasTotal(us, p, dataInicial, dataFinal);
+                return horasTotais;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+
+            return null;
         }
         return null;
     }

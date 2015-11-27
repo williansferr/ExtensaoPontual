@@ -14,7 +14,7 @@
 
             <!--Tabela Principal-->
 
-            <p:dataTable id="tabela"  value="#{beanUsuario_Projeto.getProjetosUsuarioLogado(beanLogar.usuarioLogado)}" var="p" resizableColumns="false"
+            <p:dataTable id="tabela"  value="#{beanUsuario_Projeto.buscarProjetosUsuarioLogado(beanLogar.usuarioLogado)}" var="p" resizableColumns="false"
                          rendered="true" style="margin-bottom:20px; font-size: 15px"
                          emptyMessage="Não há projetos em seu cadastro">
 
@@ -139,7 +139,7 @@
                                          icon="ui-icon-search" 
                                          title="Visualizar Alunos do Projeto"
                                          action="#{beanUsuario_Projeto.setListaAlunosPorProjeto(
-                                                   beanUsuario_Projeto.getAlunosDoProjeto(beanProjeto.projeto))}"
+                                                   beanUsuario_Projeto.buscarAlunosDoProjeto(beanProjeto.projeto))}"
                                          >
                         </p:commandButton>
 

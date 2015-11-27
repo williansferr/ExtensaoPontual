@@ -19,7 +19,7 @@
     </ui:define>
 
     <ui:define name="left-menu" rendered="true">
-        <h:form id="fSideMenu">
+        <h:form id="fSideMenu" >
             <p:slideMenu style="width: 94%; margin: 0.4%; font-size: 20px" backLabel="Voltar" >
                 <p:menuitem icon="ui-icon-home" value="Inicio" outcome="/AdministradorPaginas/Ponto/EscolherProjetoAcessarPonto.xhtml"></p:menuitem>
                 <p:menuitem icon="ui-icon-flag" value="Ponto Mensal" rendered="#{beanLogar.loggedUserType('Aluno','Voluntário')}" outcome="/AdministradorPaginas/Ponto/ConsultaPontoUserLogado.xhtml">

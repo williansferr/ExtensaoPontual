@@ -19,8 +19,9 @@
                 <p:tab id="tabProjetos" title="1 - Selecionar Projeto" transient="true">
 
                     <p:message for="tabProjetos"/>
+                    <p:message for="tabProjetos"/>
                     <p:dataTable id="tabEscolhaProjetosPonto" 
-                                 value="#{beanUsuario_Projeto.getProjetosUsuarioLogado(beanLogar.usuarioLogado)}"
+                                 value="#{beanUsuario_Projeto.buscarProjetosUsuarioLogado(beanLogar.usuarioLogado)}"
                                  var="p" 
                                  selection="#{beanProjeto.projeto}" 
                                  rowKey="#{p.idProjeto}" 
@@ -47,7 +48,7 @@
                 <p:tab id="tabAlunos" title="2 - Selecionar Aluno">
 
                     <p:dataTable id="tabAlunosPonto" 
-                                 value="#{beanUsuario_Projeto.getAlunosDoProjeto(beanProjeto.projeto)}"
+                                 value="#{beanUsuario_Projeto.buscarAlunosDoProjeto(beanProjeto.projeto)}"
                                  var="us" 
                                  selection="#{beanUsuario.user}" 
                                  rowKey="#{us.matricula}" 

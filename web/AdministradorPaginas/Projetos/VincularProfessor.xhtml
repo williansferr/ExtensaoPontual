@@ -12,7 +12,7 @@
         <h:form id="fo" >
             <!--Tabela Principal-->
             <p:dataTable id="singleDT"
-                         value="#{beanProjeto.todosProjetos()}" 
+                         value="#{beanProjeto.buscaTodosProjetos()}" 
                          var="p"  rowKey="#{p.idProjeto}" 
                          style="font-size: 15px;margin-bottom:20px;"
                          emptyMessage="Nenhum Projeto Cadastrado!">
@@ -105,7 +105,7 @@
                 </p:commandButton>
 
                 <p:commandButton value="Adicionar Professor" 
-                                 action="#{beanUsuario_Projeto.insert(beanUsuario.user,beanProjeto.projeto)}"
+                                 action="#{beanUsuario_Projeto.inserir(beanUsuario.user,beanProjeto.projeto)}"
                                  style="left:55%;font-size: 13px;padding: 0.5%"
                                  icon="ui-icon-check"
                                  update="fo,singleDT"

@@ -16,7 +16,7 @@
 
                     <p:outputLabel for="labelProjeto" value="Projetos: " />
                     <p:selectOneMenu id="labelProjeto" value="#{beanProjeto.projeto}" converter="projetoConverter">
-                        <f:selectItems value="#{beanConverterProjeto.getProjetosUsuarioLogado(beanLogar.usuarioLogado)}" 
+                        <f:selectItems value="#{beanConverterProjeto.buscarProjetosConvertidosParaUsuarioLogado(beanLogar.usuarioLogado)}" 
                                        var="p" itemLabel="#{p.nome}" itemValue="#{p}" />
                     </p:selectOneMenu>
                 </div>

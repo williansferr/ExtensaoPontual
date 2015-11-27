@@ -9,14 +9,11 @@ import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.swing.Action;
 import models.Projeto;
 import models.Usuario;
 import org.primefaces.event.DragDropEvent;
 import org.primefaces.event.FlowEvent;
-import org.w3c.dom.html.HTMLButtonElement;
 
 /**
  *
@@ -37,8 +34,9 @@ public class BeanProjeto implements Serializable {
     static List<Usuario> dropLista = new ArrayList();
     List<Usuario> lista = new ArrayList();
     Date dataAtual = new Date();
+    private boolean skip;
 
-    public void insert() {
+    public void inserir() {
         Calendar dataAtual = Calendar.getInstance();
         projeto.setDataInicio(dataAtual.getTime());
         if (jpa == null) {
@@ -86,27 +84,19 @@ public class BeanProjeto implements Serializable {
             return current;
         }
     }
-    
-    public String onFlowProcess2(FlowEvent event) {
 
-        String current = event.getOldStep();
-        String next = event.getNewStep();
-        boolean proceed = true;
-
-        if (current.equals("projeto") && next.equals("alunos") && (getProjeto() == null)) {
-
-            proceed = false;
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                    FacesMessage.SEVERITY_INFO, "", "Necessário Escolher Projeto!"));
-        }
-        if (proceed) {
-            return next;
-        } else {
-
-            return current;
-        }
-    }
-    
+//    public String onFlowProcess(FlowEvent event) {
+//
+//        String current = event.getOldStep();
+//        String next = event.getNewStep();
+//        boolean proceed = true;
+//        if (skip) {
+//            skip = false;   //reset in case user goes back
+//            return event.getOldStep();
+//        } else {
+//            return event.getNewStep();
+//        }
+//    }
 
     //EVENTO DA DRAGDROP DE ARRASTAR E SOLTAR
     public void onUsuarioDrop(DragDropEvent ddEvent) {
@@ -189,7 +179,7 @@ public class BeanProjeto implements Serializable {
     }
 
     //Busca Todos os Projetos Cadastrados
-    public List<Projeto> todosProjetos() {
+    public List<Projeto> buscaTodosProjetos() {
         if (jpa == null) {
             jpa = new ProjetoJpaController();
         }
@@ -220,6 +210,14 @@ public class BeanProjeto implements Serializable {
 
     public void setDataAtual(Date dataAtual) {
         this.dataAtual = dataAtual;
+    }
+
+    public boolean isSkip() {
+        return skip;
+    }
+
+    public void setSkip(boolean skip) {
+        this.skip = skip;
     }
 
 }

@@ -29,11 +29,10 @@ public class BeanConverterProjeto implements Serializable{
     @PostConstruct
     public void init() {
         listaAuxProjeto = new ArrayList<Projeto>();
-//        getProjetosUsuarioLogado(usuario);
     }
 
     //BUSCA PROJETOS CADASTRADOS DA ENTIDADE USUARIO CONFORME A DATA ATUAL
-    public List<Projeto> getProjetosUsuarioLogado(Usuario us) {
+    public List<Projeto> buscarProjetosConvertidosParaUsuarioLogado(Usuario us) {
         if (usuario == null) {
             usuario = new Usuario();
         }

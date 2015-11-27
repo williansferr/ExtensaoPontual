@@ -17,6 +17,7 @@ import javax.faces.context.FacesContext;
 import models.Projeto;
 import models.Usuario;
 import models.UsuarioProjeto;
+import org.primefaces.event.FlowEvent;
 
 /**
  *
@@ -42,7 +43,7 @@ public class BeanUsuario_Projeto implements Serializable {
     public BeanUsuario_Projeto() {
     }
 
-    public void insert(Usuario us, Projeto projeto) {
+    public void inserir(Usuario us, Projeto projeto) {
         UsuarioProjeto up = new UsuarioProjeto(us, projeto);
         if (!existeRegistroUsuarioNoProjeto(us, projeto)) {
             Calendar dataAtual = Calendar.getInstance();
@@ -63,32 +64,33 @@ public class BeanUsuario_Projeto implements Serializable {
     }
 
     //RETORNA O NOME DO PROFESSOR DE UM PROJETO (Projeto)
-    public String getNameProfessorByProjectRegistry(Projeto p) {
-        String nome = "";
-        List<Usuario> list = jpa.getUserProfessorByProject(p);
-        if (!list.isEmpty()) {
-            nome = list.get(0).getNome();
-        } else {
-
-        }
-        return nome;
-    }
+//    public String getNameProfessorByProjectRegistry(Projeto p) {
+//        String nome = "";
+//        List<Usuario> list = jpa.getUserProfessorByProject(p);
+//        if (!list.isEmpty()) {
+//            nome = list.get(0).getNome();
+//        } else {
+//
+//        }
+//        return nome;
+//    }
 
     public List<Usuario> getListaRegistroProfessor(Projeto p) {
         return jpa.getUserProfessorByProject(p);
     }
 
     //RETORNA OS ALUNOS QUE ESTÃO CADASTRADOS EM DETERMINADO PROJETO (PROJETO)
-    public List<Usuario> getAlunosDoProjeto(Projeto p) {
-        List<Usuario> list = jpa.getUserStudentsByProjeto(p);
-        return list;
-    }
+    public List<Usuario> buscarAlunosDoProjeto(Projeto p) {
+        List<Usuario> list  = jpa.getUserStudentsByProjeto(p);
+            return list;
+        }
+        
 
 //RETORNA USUARIOS QUE TEM PROJETO CADASTRADO (SEM PARAMETRO)
-    public List<Usuario> getTodosUsuariosComProjeto() {
-        List lista = jpa.getUserWithProjectAll();
-        return lista;
-    }
+//    public List<Usuario> getTodosUsuariosComProjeto() {
+//        List lista = jpa.getUserWithProjectAll();
+//        return lista;
+//    }
 //RETORNA PROJETOS QUE O DETERMINADO USUARIO ESTÁ CADASTRADO (USUARIO)
 
     public List<Projeto> getListProjetos(Usuario us) {
@@ -138,7 +140,7 @@ public class BeanUsuario_Projeto implements Serializable {
 
             } else {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
-                        FacesMessage.SEVERITY_INFO, "Lista Vazia! Favor Adicionar Aluno/Voluntário", ""));
+                        FacesMessage.SEVERITY_ERROR, "Aluno(s)! Já cadastrados!", ""));
             }
 
         } catch (Exception e) {
@@ -160,7 +162,7 @@ public class BeanUsuario_Projeto implements Serializable {
     }
 
     //RETORNA A LISTA DE PROJETOS DO USUARIO QUE ESTÁ LOGADO
-    public List<Projeto> getProjetosUsuarioLogado(Usuario us) {
+    public List<Projeto> buscarProjetosUsuarioLogado(Usuario us) {
         listaAuxProjeto = new ArrayList();
         if (us.getTipoUsuario().equals("Professor")) {
             setListaAuxProjeto(jpa.getEntityWithParameterUser(us));
@@ -175,7 +177,7 @@ public class BeanUsuario_Projeto implements Serializable {
     }
 
     public List<String> getNomeProjetosUsuarioAlunos(Usuario us) {
-        List<Projeto> list = getProjetosUsuarioLogado(us);
+        List<Projeto> list = buscarProjetosUsuarioLogado(us);
         List<String> listaNome = new ArrayList();
         for (int i = 0; i < list.size(); i++) {
             if (!list.isEmpty()) {
@@ -214,6 +216,44 @@ public class BeanUsuario_Projeto implements Serializable {
             return false;
         }
     }
+    
+//    public String onFlowProcess(FlowEvent event) {
+//
+//        String current = event.getOldStep();
+//        String next = event.getNewStep();
+//        boolean proceed = true;
+////        System.out.println("FORAAAA!!");
+//        System.out.println("Projeto: " + getProjeto());
+//        System.out.println("Usuario: " + getUsuario());
+////        System.out.println("getOldStep(): " + event.getOldStep());
+////        System.out.println("event.getNewStep(): " + event.getNewStep());
+//        if ( getListaAuxProjeto().isEmpty()) {
+//            proceed = false;
+//            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+//                    FacesMessage.SEVERITY_INFO, "", "Necessário Escolher Projeto!"));
+//            if(getListaAlunosPorProjeto().isEmpty()){
+//                proceed = false;
+//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(
+//                    FacesMessage.SEVERITY_INFO, "", "Necessário Escolher Alunos!"));
+//            }
+////            System.out.println("");
+////            System.out.println("DENTRO!!");
+//            System.out.println("Projeto: " + getProjeto());
+//            System.out.println("Usuario: " + getUsuario());
+////            System.out.println("getOldStep(): " + event.getOldStep());
+////            System.out.println("event.getNewStep(): " + event.getNewStep());
+//            
+//        }else{
+//            proceed = true;
+//        }
+//        if (proceed) {
+//
+//            return next;
+//        } else {
+//
+//            return current;
+//        }
+//    }
 
     public Projeto getProjeto() {
         return projeto;
