@@ -14,7 +14,7 @@
             <span style="float: left;">
                 <ui:insert name="header-left"></ui:insert>                    
             </span>
-
+            
         </h:form>
     </ui:define>
 
@@ -26,7 +26,7 @@
                 </p:menuitem>
                 <p:submenu icon="ui-icon-flag" label="Ponto"  rendered="#{beanLogar.loggedUserType('Professor','Coordenador')}" >
 
-                    
+
                     <p:menuitem value="Justificar" outcome="/AdministradorPaginas/Ponto/ConsultaJustificarPonto.xhtml" rendered="#{beanLogar.loggedUserType('Professor','Coordenador')}" ></p:menuitem>
 
                 </p:submenu>
@@ -72,11 +72,13 @@
         </div>
         <div>
             <h:outputText value="Seja Bem-vindo, #{beanLogar.getPrimeiroNome()}!"
-                         style="position: relative;top: 70px;margin-left: 10px;" >
-                
+                          style="position: relative;top: 70px;margin-left: 10px;" >
+
             </h:outputText>
 
         </div>
+
+
 
     </ui:define>
 </ui:composition>

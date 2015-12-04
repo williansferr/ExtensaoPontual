@@ -122,6 +122,11 @@
                             <f:selectItem itemLabel="Concluído" itemValue="Concluído"></f:selectItem>
                         </p:selectOneMenu>
 
+                        <h:outputText value="Início Projeto" />
+                        <p:inputMask value="#{beanProjeto.projeto.dataInicio}" mask="99/99/9999" style="width: 25%">
+                            <f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" ></f:convertDateTime>
+                        </p:inputMask>
+                        
                         <h:outputText value="Professor" title="Visualizar Professor Coordenador"  />
                         <p:commandButton update="fo:dialogVisualizarProfessor"
                                          value="Buscar"

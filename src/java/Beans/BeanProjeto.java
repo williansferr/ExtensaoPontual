@@ -37,8 +37,6 @@ public class BeanProjeto implements Serializable {
     private boolean skip;
 
     public void inserir() {
-        Calendar dataAtual = Calendar.getInstance();
-        projeto.setDataInicio(dataAtual.getTime());
         if (jpa == null) {
             jpa = new ProjetoJpaController();
         }

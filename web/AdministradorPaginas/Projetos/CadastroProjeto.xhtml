@@ -6,6 +6,7 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="content" rendered="true">
+        <h:outputScript name="locale_primefaces.js"/>   
         <p:messages autoUpdate="true" />
 
         <h:form rendered="#{beanLogar.loggedUserType('Coordenador')}" id="formCadastroProjeto" >
@@ -58,7 +59,24 @@
                     <f:selectItem itemLabel="Concluído" itemValue="Concluído"></f:selectItem>
                 </p:selectOneMenu>
 
-                <p:outputLabel value="* Obrigatório"/>
+                <p:outputLabel value="Data Início"
+                               title="Inicio Projeto"
+                               class="outLabel" for="txtDataInicioProject"/>
+                <p:calendar id="txtDataInicioProject" 
+                            value="#{beanProjeto.projeto.dataInicio}"
+                            class="txtDataInicioProjeto"
+                            required="true"
+                            size="10"
+                            requiredMessage="Favor entrar com Data de Início do Projeto"
+                            navigator="true"
+                            mask="true"
+                            timeZone="America/Sao_Paulo"
+                            locale="pt"
+                            pattern="dd/MM/yyyy"
+                            >
+                </p:calendar>
+
+                <p:outputLabel value="(*) Campos Obrigatórios"/>
 
             </h:panelGrid>
 
